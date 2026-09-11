@@ -1,0 +1,34 @@
+# ─── Files to ignore when pushing to GitHub / Railway ───────────────────────
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Virtual Environment
+venv/
+env/
+.venv/
+
+# Environment file (IMPORTANT: never push .env to GitHub)
+.env
+.env.local
+
+# Database & uploads (ignore local data so server data isn't overwritten)
+*.db
+*.sqlite3
+database.db
+data/*.db
+data/app.db
+data/uploads/
+uploads/
+
+# Logs
+*.log
+
+# OS & Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

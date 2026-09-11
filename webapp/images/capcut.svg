@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090d16" />
+      <stop offset="100%" stop-color="#18132c" />
+    </linearGradient>
+    <linearGradient id="glowBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ec4899" />
+      <stop offset="50%" stop-color="#a855f7" />
+      <stop offset="100%" stop-color="#06b6d4" />
+    </linearGradient>
+    <linearGradient id="capCutWhite" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#e0e7ff" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000000" flood-opacity="0.5" />
+    </filter>
+  </defs>
+  
+  <!-- Outer Rounded Square with Neon Glow Border -->
+  <rect width="512" height="512" rx="115" fill="url(#bgGrad)" />
+  <rect x="8" y="8" width="496" height="496" rx="108" fill="none" stroke="url(#glowBorder)" stroke-width="8" opacity="0.85" />
+  
+  <!-- CapCut Iconic Geometry (Clean & Accurate) -->
+  <g filter="url(#shadow)" fill="url(#capCutWhite)">
+    <!-- Top Left Blade -->
+    <path d="M 125 155 L 315 155 L 245 235 L 125 235 Z" rx="10" />
+    <!-- Top Right Triangle -->
+    <path d="M 387 155 L 387 235 L 278 235 L 348 155 Z" />
+    
+    <!-- Bottom Left Blade (Mirrored) -->
+    <path d="M 125 357 L 315 357 L 245 277 L 125 277 Z" />
+    <!-- Bottom Right Triangle (Mirrored) -->
+    <path d="M 387 357 L 387 277 L 278 277 L 348 357 Z" />
+  </g>
+  
+  <!-- Glowing VIP Badge on Top Right -->
+  <g filter="url(#shadow)">
+    <rect x="340" y="55" width="115" height="48" rx="24" fill="url(#glowBorder)" />
+    <text x="397" y="87" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="1">PRO</text>
+  </g>
+</svg>
