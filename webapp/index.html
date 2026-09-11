@@ -61,12 +61,12 @@
         <div class="avatar" id="userAvatar">U</div>
         <span class="avatar-role-dot" id="avatarRoleDot"></span>
       </div>
-      <div>
-        <div style="display:flex; align-items:center; gap:6px;">
+      <div class="user-info-col">
+        <div class="user-name-row">
           <div class="user-name" id="userName">Customer</div>
           <span class="role-badge-pill" id="headerRoleBadge" style="display:none;">👑 Admin</span>
         </div>
-        <div style="display:flex; align-items:center; gap:6px; margin-top:2px;">
+        <div class="user-meta-row">
           <span class="vip-badge-pill" id="headerVipBadge">🥉 Bronze</span>
           <span class="user-id" id="userId" onclick="event.stopPropagation(); copyText(currentUser.user_id, this)" title="Click to copy ID">ID: 00000000 📋</span>
         </div>
@@ -75,25 +75,25 @@
 
     <!-- Header Controls & Admin Badge -->
     <div class="header-actions">
-      <button id="currencyToggleBtn" class="lang-toggle-btn" onclick="toggleCurrency()" title="Switch Currency USD ($) / KHR (៛)">
+      <button id="currencyToggleBtn" class="header-tool-btn" onclick="toggleCurrency()" title="Switch Currency USD ($) / KHR (៛)">
         <span id="currencySymbol">💵</span>
-        <span id="currencyLabel" style="font-size: 11px; font-weight: 800;">USD</span>
+        <span id="currencyLabel" class="tool-btn-label">USD</span>
       </button>
-      <button id="langToggleBtn" class="lang-toggle-btn" onclick="toggleLanguage()" title="Switch Language ខ្មែរ / English">
+      <button id="langToggleBtn" class="header-tool-btn" onclick="toggleLanguage()" title="Switch Language ខ្មែរ / English">
         <span id="langFlag">🇰🇭</span>
-        <span id="langLabel" style="font-size: 11px; font-weight: 800;">KM</span>
+        <span id="langLabel" class="tool-btn-label">KM</span>
       </button>
-      <button id="btnNotifInbox" class="notif-inbox-btn" onclick="openNotificationCenter()" title="Notifications & Announcements">
+      <button id="btnNotifInbox" class="header-tool-btn icon-only notif-inbox-btn" onclick="openNotificationCenter()" title="Notifications">
         <span class="notif-icon">🔔</span>
         <span class="notif-unread-dot" id="headerNotifBadge" style="display:none;"></span>
       </button>
-      <button id="themeToggleBtn" class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+      <button id="themeToggleBtn" class="header-tool-btn icon-only theme-toggle-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
         <span class="theme-icon" id="themeIcon">🌙</span>
-        <span id="themeLabel">Dark</span>
       </button>
-      <div id="adminBadge" class="admin-chip" style="display:none;"
-        onclick="switchTab('tabAdmin', document.getElementById('navAdmin'))" title="Click to open Admin Dashboard">👑
-        ADMIN</div>
+      <div id="adminBadge" class="admin-chip-compact" style="display:none;"
+        onclick="switchTab('tabAdmin', document.getElementById('navAdmin'))" title="Click to open Admin Dashboard">
+        👑 ADMIN
+      </div>
     </div>
   </header>
 
