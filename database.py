@@ -4641,6 +4641,128 @@ async def reply_support_ticket(ticket_id: int, admin_reply: str, replied_by: str
         return {"status": "error", "message": str(e)}
 
 
+async def add_customer_review(product_id: int, user_id: int, full_name: str, username: str, rating: int, comment: str, order_id: Optional[int] = None) -> dict:
+    """Submit a customer rating and review for a product."""
+    try:
+        async with get_db() as db:
+            cursor = await db.execute(
+                """
+                INSERT INTO customer_reviews (order_id, product_id, user_id, full_name, username, rating, comment, is_verified)
+                VALUES (?, ?, ?, ?, ?, ?, ?, 1)
+                """,
+                (order_id, product_id, user_id, full_name, username, max(1, min(5, int(rating))), comment)
+            )
+            await db.commit()
+            return {"status": "success", "message": "បានផ្ញើ Review ជោគជ័យ! អរគុណសម្រាប់ការវាយតម្លៃ។", "review_id": cursor.lastrowid}
+    except Exception as e:
+        logger.error(f"Error adding customer review: {e}")
+        return {"status": "error", "message": str(e)}
+
+
+async def get_product_reviews(product_id: int, limit: int = 20) -> List[dict]:
+    """Get verified customer reviews for a specific product."""
+    try:
+        async with get_db() as db:
+            db.row_factory = aiosqlite.Row
+            cursor = await db.execute(
+                """
+                SELECT * FROM customer_reviews
+                WHERE product_id = ?
+                ORDER BY created_at DESC
+                LIMIT ?
+                """,
+                (product_id, limit)
+            )
+            rows = await cursor.fetchall()
+            return [dict(row) for row in rows]
+    except Exception as e:
+        logger.error(f"Error getting reviews for product {product_id}: {e}")
+        return []
+
+
+async def get_recent_customer_reviews(limit: int = 15) -> List[dict]:
+    """Get recent customer reviews across all products."""
+    try:
+        async with get_db() as db:
+            db.row_factory = aiosqlite.Row
+            cursor = await db.execute(
+                """
+                SELECT r.*, p.name as product_name, p.image_url as product_image
+                FROM customer_reviews r
+                LEFT JOIN products p ON r.product_id = p.id
+                ORDER BY r.created_at DESC
+                LIMIT ?
+                """,
+                (limit,)
+            )
+            rows = await cursor.fetchall()
+            return [dict(row) for row in rows]
+    except Exception as e:
+        logger.error(f"Error getting recent reviews: {e}")
+        return []
+
+
+async def get_orders_for_export() -> List[dict]:
+    """Fetch all orders data formatted for CSV/Excel export."""
+    try:
+        async with get_db() as db:
+            db.row_factory = aiosqlite.Row
+            cursor = await db.execute(
+                """
+                SELECT o.id as order_id, o.user_id, u.full_name as customer_name, u.username,
+                       o.product_name, o.price, o.payment_method, o.status, o.note, o.created_at, o.updated_at
+                FROM orders o
+                LEFT JOIN users u ON o.user_id = u.user_id
+                ORDER BY o.id DESC
+                """
+            )
+            rows = await cursor.fetchall()
+            return [dict(row) for row in rows]
+    except Exception as e:
+        logger.error(f"Error exporting orders data: {e}")
+        return []
+
+
+async def get_topups_for_export() -> List[dict]:
+    """Fetch all top-up requests for CSV/Excel export."""
+    try:
+        async with get_db() as db:
+            db.row_factory = aiosqlite.Row
+            cursor = await db.execute(
+                """
+                SELECT t.id as topup_id, t.user_id, u.full_name as user_name, u.username,
+                       t.amount, t.payment_method, t.status, t.admin_note, t.created_at
+                FROM topup_requests t
+                LEFT JOIN users u ON t.user_id = u.user_id
+                ORDER BY t.id DESC
+                """
+            )
+            rows = await cursor.fetchall()
+            return [dict(row) for row in rows]
+    except Exception as e:
+        logger.error(f"Error exporting top-ups data: {e}")
+        return []
+
+
+async def get_users_for_export() -> List[dict]:
+    """Fetch user accounts list for CSV/Excel export."""
+    try:
+        async with get_db() as db:
+            db.row_factory = aiosqlite.Row
+            cursor = await db.execute(
+                """
+                SELECT user_id, username, full_name, balance, is_admin, referred_by, created_at
+                FROM users
+                ORDER BY user_id DESC
+                """
+            )
+            rows = await cursor.fetchall()
+            return [dict(row) for row in rows]
+    except Exception as e:
+        logger.error(f"Error exporting users data: {e}")
+        return []
+
+
 
 
 

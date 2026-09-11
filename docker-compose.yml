@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  telegram-miniapp:
+    build: .
+    container_name: telegram_miniapp_bot
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./uploads:/app/uploads
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8000

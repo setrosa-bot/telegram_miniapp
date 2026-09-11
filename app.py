@@ -4,10 +4,12 @@ import logging
 import html
 import aiosqlite
 import asyncio
+import io
+import csv
 from typing import Optional, List
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form, Depends
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
+from fastapi.responses import FileResponse, JSONResponse, RedirectResponse, Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -2089,6 +2091,127 @@ async def admin_get_giveaway_claims_api(giveaway_id: int, admin_id: int):
         raise HTTPException(status_code=403, detail="Admin access required")
     claims = await db.admin_get_giveaway_claims(giveaway_id)
     return {"status": "success", "data": claims}
+
+
+# ─── Customer Reviews API ───────────────────────────────────────────────────
+class CustomerReviewRequest(BaseModel):
+    user_id: int
+    full_name: str
+    username: Optional[str] = ""
+    rating: int = 5
+    comment: str
+    order_id: Optional[int] = None
+
+
+@app.post("/api/products/{product_id}/review")
+async def add_product_review_api(product_id: int, req: CustomerReviewRequest):
+    res = await db.add_customer_review(
+        product_id=product_id,
+        user_id=req.user_id,
+        full_name=req.full_name,
+        username=req.username or "",
+        rating=req.rating,
+        comment=req.comment,
+        order_id=req.order_id
+    )
+    return res
+
+
+@app.get("/api/products/{product_id}/reviews")
+async def get_product_reviews_api(product_id: int, limit: int = 20):
+    reviews = await db.get_product_reviews(product_id, limit=limit)
+    return {"status": "success", "data": reviews}
+
+
+@app.get("/api/reviews/recent")
+async def get_recent_reviews_api(limit: int = 15):
+    reviews = await db.get_recent_customer_reviews(limit=limit)
+    return {"status": "success", "data": reviews}
+
+
+# ─── Admin CSV / Excel Data Exports ──────────────────────────────────────────
+@app.get("/api/admin/export/orders.csv")
+async def export_orders_csv_api(admin_id: int):
+    if not is_admin(admin_id):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    orders = await db.get_orders_for_export()
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["Order ID", "User ID", "Customer Name", "Username", "Product Name", "Price (USD)", "Payment Method", "Status", "Note", "Created At", "Updated At"])
+    for o in orders:
+        writer.writerow([
+            o.get("order_id", ""),
+            o.get("user_id", ""),
+            o.get("customer_name", ""),
+            o.get("username", ""),
+            o.get("product_name", ""),
+            o.get("price", 0.0),
+            o.get("payment_method", ""),
+            o.get("status", ""),
+            o.get("note", ""),
+            o.get("created_at", ""),
+            o.get("updated_at", "")
+        ])
+    csv_content = output.getvalue()
+    return Response(
+        content=csv_content,
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=orders_export.csv"}
+    )
+
+
+@app.get("/api/admin/export/topups.csv")
+async def export_topups_csv_api(admin_id: int):
+    if not is_admin(admin_id):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    topups = await db.get_topups_for_export()
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["Topup ID", "User ID", "User Name", "Username", "Amount (USD)", "Payment Method", "Status", "Admin Note", "Created At"])
+    for t in topups:
+        writer.writerow([
+            t.get("topup_id", ""),
+            t.get("user_id", ""),
+            t.get("user_name", ""),
+            t.get("username", ""),
+            t.get("amount", 0.0),
+            t.get("payment_method", ""),
+            t.get("status", ""),
+            t.get("admin_note", ""),
+            t.get("created_at", "")
+        ])
+    csv_content = output.getvalue()
+    return Response(
+        content=csv_content,
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=topups_export.csv"}
+    )
+
+
+@app.get("/api/admin/export/users.csv")
+async def export_users_csv_api(admin_id: int):
+    if not is_admin(admin_id):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    users = await db.get_users_for_export()
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["User ID", "Username", "Full Name", "Balance (USD)", "Is Admin", "Referred By", "Created At"])
+    for u in users:
+        writer.writerow([
+            u.get("user_id", ""),
+            u.get("username", ""),
+            u.get("full_name", ""),
+            u.get("balance", 0.0),
+            u.get("is_admin", 0),
+            u.get("referred_by", ""),
+            u.get("created_at", "")
+        ])
+    csv_content = output.getvalue()
+    return Response(
+        content=csv_content,
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=users_export.csv"}
+    )
 
 
 # ─── Serve WebApp Frontend Static Files ───────────────────────────────────────

@@ -75,6 +75,10 @@
 
     <!-- Header Controls & Admin Badge -->
     <div class="header-actions">
+      <button id="currencyToggleBtn" class="lang-toggle-btn" onclick="toggleCurrency()" title="Switch Currency USD ($) / KHR (៛)">
+        <span id="currencySymbol">💵</span>
+        <span id="currencyLabel" style="font-size: 11px; font-weight: 800;">USD</span>
+      </button>
       <button id="langToggleBtn" class="lang-toggle-btn" onclick="toggleLanguage()" title="Switch Language ខ្មែរ / English">
         <span id="langFlag">🇰🇭</span>
         <span id="langLabel" style="font-size: 11px; font-weight: 800;">KM</span>
@@ -659,7 +663,10 @@
           <h4 class="admin-sec-title" style="color: var(--gold-primary);">
             <span>📋</span> <span>Orders ទាំងអស់ (All Orders)</span>
           </h4>
-          <button class="btn-admin-tool" onclick="loadAdminOrders()" style="font-size: 11px; padding: 4px 8px;">🔄 Refresh</button>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn-admin-tool" onclick="exportAdminOrdersCsv()" style="font-size: 11px; padding: 4px 8px; background: rgba(16,185,129,0.15); border-color: rgba(16,185,129,0.4); color: #34d399;" title="Download Orders as CSV Excel">📥 Export CSV</button>
+            <button class="btn-admin-tool" onclick="loadAdminOrders()" style="font-size: 11px; padding: 4px 8px;">🔄 Refresh</button>
+          </div>
         </div>
 
         <!-- Search Bar for Orders -->
@@ -693,9 +700,12 @@
             </h4>
             <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">ផ្ទៀងផ្ទាត់ Bank Slip និងអនុម័តសមតុល្យ Wallet ជូនអតិថិជន</div>
           </div>
-          <button class="btn-admin-tool" onclick="loadAdminTopupRequests()" style="display: flex; align-items: center; gap: 4px;">
-            <span>🔄</span> <span>Refresh</span>
-          </button>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn-admin-tool" onclick="exportAdminTopupsCsv()" style="font-size: 11px; padding: 4px 8px; background: rgba(16,185,129,0.15); border-color: rgba(16,185,129,0.4); color: #34d399;" title="Download Topups as CSV Excel">📥 Export CSV</button>
+            <button class="btn-admin-tool" onclick="loadAdminTopupRequests()" style="display: flex; align-items: center; gap: 4px;">
+              <span>🔄</span> <span>Refresh</span>
+            </button>
+          </div>
         </div>
 
         <div id="adminTopupList" style="display: flex; flex-direction: column; gap: 12px; margin-top: 6px;">
@@ -841,7 +851,10 @@
               <div style="font-size: 11px; color: var(--text-sub);">គ្រប់គ្រងសមាជិក តួនាទី និងសមតុល្យ</div>
             </div>
           </div>
-          <button class="btn-admin-tool" onclick="loadAdminUsers()" style="font-size: 11.5px; padding: 6px 12px;">🔄 Refresh</button>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn-admin-tool" onclick="exportAdminUsersCsv()" style="font-size: 11.5px; padding: 6px 12px; background: rgba(16,185,129,0.15); border-color: rgba(16,185,129,0.4); color: #34d399;" title="Download Users as CSV Excel">📥 Export CSV</button>
+            <button class="btn-admin-tool" onclick="loadAdminUsers()" style="font-size: 11.5px; padding: 6px 12px;">🔄 Refresh</button>
+          </div>
         </div>
 
         <!-- KPI Quick Stat Pills -->
@@ -1832,6 +1845,19 @@
                 <span>🔗</span> <span>បើក Link ភ្ជាប់</span>
               </a>
             </div>
+          </div>
+
+          <!-- Quick Action Suite: Launch App, Receipt, Reviews -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: 6px;">
+            <button type="button" class="btn-primary-action" id="accModalLaunchBtn" onclick="launchDirectApp(document.getElementById('accModalProdName').textContent)" style="padding: 8px 4px; font-size: 11px; font-weight: 800; background: linear-gradient(135deg, #06b6d4, #3b82f6); border: none;">
+              🚀 Launch App
+            </button>
+            <button type="button" class="btn-secondary-action" id="accModalReceiptBtn" onclick="openReceiptModal(currentAccountDetailsOrderId || (userOrdersCache[0]?.id))" style="padding: 8px 4px; font-size: 11px; font-weight: 800;">
+              🧾 វិក្កយបត្រ
+            </button>
+            <button type="button" class="btn-secondary-action" id="accModalReviewBtn" onclick="openProductReviewsModal(null, document.getElementById('accModalProdName').textContent, currentAccountDetailsOrderId)" style="padding: 8px 4px; font-size: 11px; font-weight: 800; color: #fbbf24;">
+              ⭐ Review
+            </button>
           </div>
 
           <div
@@ -3337,6 +3363,154 @@
           បិទ (Close)
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       MODAL: DIGITAL RECEIPT / INVOICE (Luxury Official Receipt)
+       ═══════════════════════════════════════════════════════════════ -->
+  <div class="modal-backdrop" id="receiptModal" onclick="if(event.target===this) closeModal('receiptModal')">
+    <div class="modal-box" style="max-width: 420px; padding: 0; overflow: hidden; background: #0c081e; border: 1px solid rgba(167,139,250,0.3); box-shadow: 0 20px 50px rgba(0,0,0,0.9);">
+      
+      <!-- Receipt Header Banner -->
+      <div style="background: linear-gradient(135deg, #1e1b4b, #3b0764); padding: 20px; text-align: center; position: relative; border-bottom: 1px dashed rgba(255,255,255,0.15);">
+        <button class="btn-close-modal" style="position: absolute; right: 14px; top: 14px;" onclick="closeModal('receiptModal')">✕</button>
+        <div style="width: 50px; height: 50px; margin: 0 auto 8px; border-radius: 50%; background: linear-gradient(135deg, #fbbf24, #f59e0b); display: flex; align-items: center; justify-content: center; font-size: 26px; box-shadow: 0 0 20px rgba(251,191,36,0.4);">
+          🧾
+        </div>
+        <h3 style="margin: 0; font-size: 17px; font-weight: 900; color: #fff; letter-spacing: 0.5px;">DIGITAL OFFICIAL RECEIPT</h3>
+        <div style="font-size: 11px; color: #cbd5e1; margin-top: 3px;">Digital Premium Store • 24/7 Verified</div>
+      </div>
+
+      <!-- Receipt Body -->
+      <div id="receiptPrintArea" style="padding: 20px; display: flex; flex-direction: column; gap: 14px; background: rgba(255,255,255,0.02);">
+        
+        <!-- Status & Order ID Badge -->
+        <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); padding: 10px 14px; border-radius: 12px;">
+          <div>
+            <div style="font-size: 10px; color: var(--text-muted); font-weight: 700;">STATUS</div>
+            <div style="font-size: 13px; font-weight: 800; color: #34d399;" id="receiptStatus">✅ PAID &amp; DELIVERED</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 10px; color: var(--text-muted); font-weight: 700;">ORDER ID</div>
+            <div style="font-size: 13px; font-weight: 800; color: #fbbf24; font-family: monospace;" id="receiptOrderId">#ORD-0000</div>
+          </div>
+        </div>
+
+        <!-- Meta Grid -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 11.5px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 12px;">
+          <div>
+            <span style="color: var(--text-muted); display: block; font-size: 10px;">CUSTOMER</span>
+            <strong style="color: #fff;" id="receiptCustomerName">User</strong>
+          </div>
+          <div style="text-align: right;">
+            <span style="color: var(--text-muted); display: block; font-size: 10px;">DATE &amp; TIME</span>
+            <strong style="color: #fff;" id="receiptDateTime">2026-09-11</strong>
+          </div>
+          <div>
+            <span style="color: var(--text-muted); display: block; font-size: 10px;">PAYMENT METHOD</span>
+            <strong style="color: #38bdf8;" id="receiptPaymentMethod">ABA KHQR</strong>
+          </div>
+          <div style="text-align: right;">
+            <span style="color: var(--text-muted); display: block; font-size: 10px;">WARRANTY</span>
+            <strong style="color: #34d399;" id="receiptWarranty">30 Days 100%</strong>
+          </div>
+        </div>
+
+        <!-- Product Summary -->
+        <div style="background: rgba(0,0,0,0.35); border-radius: 12px; padding: 12px; border: 1px solid rgba(255,255,255,0.06);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="font-size: 12.5px; font-weight: 800; color: #fff;" id="receiptItemName">CapCut Pro</span>
+            <span style="font-size: 13px; font-weight: 900; color: #fbbf24;" id="receiptItemPrice">$0.00</span>
+          </div>
+          <div style="font-size: 10.5px; color: var(--text-muted);" id="receiptItemDuration">Duration: 30 Days</div>
+        </div>
+
+        <!-- Total Breakdown -->
+        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 4px;">
+          <span style="font-size: 14px; font-weight: 800; color: #fff;">TOTAL PAID:</span>
+          <div style="text-align: right;">
+            <div style="font-size: 18px; font-weight: 900; color: #34d399;" id="receiptTotalVal">$0.00</div>
+            <div style="font-size: 11px; color: #fbbf24; font-weight: 700;" id="receiptTotalKhr">0 ៛</div>
+          </div>
+        </div>
+
+        <div style="text-align: center; font-size: 10px; color: var(--text-muted); margin-top: 4px; font-style: italic;">
+          🔒 This invoice is digitally encrypted and verified by Digital Store API.
+        </div>
+      </div>
+
+      <!-- Footer Action Buttons -->
+      <div style="padding: 14px 20px; background: rgba(0,0,0,0.4); border-top: 1px solid rgba(255,255,255,0.08); display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+        <button type="button" class="btn-primary-action" onclick="copyReceiptText()" style="padding: 10px; font-size: 12px; font-weight: 800;">
+          📋 Copy វិក្កយបត្រ
+        </button>
+        <button type="button" class="btn-secondary-action" onclick="shareReceiptTelegram()" style="padding: 10px; font-size: 12px; font-weight: 800;">
+          🚀 Share Telegram
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       MODAL: CUSTOMER REVIEWS & 5-STAR RATING
+       ═══════════════════════════════════════════════════════════════ -->
+  <div class="modal-backdrop" id="productReviewsModal" onclick="if(event.target===this) closeModal('productReviewsModal')">
+    <div class="modal-box" style="max-width: 440px; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden; padding: 0;">
+      
+      <!-- Modal Header -->
+      <div class="modal-header" style="padding: 16px 20px; border-bottom: 1px solid var(--card-border); background: rgba(0,0,0,0.15);">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 38px; height: 38px; border-radius: 12px; background: linear-gradient(135deg, rgba(251,191,36,0.2), rgba(245,158,11,0.2)); display: flex; align-items: center; justify-content: center; font-size: 20px;">
+            ⭐
+          </div>
+          <div>
+            <h3 class="modal-title" style="color: var(--gold-primary); font-size: 15.5px; margin: 0; font-weight: 900;">មតិយោបល់ &amp; ការវាយតម្លៃ</h3>
+            <div style="font-size: 11px; color: var(--text-muted);" id="reviewsModalProdTitle">Product Reviews</div>
+          </div>
+        </div>
+        <button class="btn-close-modal" onclick="closeModal('productReviewsModal')">✕</button>
+      </div>
+
+      <!-- Add Review Form -->
+      <div style="padding: 14px 18px; border-bottom: 1px solid var(--card-border); background: rgba(255,255,255,0.02);">
+        <form id="formSubmitReview" onsubmit="submitCustomerReview(event)">
+          <input type="hidden" id="reviewProdId" value="">
+          <input type="hidden" id="reviewOrderId" value="">
+          
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="font-size: 12px; font-weight: 700; color: #fff;">ផ្ដល់ពិន្ទុរបស់អ្នក៖</span>
+            <div class="star-rating-selector" id="starRatingSelector">
+              <span class="star-choice active" data-rating="1" onclick="selectStarRating(1)">⭐</span>
+              <span class="star-choice active" data-rating="2" onclick="selectStarRating(2)">⭐</span>
+              <span class="star-choice active" data-rating="3" onclick="selectStarRating(3)">⭐</span>
+              <span class="star-choice active" data-rating="4" onclick="selectStarRating(4)">⭐</span>
+              <span class="star-choice active" data-rating="5" onclick="selectStarRating(5)">⭐</span>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 8px;">
+            <input type="text" id="reviewCommentInput" class="form-input" placeholder="សរសេរមតិយោបល់របស់អ្នក (ឧ. លឿន ស្រួលប្រើ)..." required style="font-size: 12px; padding: 8px 12px; flex: 1;">
+            <button type="submit" class="btn-primary-action" style="padding: 8px 14px; font-size: 12px; font-weight: 800; white-space: nowrap;">
+              ផ្ញើ ⭐
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Reviews List Container -->
+      <div id="productReviewsList" style="padding: 14px 18px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 10px;">
+        <div style="text-align: center; padding: 30px; color: var(--text-muted);">⏳ កំពុងផ្ទុកមតិយោបល់...</div>
+      </div>
+
+      <!-- Footer -->
+      <div style="padding: 10px 18px; border-top: 1px solid var(--card-border); text-align: right; background: rgba(0,0,0,0.15);">
+        <button type="button" class="btn-secondary-action" style="padding: 7px 16px; font-size: 12px;" onclick="closeModal('productReviewsModal')">
+          បិទ (Close)
+        </button>
+      </div>
+
     </div>
   </div>
 

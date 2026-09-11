@@ -1860,6 +1860,7 @@ async function loadUserOrders() {
 
 
 function openAccountDetailsModal(orderId) {
+  window.currentAccountDetailsOrderId = orderId;
   const o = userOrdersCache.find(x => Number(x.id) === Number(orderId));
   if (!o) return;
 
@@ -7663,6 +7664,330 @@ async function openAdminGaClaimsModal(giveawayId, title) {
   }
 }
 window.openAdminGaClaimsModal = openAdminGaClaimsModal;
+
+// ═══════════════════════════════════════════════════════════════
+// 💵 1. CURRENCY SWITCHER (USD $ ↔ KHR ៛)
+// ═══════════════════════════════════════════════════════════════
+let currentCurrency = localStorage.getItem("app_currency") || "USD";
+const KHR_RATE = 4100;
+
+function formatMoney(amountUsd) {
+  const num = parseFloat(amountUsd) || 0;
+  if (currentCurrency === "KHR") {
+    const khr = Math.round(num * KHR_RATE);
+    return `${khr.toLocaleString("km-KH")} ៛`;
+  }
+  return `$${num.toFixed(2)}`;
+}
+window.formatMoney = formatMoney;
+
+function toggleCurrency() {
+  currentCurrency = currentCurrency === "USD" ? "KHR" : "USD";
+  localStorage.setItem("app_currency", currentCurrency);
+  
+  const label = document.getElementById("currencyLabel");
+  const symbol = document.getElementById("currencySymbol");
+  if (label) label.textContent = currentCurrency;
+  if (symbol) symbol.textContent = currentCurrency === "USD" ? "💵" : "🇰🇭";
+  
+  if (typeof playSound === "function") playSound("click");
+  if (window.Telegram?.WebApp?.HapticFeedback) {
+    window.Telegram.WebApp.HapticFeedback.impactOccurred("medium");
+  }
+
+  // Refresh current views
+  if (typeof renderProducts === "function" && productsData) {
+    renderProducts(productsData);
+  }
+  if (typeof loadOrders === "function") {
+    loadOrders();
+  }
+  if (typeof loadWalletInfo === "function") {
+    loadWalletInfo();
+  }
+}
+window.toggleCurrency = toggleCurrency;
+
+function initCurrencyUI() {
+  const label = document.getElementById("currencyLabel");
+  const symbol = document.getElementById("currencySymbol");
+  if (label) label.textContent = currentCurrency;
+  if (symbol) symbol.textContent = currentCurrency === "USD" ? "💵" : "🇰🇭";
+}
+
+
+// ═══════════════════════════════════════════════════════════════
+// 🧾 2. DIGITAL RECEIPT / INVOICE GENERATOR
+// ═══════════════════════════════════════════════════════════════
+let currentReceiptData = null;
+
+async function openReceiptModal(orderId) {
+  if (!orderId) return;
+  if (typeof playSound === "function") playSound("click");
+
+  const statusEl = document.getElementById("receiptStatus");
+  const idEl = document.getElementById("receiptOrderId");
+  const custEl = document.getElementById("receiptCustomerName");
+  const dateEl = document.getElementById("receiptDateTime");
+  const payEl = document.getElementById("receiptPaymentMethod");
+  const warEl = document.getElementById("receiptWarranty");
+  const itemEl = document.getElementById("receiptItemName");
+  const priceEl = document.getElementById("receiptItemPrice");
+  const durEl = document.getElementById("receiptItemDuration");
+  const totalEl = document.getElementById("receiptTotalVal");
+  const khrEl = document.getElementById("receiptTotalKhr");
+
+  if (idEl) idEl.textContent = `#ORD-${orderId}`;
+  if (custEl) custEl.textContent = currentUser.full_name || "Customer";
+  if (dateEl) dateEl.textContent = new Date().toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" });
+
+  try {
+    const res = await fetch(`/api/user/${currentUser.user_id}/orders`);
+    const json = await res.json();
+    const orders = json.data || [];
+    const order = orders.find(o => String(o.id) === String(orderId)) || orders[0];
+
+    if (order) {
+      currentReceiptData = order;
+      if (idEl) idEl.textContent = `#ORD-${order.id}`;
+      if (itemEl) itemEl.textContent = order.product_name || "Digital Account";
+      if (priceEl) priceEl.textContent = `$${parseFloat(order.price || 0).toFixed(2)}`;
+      if (totalEl) totalEl.textContent = `$${parseFloat(order.price || 0).toFixed(2)}`;
+      const khrAmount = Math.round(parseFloat(order.price || 0) * KHR_RATE);
+      if (khrEl) khrEl.textContent = `(${khrAmount.toLocaleString("km-KH")} ៛)`;
+      if (payEl) payEl.textContent = order.payment_method || "ABA KHQR";
+      if (dateEl) dateEl.textContent = formatOrderDateTime(order.created_at);
+      if (statusEl) {
+        statusEl.textContent = order.status === "delivered" ? "✅ PAID & DELIVERED" : (order.status === "pending" ? "⏳ PENDING REVIEW" : "❌ " + order.status.toUpperCase());
+        statusEl.style.color = order.status === "delivered" ? "#34d399" : (order.status === "pending" ? "#fbbf24" : "#f87171");
+      }
+    }
+  } catch (err) {
+    console.error("Error loading receipt:", err);
+  }
+
+  openModal("receiptModal");
+}
+window.openReceiptModal = openReceiptModal;
+
+function copyReceiptText() {
+  if (!currentReceiptData) {
+    alert("Receipt data loaded.");
+    return;
+  }
+  const text = `🧾 DIGITAL PREMIUM STORE — OFFICIAL RECEIPT
+━━━━━━━━━━━━━━━━━━━━━
+Order ID: #ORD-${currentReceiptData.id}
+Customer: ${currentUser.full_name || 'Customer'}
+Product: ${currentReceiptData.product_name}
+Amount Paid: $${parseFloat(currentReceiptData.price || 0).toFixed(2)} (${(Math.round(parseFloat(currentReceiptData.price || 0) * KHR_RATE)).toLocaleString('km-KH')} ៛)
+Payment: ${currentReceiptData.payment_method || 'ABA KHQR'}
+Status: ${currentReceiptData.status ? currentReceiptData.status.toUpperCase() : 'DELIVERED'}
+Date: ${formatOrderDateTime(currentReceiptData.created_at)}
+━━━━━━━━━━━━━━━━━━━━━
+🔒 Digitally Verified & Guaranteed 100%`;
+  
+  if (typeof copyText === "function") {
+    copyText(text);
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(text);
+    alert("✅ វិក្កយបត្រត្រូវបានចម្លង (Receipt Copied)!");
+  }
+}
+window.copyReceiptText = copyReceiptText;
+
+function shareReceiptTelegram() {
+  if (!currentReceiptData) return;
+  const msg = `🧾 វិក្កយបត្របញ្ជាទិញជោគជ័យ #ORD-${currentReceiptData.id} លើ Digital Premium Store! 🎉`;
+  const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(window.location.origin)}&text=${encodeURIComponent(msg)}`;
+  if (tg && tg.openTelegramLink) {
+    tg.openTelegramLink(shareUrl);
+  } else {
+    window.open(shareUrl, "_blank");
+  }
+}
+window.shareReceiptTelegram = shareReceiptTelegram;
+
+
+// ═══════════════════════════════════════════════════════════════
+// ⭐ 3. CUSTOMER REVIEWS & 5-STAR RATING SYSTEM
+// ═══════════════════════════════════════════════════════════════
+let selectedStarRating = 5;
+
+function selectStarRating(r) {
+  selectedStarRating = Math.max(1, Math.min(5, parseInt(r) || 5));
+  const stars = document.querySelectorAll("#starRatingSelector .star-choice");
+  stars.forEach((s, idx) => {
+    if (idx < selectedStarRating) {
+      s.classList.add("active");
+      s.style.opacity = "1";
+    } else {
+      s.classList.remove("active");
+      s.style.opacity = "0.3";
+    }
+  });
+  if (typeof playSound === "function") playSound("click");
+}
+window.selectStarRating = selectStarRating;
+
+async function openProductReviewsModal(productId, productName, orderId = null) {
+  if (typeof playSound === "function") playSound("click");
+  const titleEl = document.getElementById("reviewsModalProdTitle");
+  if (titleEl) titleEl.textContent = productName || "Product Reviews";
+
+  const pIdInput = document.getElementById("reviewProdId");
+  const oIdInput = document.getElementById("reviewOrderId");
+  if (pIdInput) pIdInput.value = productId || "";
+  if (oIdInput) oIdInput.value = orderId || "";
+
+  selectStarRating(5);
+  const listEl = document.getElementById("productReviewsList");
+  if (listEl) listEl.innerHTML = `<div style="text-align: center; padding: 25px; color: var(--text-muted);">⏳ កំពុងផ្ទុកមតិយោបល់...</div>`;
+
+  openModal("productReviewsModal");
+
+  try {
+    const res = await fetch(`/api/products/${productId}/reviews`);
+    const json = await res.json();
+    const reviews = json.data || [];
+
+    if (reviews.length === 0) {
+      listEl.innerHTML = `
+        <div style="text-align: center; padding: 30px; color: var(--text-muted);">
+          <div style="font-size: 30px; margin-bottom: 6px;">⭐</div>
+          <div style="font-size: 13px; font-weight: 700; color: #fff;">មិនទាន់មានមតិយោបល់នៅឡើយទេ</div>
+          <div style="font-size: 11px; margin-top: 4px;">ក្លាយជាអ្នកដំបូងគេដែលផ្ដល់ការវាយតម្លៃ 5 ផ្កាយ!</div>
+        </div>
+      `;
+      return;
+    }
+
+    let html = "";
+    reviews.forEach(r => {
+      const starsStr = "⭐".repeat(r.rating || 5);
+      const timeStr = r.created_at ? new Date(r.created_at).toLocaleDateString("km-KH") : "ថ្មីៗនេះ";
+      html += `
+        <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="font-size: 12px; font-weight: 800; color: #fff;">${escapeHtml(r.full_name || 'អតិថិជន')}</span>
+              <span style="font-size: 9.5px; color: #34d399; background: rgba(16,185,129,0.15); padding: 1px 6px; border-radius: 8px;">✓ Verified</span>
+            </div>
+            <span style="font-size: 11px;">${starsStr}</span>
+          </div>
+          <p style="margin: 0; font-size: 12px; color: var(--text-sub); line-height: 1.4;">${escapeHtml(r.comment || '')}</p>
+          <div style="text-align: right; font-size: 9.5px; color: var(--text-muted); margin-top: 4px;">${timeStr}</div>
+        </div>
+      `;
+    });
+
+    listEl.innerHTML = html;
+  } catch (err) {
+    listEl.innerHTML = `<div style="text-align: center; padding: 25px; color: var(--danger);">❌ Error: ${err.message}</div>`;
+  }
+}
+window.openProductReviewsModal = openProductReviewsModal;
+
+async function submitCustomerReview(e) {
+  e.preventDefault();
+  const prodId = document.getElementById("reviewProdId")?.value;
+  const orderId = document.getElementById("reviewOrderId")?.value;
+  const comment = document.getElementById("reviewCommentInput")?.value?.trim();
+
+  if (!prodId || !comment) {
+    alert("សូមបញ្ចូលមតិយោបល់របស់អ្នក!");
+    return;
+  }
+
+  try {
+    const res = await fetch(`/api/products/${prodId}/review`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        user_id: currentUser.user_id,
+        full_name: currentUser.full_name || "អតិថិជន",
+        username: currentUser.username || "",
+        rating: selectedStarRating,
+        comment: comment,
+        order_id: orderId ? parseInt(orderId) : null
+      })
+    });
+    const json = await res.json();
+    if (json.status === "success") {
+      if (typeof playSound === "function") playSound("win");
+      alert("🎉 " + json.message);
+      document.getElementById("reviewCommentInput").value = "";
+      openProductReviewsModal(prodId, "Product Reviews", orderId);
+    } else {
+      alert("❌ Error: " + json.message);
+    }
+  } catch (err) {
+    alert("❌ Network Error: " + err.message);
+  }
+}
+window.submitCustomerReview = submitCustomerReview;
+
+
+// ═══════════════════════════════════════════════════════════════
+// 🚀 4. DIRECT ONE-TAP LAUNCH APP RESOLVER
+// ═══════════════════════════════════════════════════════════════
+function getAppLaunchUrl(productName) {
+  if (!productName) return null;
+  const p = productName.toLowerCase();
+  if (p.includes("capcut")) return "https://www.capcut.com/login";
+  if (p.includes("canva")) return "https://www.canva.com/login";
+  if (p.includes("chatgpt") || p.includes("openai")) return "https://chatgpt.com";
+  if (p.includes("netflix")) return "https://www.netflix.com/login";
+  if (p.includes("claude")) return "https://claude.ai/login";
+  if (p.includes("gemini")) return "https://gemini.google.com";
+  if (p.includes("spotify")) return "https://accounts.spotify.com";
+  if (p.includes("youtube")) return "https://accounts.google.com";
+  if (p.includes("vpn") || p.includes("nord")) return "https://my.nordaccount.com";
+  return null;
+}
+window.getAppLaunchUrl = getAppLaunchUrl;
+
+function launchDirectApp(productName) {
+  const url = getAppLaunchUrl(productName);
+  if (!url) {
+    alert("សូមបើក Login ដោយផ្ទាល់លើកម្មវិធី " + (productName || ""));
+    return;
+  }
+  if (typeof playSound === "function") playSound("click");
+  if (tg && tg.openLink) {
+    tg.openLink(url);
+  } else {
+    window.open(url, "_blank");
+  }
+}
+window.launchDirectApp = launchDirectApp;
+
+
+// ═══════════════════════════════════════════════════════════════
+// 📊 5. ADMIN CSV / EXCEL EXPORT FUNCTIONS
+// ═══════════════════════════════════════════════════════════════
+function exportAdminOrdersCsv() {
+  if (typeof playSound === "function") playSound("click");
+  window.location.href = `/api/admin/export/orders.csv?admin_id=${currentUser.user_id}`;
+}
+window.exportAdminOrdersCsv = exportAdminOrdersCsv;
+
+function exportAdminTopupsCsv() {
+  if (typeof playSound === "function") playSound("click");
+  window.location.href = `/api/admin/export/topups.csv?admin_id=${currentUser.user_id}`;
+}
+window.exportAdminTopupsCsv = exportAdminTopupsCsv;
+
+function exportAdminUsersCsv() {
+  if (typeof playSound === "function") playSound("click");
+  window.location.href = `/api/admin/export/users.csv?admin_id=${currentUser.user_id}`;
+}
+window.exportAdminUsersCsv = exportAdminUsersCsv;
+
+// Init currency on page ready
+document.addEventListener("DOMContentLoaded", () => {
+  initCurrencyUI();
+});
 
 
 
