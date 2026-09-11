@@ -1911,6 +1911,11 @@ async def reject_order(
 async def delete_order(order_id: int) -> bool:
     """Permanently delete an order from database."""
     async with aiosqlite.connect(DATABASE_PATH) as db:
+        await db.execute("DELETE FROM delivered_accounts WHERE order_id = ?", (order_id,))
+        try:
+            await db.execute("DELETE FROM ratings WHERE order_id = ?", (order_id,))
+        except Exception:
+            pass
         await db.execute("DELETE FROM orders WHERE id = ?", (order_id,))
         await db.commit()
         return True

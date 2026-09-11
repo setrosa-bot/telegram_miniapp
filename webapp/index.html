@@ -2757,15 +2757,19 @@
         <span>Bot នឹងផ្ញើសារប្រាប់ User តាម Telegram ពីមូលហេតុនៃការបដិសេធនេះ។</span>
       </div>
 
-      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 8px;">
-        <button type="button" class="btn-reject-submit" id="btnSubmitRejectOrder" onclick="submitRejectOrder()">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+        <button type="button" class="btn-reject-submit" id="btnSubmitRejectOrder" onclick="submitRejectOrder(false)">
           <span>❌</span>
-          <span id="btnSubmitRejectText">បដិសេធ Order</span>
+          <span id="btnSubmitRejectText">បដិសេធ (Reject)</span>
         </button>
-        <button type="button" class="btn-secondary-action" style="padding: 12px; font-size: 13px; font-weight: 700;" onclick="closeModal('rejectOrderModal')">
-          ត្រឡប់ក្រោយ
+        <button type="button" class="btn-reject-delete-submit" id="btnSubmitRejectAndDelete" onclick="submitRejectOrder(true)">
+          <span>🗑️</span>
+          <span>Reject & Delete</span>
         </button>
       </div>
+      <button type="button" class="btn-secondary-action" style="width: 100%; margin-top: 8px; padding: 10px; font-size: 12px; font-weight: 700;" onclick="closeModal('rejectOrderModal')">
+        ត្រឡប់ក្រោយ (Cancel)
+      </button>
     </div>
   </div>
 

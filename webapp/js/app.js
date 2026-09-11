@@ -2395,10 +2395,10 @@ function renderAdminOrders(orders) {
 
   if (!orders || orders.length === 0) {
     container.innerHTML = `
-      <div style="text-align:center; padding:40px 20px; color:var(--text-muted); background:var(--card-glass); border-radius:16px; border:1px dashed var(--card-border);">
-        <div style="font-size:32px; margin-bottom:8px;">📦</div>
-        <div style="font-size:14px; font-weight:700; color:var(--text-main);">មិនមាន Order ណាត្រូវបានរកឃើញឡើយ</div>
-        <div style="font-size:11px; color:var(--text-sub); margin-top:4px;">រាល់ការបញ្ជាទិញថ្មីៗរបស់អតិថិជន នឹងបង្ហាញនៅទីនេះ</div>
+      <div style="text-align:center; padding:40px 20px; color:var(--text-muted); background:var(--card-glass); border-radius:18px; border:1px dashed var(--card-border);">
+        <div style="font-size:36px; margin-bottom:8px;">📦</div>
+        <div style="font-size:14.5px; font-weight:800; color:var(--text-main);">មិនមាន Order ណាត្រូវបានរកឃើញឡើយ</div>
+        <div style="font-size:11.5px; color:var(--text-sub); margin-top:4px;">រាល់ការបញ្ជាទិញថ្មីៗរបស់អតិថិជន នឹងបង្ហាញនៅទីនេះ</div>
       </div>
     `;
     return;
@@ -2410,29 +2410,62 @@ function renderAdminOrders(orders) {
     const isDelivered = o.status === "delivered";
     const isRejected = o.status === "rejected";
 
+    let cardClass = "admin-order-card";
     let statusBadge = "";
-    let cardBorder = "1px solid rgba(255,255,255,0.08)";
-    let cardBg = "linear-gradient(145deg, rgba(26,18,53,0.85), rgba(16,10,36,0.92))";
 
     if (isPending) {
-      statusBadge = `<span style="background:rgba(245,158,11,0.18); color:#fbbf24; border:1px solid rgba(245,158,11,0.4); padding:3px 10px; border-radius:20px; font-size:11px; font-weight:800; display:inline-flex; align-items:center; gap:4px;">⏳ PENDING</span>`;
-      cardBorder = "1px solid rgba(245,158,11,0.45)";
-      cardBg = "linear-gradient(145deg, rgba(38,28,15,0.9), rgba(20,14,35,0.95))";
+      cardClass += " order-card-pending";
+      statusBadge = `<span class="order-status-pill-v2 pill-pending"><span class="status-dot-pulse"></span> ⏳ PENDING</span>`;
     } else if (isDelivered) {
-      statusBadge = `<span style="background:rgba(16,185,129,0.18); color:#34d399; border:1px solid rgba(16,185,129,0.4); padding:3px 10px; border-radius:20px; font-size:11px; font-weight:800; display:inline-flex; align-items:center; gap:4px;">✅ DELIVERED</span>`;
+      cardClass += " order-card-delivered";
+      statusBadge = `<span class="order-status-pill-v2 pill-delivered"><span class="status-dot-pulse"></span> ✅ DELIVERED</span>`;
     } else if (isRejected) {
-      statusBadge = `<span style="background:rgba(239,68,68,0.18); color:#f87171; border:1px solid rgba(239,68,68,0.4); padding:3px 10px; border-radius:20px; font-size:11px; font-weight:800; display:inline-flex; align-items:center; gap:4px;">❌ REJECTED</span>`;
+      cardClass += " order-card-rejected";
+      statusBadge = `<span class="order-status-pill-v2 pill-rejected"><span class="status-dot-pulse"></span> ❌ REJECTED</span>`;
     }
+
+    // Payment badge
+    const payMethod = o.payment_method || "Wallet";
+    const payUpper = payMethod.toUpperCase();
+    let payBadge = `<span class="order-pay-pill pay-wallet">⚡ ${escapeHtml(payMethod)}</span>`;
+    if (payUpper.includes("ABA")) {
+      payBadge = `<span class="order-pay-pill pay-aba">🏦 ABA KHQR</span>`;
+    } else if (payUpper.includes("ACLEDA")) {
+      payBadge = `<span class="order-pay-pill pay-acleda">🏦 ACLEDA</span>`;
+    } else if (payUpper.includes("WING")) {
+      payBadge = `<span class="order-pay-pill pay-wing">💸 Wing Bank</span>`;
+    } else if (payUpper.includes("USDT") || payUpper.includes("TRC") || payUpper.includes("CRYPTO")) {
+      payBadge = `<span class="order-pay-pill pay-usdt">💎 USDT (TRC20)</span>`;
+    } else if (payUpper.includes("BAKONG")) {
+      payBadge = `<span class="order-pay-pill pay-aba">🇰🇭 Bakong KHQR</span>`;
+    }
+
+    // User Avatar initial
+    const custName = o.full_name || "Customer";
+    const custInitial = (custName.trim().charAt(0) || "U").toUpperCase();
 
     // Bank slip row
     const slipSection = o.proof_file && o.proof_file !== "WALLET_PAYMENT" && o.proof_file !== "instant_wallet_purchase.png"
-      ? `<div style="margin-top:10px; display:flex; align-items:center; gap:10px; background:rgba(56,189,248,0.06); border:1px solid rgba(56,189,248,0.25); padding:8px 12px; border-radius:12px;">
-           <img src="${o.proof_file}" style="width:40px; height:40px; object-fit:cover; border-radius:8px; border:1px solid #38bdf8; cursor:pointer;" onclick="openSlipModal('${o.proof_file}')">
-           <div style="flex:1; min-width:0; cursor:pointer;" onclick="openSlipModal('${o.proof_file}')">
-             <div style="font-size:12px; color:#38bdf8; font-weight:800;">📸 Bank Slip (បានភ្ជាប់)</div>
-             <div style="font-size:10px; color:var(--text-muted);">ចុចទីនេះដើម្បីពង្រីកមើល Slip ពេញ</div>
+      ? `<div class="admin-slip-preview-card" onclick="openSlipModal('${o.proof_file}')">
+           <img src="${o.proof_file}" style="width:44px; height:44px; object-fit:cover; border-radius:10px; border:1.5px solid #38bdf8; cursor:pointer;" onerror="this.src='/images/logo.png'">
+           <div style="flex:1; min-width:0; cursor:pointer;">
+             <div style="font-size:12px; color:#38bdf8; font-weight:800; display:flex; align-items:center; gap:5px;">
+               <span>📸</span> <span>Bank Slip (បានភ្ជាប់)</span>
+             </div>
+             <div style="font-size:10.5px; color:var(--text-sub);">ចុចទីនេះដើម្បីពង្រីកពិនិត្យមើល Slip ពេញ</div>
            </div>
-           <button type="button" class="btn-mini-copy" style="font-size:11px; padding:5px 10px; background:rgba(56,189,248,0.2); color:#38bdf8; border:1px solid #38bdf8; border-radius:8px;" onclick="openSlipModal('${o.proof_file}')">🔍 មើល</button>
+           <button type="button" class="btn-mini-copy" style="font-size:11px; padding:5px 12px; background:rgba(56,189,248,0.2); color:#38bdf8; border:1px solid #38bdf8; border-radius:8px; font-weight:800;" onclick="event.stopPropagation(); openSlipModal('${o.proof_file}')">🔍 មើល Slip</button>
+         </div>`
+      : "";
+
+    // Rejection Reason row
+    const rejectionSection = isRejected
+      ? `<div class="order-rejection-notice">
+           <div class="order-rejection-notice-icon">⚠️</div>
+           <div class="order-rejection-notice-content">
+             <div class="order-rejection-notice-title">មូលហេតុបដិសេធ (Rejection Reason):</div>
+             <div class="order-rejection-notice-text">${escapeHtml(o.note || 'Slip មិនត្រឹមត្រូវ ឬមិនទាន់ទទួលបានការទូទាត់ប្រាក់')}</div>
+           </div>
          </div>`
       : "";
 
@@ -2493,46 +2526,80 @@ function renderAdminOrders(orders) {
       `;
     }
 
-    // Action buttons for pending
-    const actionButtons = isPending
-      ? `<div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px;">
-           <button type="button" class="btn-admin-approve" style="padding:10px; font-size:12.5px; font-weight:800; border-radius:10px; display:flex; align-items:center; justify-content:center; gap:6px;" onclick="openApproveOrderModal(${o.id}, '${escapeHtml(o.product_name)}', '${o.price}', '${escapeHtml(o.full_name || 'Customer')}', '${o.user_id}', '${escapeHtml(o.payment_method || 'ABA')}', '${o.proof_file || ''}')">
-             <span>✅</span> Approve & Deliver
-           </button>
-           <button type="button" class="btn-admin-reject" style="padding:10px; font-size:12.5px; font-weight:800; border-radius:10px; display:flex; align-items:center; justify-content:center; gap:6px;" onclick="openRejectOrderModal(${o.id}, '${escapeHtml(o.product_name)}', '${o.price}', '${escapeHtml(o.full_name || 'Customer')}', '${o.user_id}', '${o.proof_file || ''}')">
-             <span>❌</span> Reject
-           </button>
-         </div>`
-      : "";
+    // Action buttons based on status
+    let actionButtons = "";
+    if (isPending) {
+      actionButtons = `
+        <div class="order-actions-luxury-grid">
+          <button type="button" class="btn-admin-approve" style="padding:10px 12px; font-size:12.5px; font-weight:800; border-radius:12px; display:flex; align-items:center; justify-content:center; gap:6px; box-shadow:0 4px 15px rgba(16,185,129,0.3);" onclick="openApproveOrderModal(${o.id}, '${escapeHtml(o.product_name)}', '${o.price}', '${escapeHtml(o.full_name || 'Customer')}', '${o.user_id}', '${escapeHtml(o.payment_method || 'ABA')}', '${o.proof_file || ''}')">
+            <span>✅</span> <span>Approve & Deliver</span>
+          </button>
+          <button type="button" class="btn-admin-reject" style="padding:10px 12px; font-size:12.5px; font-weight:800; border-radius:12px; display:flex; align-items:center; justify-content:center; gap:6px; box-shadow:0 4px 15px rgba(239,68,68,0.25);" onclick="openRejectOrderModal(${o.id}, '${escapeHtml(o.product_name)}', '${o.price}', '${escapeHtml(o.full_name || 'Customer')}', '${o.user_id}', '${o.proof_file || ''}')">
+            <span>❌</span> <span>Reject Order</span>
+          </button>
+        </div>
+      `;
+    } else if (isRejected) {
+      actionButtons = `
+        <div class="order-rejected-action-grid">
+          <button type="button" class="btn-order-delete-action" onclick="deleteAdminOrder(${o.id}, '${escapeHtml(o.product_name || 'Product')}')" title="លុប Order នេះចេញពី Database">
+            <span>🗑️</span> <span>លុប Order (Delete)</span>
+          </button>
+          <button type="button" class="btn-order-reapprove-action" onclick="openApproveOrderModal(${o.id}, '${escapeHtml(o.product_name)}', '${o.price}', '${escapeHtml(o.full_name || 'Customer')}', '${o.user_id}', '${escapeHtml(o.payment_method || 'ABA')}', '${o.proof_file || ''}')" title="ពិនិត្យ និងអនុម័តឡើងវិញ">
+            <span>🔄</span> <span>Approve ឡើងវិញ</span>
+          </button>
+        </div>
+      `;
+    } else if (isDelivered) {
+      actionButtons = `
+        <div style="display:flex; justify-content:flex-end; margin-top:10px; padding-top:8px; border-top:1px dashed rgba(255,255,255,0.06);">
+          <button type="button" class="btn-order-delete-action" style="padding:5px 10px; font-size:11px; background:rgba(239,68,68,0.12); border-color:rgba(239,68,68,0.3); color:#f87171;" onclick="deleteAdminOrder(${o.id}, '${escapeHtml(o.product_name || 'Product')}')" title="លុបកំណត់ត្រា Order">
+            <span>🗑️</span> <span>លុប Order</span>
+          </button>
+        </div>
+      `;
+    }
 
     html += `
-      <div style="background:${cardBg}; border:${cardBorder}; border-radius:16px; padding:14px; margin-bottom:12px; box-shadow:0 6px 20px rgba(0,0,0,0.35); transition:transform 0.2s;">
+      <div class="${cardClass}" id="adminOrderCard_${o.id}">
         <!-- Card Header: ID, Product & Price -->
-        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px; gap:8px;">
-          <div style="flex:1; min-width:0;">
-            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-              <span style="font-size:11.5px; font-weight:900; background:rgba(99,102,241,0.2); color:#a78bfa; border:1px solid rgba(99,102,241,0.4); padding:2px 8px; border-radius:8px;">#${o.id}</span>
-              <span style="font-size:14px; font-weight:900; color:#fff; word-break:break-word;">${escapeHtml(o.product_name)}</span>
-            </div>
-            <div style="font-size:11.5px; color:var(--text-sub); margin-top:4px; display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-              <span>👤 <strong>${escapeHtml(o.full_name || 'Customer')}</strong></span>
-              ${o.username ? `<span style="color:#fbbf24;">(@${escapeHtml(o.username)})</span>` : ''}
-              <span style="color:rgba(255,255,255,0.2);">|</span>
-              <span>🆔 <code style="color:#38bdf8; font-size:11px;">${o.user_id}</code></span>
+        <div class="order-card-header">
+          <div class="order-card-title-group">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="order-id-badge" onclick="copyText('${o.id}', this)" title="ចុច Copy ID">#${o.id}</span>
+              <span class="order-product-name">${escapeHtml(o.product_name)}</span>
             </div>
           </div>
-          <div style="text-align:right; flex-shrink:0;">
-            <div style="font-size:16px; font-weight:900; color:#38bdf8; letter-spacing:0.3px;">$${parseFloat(o.price || 0).toFixed(2)}</div>
-            <div style="margin-top:4px;">${statusBadge}</div>
+          <div class="order-card-price-group">
+            <div class="order-price-glow">$${parseFloat(o.price || 0).toFixed(2)}</div>
+            <div>${statusBadge}</div>
           </div>
+        </div>
+
+        <!-- Customer Identity Strip -->
+        <div class="order-user-card-strip">
+          <div class="order-user-identity">
+            <div class="order-user-avatar-circle">${custInitial}</div>
+            <div class="order-user-names">
+              <span>👤 ${escapeHtml(custName)}</span>
+              ${o.username ? `<span class="order-username-tag">(@${escapeHtml(o.username)})</span>` : ''}
+            </div>
+          </div>
+          <span class="order-uid-chip" onclick="copyText('${o.user_id}', this)" title="ចុច Copy User ID">
+            🆔 <code>${o.user_id}</code>
+          </span>
         </div>
 
         <!-- Meta Sub-row -->
-        <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; color:var(--text-muted); padding-top:6px; border-top:1px dashed rgba(255,255,255,0.08); margin-top:6px;">
-          <span>💳 <strong>${escapeHtml(o.payment_method || 'Wallet')}</strong></span>
-          <span>📅 ${o.created_at ? formatOrderDateTime(o.created_at) : ''}</span>
+        <div class="order-meta-details-row">
+          <div>${payBadge}</div>
+          <div class="order-date-pill">
+            <span>📅</span>
+            <span>${o.created_at ? formatOrderDateTime(o.created_at) : ''}</span>
+          </div>
         </div>
 
+        ${rejectionSection}
         ${slipSection}
         ${credsSection}
         ${adminGeminiGuide}
@@ -2694,12 +2761,14 @@ function selectRejectPresetReason(reason, btn) {
 }
 window.selectRejectPresetReason = selectRejectPresetReason;
 
-async function submitRejectOrder() {
-  const reason = document.getElementById("rejectReason")?.value.trim() || "Slip មិនត្រឹមត្រូវ";
+async function submitRejectOrder(andDelete = false) {
+  const reason = document.getElementById("rejectReason")?.value.trim() || "Slip មិនត្រឹមត្រូវ / Payment Failed";
   const btn = document.getElementById("btnSubmitRejectOrder");
+  const btnDel = document.getElementById("btnSubmitRejectAndDelete");
   const btnText = document.getElementById("btnSubmitRejectText");
   if (btn) btn.disabled = true;
-  if (btnText) btnText.textContent = "⏳ កំពុងបដិសេធ...";
+  if (btnDel) btnDel.disabled = true;
+  if (btnText) btnText.textContent = "⏳ កំពុងដំណើរការ...";
 
   try {
     const formData = new FormData();
@@ -2712,7 +2781,20 @@ async function submitRejectOrder() {
     });
     const json = await res.json();
     if (json.status === "success") {
-      showToast("❌ បាន Reject Order រួចរាល់!", "info");
+      if (andDelete) {
+        try {
+          await fetch(`/api/admin/orders/${currentRejectOrderId}?user_id=${currentUser.user_id}`, {
+            method: "DELETE"
+          });
+          showToast("🗑️ បាន Reject & លុប Order ជោគជ័យ!", "info", 3500);
+        } catch (e) {
+          showToast("❌ បាន Reject Order រួចរាល់!", "info", 3000);
+        }
+      } else {
+        showToast("❌ បាន Reject Order រួចរាល់!", "info", 3000);
+      }
+      if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred("warning");
+      playSound("pop");
       closeModal("rejectOrderModal");
       loadAdminOrders(currentAdminOrderFilter);
       loadAdminStats();
@@ -2723,10 +2805,36 @@ async function submitRejectOrder() {
     alert("❌ Error: " + err.message);
   } finally {
     if (btn) btn.disabled = false;
-    if (btnText) btnText.textContent = "បដិសេធ Order";
+    if (btnDel) btnDel.disabled = false;
+    if (btnText) btnText.textContent = "បដិសេធ (Reject)";
   }
 }
 window.submitRejectOrder = submitRejectOrder;
+
+async function deleteAdminOrder(orderId, prodName) {
+  const targetName = prodName ? `"${prodName}"` : `Order #${orderId}`;
+  const confirmMsg = `⚠️ តើអ្នកពិតជាចង់លុប ${targetName} នេះមែនទេ?\n\nទិន្នន័យ Order នេះនឹងត្រូវលុបចេញពីប្រព័ន្ធជាអចិន្ត្រៃយ៍!`;
+  if (!confirm(confirmMsg)) return;
+
+  try {
+    const res = await fetch(`/api/admin/orders/${orderId}?user_id=${currentUser.user_id}`, {
+      method: "DELETE"
+    });
+    const json = await res.json();
+    if (json.status === "success") {
+      if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred("warning");
+      playSound("pop");
+      showToast(`🗑️ បានលុប Order #${orderId} ដោយជោគជ័យ!`, "info", 3500);
+      loadAdminOrders(currentAdminOrderFilter);
+      loadAdminStats();
+    } else {
+      showToast(`❌ ${json.detail || json.message || "Error deleting order"}`, "error");
+    }
+  } catch (err) {
+    alert("❌ Error: " + err.message);
+  }
+}
+window.deleteAdminOrder = deleteAdminOrder;
 
 async function loadAdminTopupRequests() {
   const container = document.getElementById("adminTopupList");
