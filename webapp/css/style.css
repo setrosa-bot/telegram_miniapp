@@ -13499,6 +13499,274 @@ textarea.form-input-lux {
   transform: none;
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   ✨ CYBER-LUXURY GLASSMORPHISM 2.0 & ENHANCED UX SUITE
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── 1. Ripple Effect Keyframes ─── */
+.ux-ripple-effect {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  transform: scale(0);
+  animation: rippleAnim 0.6s ease-out;
+  pointer-events: none;
+}
+
+@keyframes rippleAnim {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* ─── 2. Ambient Floating Mesh Orbs ─── */
+.bg-glow-1, .bg-glow-2, .bg-glow-3 {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.45;
+  transition: opacity 0.5s ease;
+}
+
+.bg-glow-1 {
+  width: 320px;
+  height: 320px;
+  top: -80px;
+  left: -80px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.6) 0%, rgba(99, 102, 241, 0) 70%);
+  animation: floatOrb1 16s ease-in-out infinite alternate;
+}
+
+.bg-glow-2 {
+  width: 280px;
+  height: 280px;
+  top: 35%;
+  right: -60px;
+  background: radial-gradient(circle, rgba(240, 185, 11, 0.45) 0%, rgba(245, 158, 11, 0) 70%);
+  animation: floatOrb2 18s ease-in-out infinite alternate;
+}
+
+.bg-glow-3 {
+  width: 340px;
+  height: 340px;
+  bottom: 60px;
+  left: 20%;
+  background: radial-gradient(circle, rgba(0, 182, 211, 0.45) 0%, rgba(16, 185, 129, 0) 70%);
+  animation: floatOrb3 20s ease-in-out infinite alternate;
+}
+
+@keyframes floatOrb1 {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(40px, 60px) scale(1.15); }
+  100% { transform: translate(-20px, 30px) scale(0.95); }
+}
+
+@keyframes floatOrb2 {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-50px, -40px) scale(1.2); }
+  100% { transform: translate(30px, 50px) scale(0.9); }
+}
+
+@keyframes floatOrb3 {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(30px, -60px) scale(1.1); }
+  100% { transform: translate(-40px, 20px) scale(1.05); }
+}
+
+/* ─── 3. Specular Pointer Glare on Luxury Cards ─── */
+.product-card, .virtual-debit-card, .binance-card-container {
+  position: relative;
+}
+
+.product-card::after, .virtual-debit-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle 180px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.12), transparent 80%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 2;
+}
+
+.product-card:hover::after, .virtual-debit-card:hover::after {
+  opacity: 1;
+}
+
+/* ─── 4. Enhanced Product Card Luxury Styling ─── */
+.product-card {
+  background: linear-gradient(160deg, rgba(22, 16, 48, 0.82) 0%, rgba(10, 7, 26, 0.94) 100%);
+  border: 1px solid rgba(139, 92, 246, 0.22);
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(167, 139, 250, 0.5);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), 0 0 24px rgba(139, 92, 246, 0.25);
+}
+
+.product-card:active {
+  transform: scale(0.985);
+}
+
+/* ─── 5. Luxury Category Pills ─── */
+.cat-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 8px 16px;
+  color: #cbd5e1;
+  font-weight: 700;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  backdrop-filter: blur(12px);
+}
+
+.cat-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.cat-btn.active {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.35) 0%, rgba(99, 102, 241, 0.25) 100%);
+  border-color: #a78bfa;
+  color: #ffffff;
+  box-shadow: 0 4px 18px rgba(139, 92, 246, 0.35);
+}
+
+/* ─── 6. Floating Bottom Navigation Dock ─── */
+.bottom-nav {
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 24px);
+  max-width: 480px;
+  background: rgba(8, 6, 20, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 24px;
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.65), 0 0 20px rgba(139, 92, 246, 0.15);
+  z-index: 100;
+  padding: 6px 8px;
+}
+
+.nav-tab {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 16px;
+  padding: 6px 8px;
+}
+
+.nav-tab.active {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.22) 0%, rgba(99, 102, 241, 0.12) 100%);
+  color: #a78bfa;
+}
+
+.nav-tab.active .nav-icon {
+  transform: scale(1.15);
+  filter: drop-shadow(0 2px 8px rgba(167, 139, 250, 0.6));
+}
+
+/* ─── 7. Modal Bottom Sheet Enhancements ─── */
+.modal-backdrop {
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-box {
+  background: linear-gradient(180deg, #100b28 0%, #080518 100%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 28px 28px 20px 20px;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.75), 0 0 30px rgba(139, 92, 246, 0.15);
+  animation: modalSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.modal-drag-handle {
+  width: 42px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+  margin: 8px auto 14px auto;
+  cursor: grab;
+}
+
+@keyframes modalSlideUp {
+  from {
+    transform: translateY(100%) scale(0.96);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* ─── 8. Ultra-Luxury 3D Metallic Debit Card ─── */
+.virtual-debit-card {
+  background: linear-gradient(135deg, #1a1338 0%, #2a1b5c 50%, #150f2e 100%);
+  border: 1.5px solid rgba(251, 191, 36, 0.4);
+  border-radius: 22px;
+  padding: 22px 20px;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.65), 0 0 30px rgba(251, 191, 36, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.virtual-debit-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 20%, rgba(251, 191, 36, 0.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* ─── 9. Toast Notification Modern Glass ─── */
+.toast-notification {
+  background: rgba(15, 10, 36, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 16px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), 0 0 20px rgba(139, 92, 246, 0.3);
+  font-weight: 700;
+  animation: toastPop 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes toastPop {
+  from {
+    transform: translateY(-20px) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+
 
 
 
