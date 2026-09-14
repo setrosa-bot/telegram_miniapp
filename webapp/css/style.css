@@ -13938,21 +13938,41 @@ textarea.form-input-lux {
   letter-spacing: 0.4px;
 }
 
-/* ── 3. Spotlight Hero Banner Card (SuperGrok Style) ── */
+/* ── 3. Verifier Spotlight Hero Card (Dynamic Carousel Slider) ── */
 .verifier-spotlight-card {
   margin: 10px 14px 16px;
-  background: linear-gradient(145deg, #181922 0%, #121319 50%, #0d0e13 100%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 20px;
-  padding: 16px 18px;
+  background: #0f1118;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 22px;
+  padding: 14px 16px 16px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.12);
   cursor: pointer;
-  transition: transform 0.25s ease, border-color 0.25s ease;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
 }
+
+/* Theme Glows */
+.verifier-spotlight-card.theme-gemini {
+  background: radial-gradient(ellipse at 50% 0%, rgba(99, 102, 241, 0.28) 0%, rgba(15, 17, 24, 0.98) 75%), #0c0e15 !important;
+  border-color: rgba(139, 92, 246, 0.35) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), 0 0 30px rgba(139, 92, 246, 0.15) !important;
+}
+
+.verifier-spotlight-card.theme-capcut {
+  background: radial-gradient(ellipse at 50% 0%, rgba(6, 182, 212, 0.28) 0%, rgba(15, 17, 24, 0.98) 75%), #0c0e15 !important;
+  border-color: rgba(6, 182, 212, 0.35) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), 0 0 30px rgba(6, 182, 212, 0.15) !important;
+}
+
+.verifier-spotlight-card.theme-grok {
+  background: radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.16) 0%, rgba(15, 17, 24, 0.98) 75%), #0c0e15 !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), 0 0 30px rgba(255, 255, 255, 0.1) !important;
+}
+
 .verifier-spotlight-card:hover {
-  border-color: rgba(255, 255, 255, 0.25);
   transform: translateY(-2px);
 }
 .verifier-spotlight-card:active {
@@ -13966,36 +13986,46 @@ textarea.form-input-lux {
   margin-bottom: 6px;
 }
 
+/* Dynamic Interactive Pagination Dots */
 .spotlight-pagination-dots {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
+  padding: 3.5px 8px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
 }
 
-.spotlight-pagination-dots .dot {
-  width: 5px;
+.spotlight-dot {
+  display: inline-block;
   height: 5px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.spotlight-pagination-dots .bar {
-  width: 18px;
-  height: 4px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.25);
+.spotlight-dot.dot {
+  width: 6px;
+  background: rgba(255, 255, 255, 0.3);
 }
 
-.spotlight-pagination-dots .bar.active {
+.spotlight-dot.active {
+  width: 22px;
   background: #ffffff;
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.85);
+}
+
+.spotlight-dot:hover {
+  background: rgba(255, 255, 255, 0.7);
 }
 
 .spotlight-visual-area {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px 0 20px;
+  padding: 14px 0 18px;
 }
 
 .spotlight-hero-art {
@@ -14006,8 +14036,8 @@ textarea.form-input-lux {
 }
 
 .spotlight-brand-badge-ring {
-  width: 52px;
-  height: 52px;
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
   background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(168, 85, 247, 0.2));
   border: 1.5px solid rgba(59, 130, 246, 0.55);
@@ -14016,15 +14046,29 @@ textarea.form-input-lux {
   justify-content: center;
   box-shadow: 0 0 22px rgba(37, 99, 235, 0.35);
   flex-shrink: 0;
-  transition: transform 0.3s ease;
-}
-.verifier-spotlight-card:hover .spotlight-brand-badge-ring {
-  transform: scale(1.08) rotate(5deg);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.spotlight-grok-icon {
-  color: #ffffff;
-  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+.verifier-spotlight-card.theme-gemini .spotlight-brand-badge-ring {
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.25), rgba(192, 132, 252, 0.25));
+  border-color: rgba(192, 132, 252, 0.55);
+  box-shadow: 0 0 24px rgba(168, 85, 247, 0.35);
+}
+
+.verifier-spotlight-card.theme-capcut .spotlight-brand-badge-ring {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.25), rgba(59, 130, 246, 0.25));
+  border-color: rgba(6, 182, 212, 0.55);
+  box-shadow: 0 0 24px rgba(6, 182, 212, 0.35);
+}
+
+.verifier-spotlight-card.theme-grok .spotlight-brand-badge-ring {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(148, 163, 184, 0.2));
+  border-color: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 0 24px rgba(255, 255, 255, 0.25);
+}
+
+.verifier-spotlight-card:hover .spotlight-brand-badge-ring {
+  transform: scale(1.08) rotate(5deg);
 }
 
 .spotlight-brand-text-col {
@@ -14120,6 +14164,22 @@ textarea.form-input-lux {
 }
 .btn-spotlight-buy:active {
   transform: scale(0.95);
+}
+
+/* Slide Swap Animation */
+@keyframes spotlightSlideFade {
+  0% {
+    opacity: 0;
+    transform: translateY(7px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.slide-anim {
+  animation: spotlightSlideFade 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 /* ── 4. Italic Serif Section Title ── */

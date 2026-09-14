@@ -162,6 +162,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     openCreateAngpaoModal();
   }
 
+  // Initialize spotlight carousel slider
+  renderSpotlightSlide(0);
+  setupSpotlightTouchGestures();
+  startSpotlightAutoPlay();
+
   setupFormHandlers();
 });
 
@@ -747,16 +752,10 @@ function renderProductsGrid(products) {
     return;
   }
 
-  // Populate spotlight hero banner with featured / first product
-  const spotlightProd = filtered.find(p => /grok|chatgpt|claude|gemini/i.test(p.name)) || filtered[0];
-  if (spotlightProd) {
-    const spTitle = document.getElementById("spotlightTitle");
-    const spPrice = document.getElementById("spotlightPrice");
-    const spDur = document.getElementById("spotlightDuration");
-    if (spTitle) spTitle.textContent = spotlightProd.name;
-    if (spPrice) spPrice.textContent = `$${spotlightProd.price % 1 === 0 ? spotlightProd.price.toFixed(0) : spotlightProd.price.toFixed(2)}`;
-    if (spDur) spDur.textContent = spotlightProd.duration_days ? `HEAVY • ${spotlightProd.duration_days} DAYS` : `PREMIUM • 1 MONTH`;
-  }
+  // Update spotlight hero carousel with live product prices
+  renderSpotlightSlide(currentSpotlightIdx);
+  setupSpotlightTouchGestures();
+  startSpotlightAutoPlay();
 
   let html = "";
   filtered.forEach((p, index) => {
@@ -833,13 +832,234 @@ function selectSegmentTab(seg, btn) {
 }
 window.selectSegmentTab = selectSegmentTab;
 
+/* ═══════════════════════════════════════════════════════════════════
+   🌟 DYNAMIC HERO SPOTLIGHT SLIDER (Gemini Pro, CapCut Pro, SuperGrok)
+   ═══════════════════════════════════════════════════════════════════ */
+const spotlightSlides = [
+  {
+    id: "gemini",
+    matcher: /gemini/i,
+    brandName: "Gemini Pro",
+    brandSub: "⚡ OFFICIAL VIP PARTNER",
+    tagPick: "TODAY'S PICK",
+    duration: "HEAVY • 540 DAYS",
+    title: "Gemini Pro (18 Month)",
+    defaultPrice: "$3.50",
+    themeClass: "theme-gemini",
+    iconHtml: `<svg class="spotlight-gemini-icon" viewBox="0 0 24 24" width="34" height="34" fill="none">
+      <path d="M12 2C12 7.5 7.5 12 2 12C7.5 12 12 16.5 12 22C12 16.5 16.5 12 22 12C16.5 12 12 7.5 12 2Z" fill="url(#geminiHeroGrad)"/>
+      <defs>
+        <linearGradient id="geminiHeroGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#60a5fa"/>
+          <stop offset="0.5" stop-color="#c084fc"/>
+          <stop offset="1" stop-color="#f43f5e"/>
+        </linearGradient>
+      </defs>
+    </svg>`
+  },
+  {
+    id: "capcut",
+    matcher: /capcut/i,
+    brandName: "CapCut Pro",
+    brandSub: "🎬 OFFICIAL CREATOR VIP",
+    tagPick: "HOT SELLER",
+    duration: "PRO • 7 - 30 DAYS",
+    title: "CapCut Pro (All Features Unlocked)",
+    defaultPrice: "$0.99",
+    themeClass: "theme-capcut",
+    iconHtml: `<svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#38bdf8" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="23 7 16 12 23 17 23 7" fill="rgba(56, 189, 248, 0.3)"/>
+      <rect x="1" y="5" width="15" height="14" rx="3" ry="3" fill="rgba(56, 189, 248, 0.15)"/>
+      <line x1="6" y1="10" x2="11" y2="10"/>
+      <line x1="6" y1="14" x2="9" y2="14"/>
+    </svg>`
+  },
+  {
+    id: "supergrok",
+    matcher: /grok|chatgpt|claude/i,
+    brandName: "SuperGrok AI",
+    brandSub: "🧠 X.AI UNLIMITED REASONING",
+    tagPick: "EXCLUSIVE",
+    duration: "HEAVY • 1 MONTH",
+    title: "SuperGrok Heavy CDK (VIP Manual)",
+    defaultPrice: "$3.50",
+    themeClass: "theme-grok",
+    iconHtml: `<svg class="spotlight-grok-icon" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#ffffff" stroke-width="2.3">
+      <circle cx="12" cy="12" r="9"/>
+      <line x1="4" y1="20" x2="20" y2="4"/>
+    </svg>`
+  }
+];
+
+let currentSpotlightIdx = 0;
+let spotlightTimer = null;
+let currentSpotlightProductId = null;
+
+function renderSpotlightSlide(idx) {
+  if (idx < 0) idx = spotlightSlides.length - 1;
+  if (idx >= spotlightSlides.length) idx = 0;
+  currentSpotlightIdx = idx;
+
+  const slide = spotlightSlides[idx];
+  const card = document.getElementById("spotlightHeroCard");
+  const brandRing = document.getElementById("spotlightBrandRing");
+  const brandBig = document.getElementById("spotlightBrandBig");
+  const brandSub = document.getElementById("spotlightBrandSub");
+  const tagPick = document.getElementById("spotlightTagPick");
+  const tagDur = document.getElementById("spotlightDuration");
+  const title = document.getElementById("spotlightTitle");
+  const price = document.getElementById("spotlightPrice");
+  const footerRow = document.getElementById("spotlightFooterRow");
+  const heroArt = document.getElementById("spotlightHeroArt");
+
+  if (!card) return;
+
+  // Update card theme class
+  card.className = `verifier-spotlight-card ${slide.themeClass}`;
+
+  // Match live product from database
+  let matchedProd = null;
+  if (Array.isArray(productsData) && productsData.length > 0) {
+    matchedProd = productsData.find(p => slide.matcher.test(p.name));
+  }
+
+  if (matchedProd) {
+    currentSpotlightProductId = matchedProd.id;
+    if (title) title.textContent = matchedProd.name;
+    if (price) price.textContent = `$${matchedProd.price % 1 === 0 ? matchedProd.price.toFixed(0) : matchedProd.price.toFixed(2)}`;
+    if (tagDur) tagDur.textContent = matchedProd.duration_days ? `VIP • ${matchedProd.duration_days} DAYS` : slide.duration;
+  } else {
+    currentSpotlightProductId = null;
+    if (title) title.textContent = slide.title;
+    if (price) price.textContent = slide.defaultPrice;
+    if (tagDur) tagDur.textContent = slide.duration;
+  }
+
+  if (brandRing) brandRing.innerHTML = slide.iconHtml;
+  if (brandBig) brandBig.textContent = slide.brandName;
+  if (brandSub) brandSub.textContent = slide.brandSub;
+  if (tagPick) tagPick.textContent = slide.tagPick;
+
+  // Trigger smooth keyframe animation
+  if (heroArt) {
+    heroArt.classList.remove("slide-anim");
+    void heroArt.offsetWidth;
+    heroArt.classList.add("slide-anim");
+  }
+  if (footerRow) {
+    footerRow.classList.remove("slide-anim");
+    void footerRow.offsetWidth;
+    footerRow.classList.add("slide-anim");
+  }
+
+  // Update Pagination Dots
+  const dotsContainer = document.getElementById("spotlightDotsContainer");
+  if (dotsContainer) {
+    const dots = dotsContainer.querySelectorAll(".spotlight-dot");
+    dots.forEach((d, i) => {
+      if (i === idx) {
+        d.className = "spotlight-dot active";
+      } else {
+        d.className = "spotlight-dot dot";
+      }
+    });
+  }
+}
+window.renderSpotlightSlide = renderSpotlightSlide;
+
+function selectSpotlightSlide(idx, event) {
+  if (event) event.stopPropagation();
+  try {
+    if (window.Telegram?.WebApp?.HapticFeedback) {
+      window.Telegram.WebApp.HapticFeedback.impactOccurred("light");
+    }
+  } catch (e) {}
+  renderSpotlightSlide(idx);
+  restartSpotlightAutoPlay();
+}
+window.selectSpotlightSlide = selectSpotlightSlide;
+
+function nextSpotlightSlide() {
+  renderSpotlightSlide(currentSpotlightIdx + 1);
+}
+window.nextSpotlightSlide = nextSpotlightSlide;
+
+function prevSpotlightSlide() {
+  renderSpotlightSlide(currentSpotlightIdx - 1);
+}
+window.prevSpotlightSlide = prevSpotlightSlide;
+
+function startSpotlightAutoPlay() {
+  stopSpotlightAutoPlay();
+  spotlightTimer = setInterval(() => {
+    nextSpotlightSlide();
+  }, 3800);
+}
+window.startSpotlightAutoPlay = startSpotlightAutoPlay;
+
+function stopSpotlightAutoPlay() {
+  if (spotlightTimer) {
+    clearInterval(spotlightTimer);
+    spotlightTimer = null;
+  }
+}
+window.stopSpotlightAutoPlay = stopSpotlightAutoPlay;
+
+function restartSpotlightAutoPlay() {
+  stopSpotlightAutoPlay();
+  startSpotlightAutoPlay();
+}
+
+function setupSpotlightTouchGestures() {
+  const card = document.getElementById("spotlightHeroCard");
+  if (!card || card.dataset.touchSetup) return;
+  card.dataset.touchSetup = "true";
+
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  card.addEventListener("touchstart", (e) => {
+    touchStartX = e.touches[0].clientX;
+    stopSpotlightAutoPlay();
+  }, { passive: true });
+
+  card.addEventListener("touchend", (e) => {
+    touchEndX = e.changedTouches[0].clientX;
+    const diff = touchStartX - touchEndX;
+    if (Math.abs(diff) > 40) {
+      try {
+        if (window.Telegram?.WebApp?.HapticFeedback) {
+          window.Telegram.WebApp.HapticFeedback.impactOccurred("light");
+        }
+      } catch (err) {}
+      if (diff > 0) nextSpotlightSlide();
+      else prevSpotlightSlide();
+    }
+    startSpotlightAutoPlay();
+  }, { passive: true });
+
+  card.addEventListener("mouseenter", stopSpotlightAutoPlay);
+  card.addEventListener("mouseleave", startSpotlightAutoPlay);
+}
+
 function openSpotlightCheckout() {
   try {
-    if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred("medium");
+    if (window.Telegram?.WebApp?.HapticFeedback) {
+      window.Telegram.WebApp.HapticFeedback.impactOccurred("medium");
+    }
   } catch (e) {}
-  const spotlightProd = productsData.find(p => /grok|chatgpt|claude|gemini/i.test(p.name)) || productsData[0];
-  if (spotlightProd) {
-    openCheckoutModal(spotlightProd.id);
+  
+  if (currentSpotlightProductId) {
+    openCheckoutModal(currentSpotlightProductId);
+    return;
+  }
+
+  const slide = spotlightSlides[currentSpotlightIdx];
+  const matched = (Array.isArray(productsData) ? productsData.find(p => slide.matcher.test(p.name)) : null) || productsData?.[0];
+  if (matched) {
+    openCheckoutModal(matched.id);
+  } else {
+    showToast("🛒 សូមជ្រើសរើសទំនិញខាងក្រោម", "info");
   }
 }
 window.openSpotlightCheckout = openSpotlightCheckout;
