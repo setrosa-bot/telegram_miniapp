@@ -14164,39 +14164,47 @@ textarea.form-input-lux {
 }
 
 .spotlight-brand-badge-ring {
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(168, 85, 247, 0.2));
-  border: 1.5px solid rgba(59, 130, 246, 0.55);
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(255, 255, 255, 0.22);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 22px rgba(37, 99, 235, 0.35);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   flex-shrink: 0;
+  overflow: hidden;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.spotlight-brand-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  display: block;
+  transition: transform 0.3s ease;
 }
 
 .verifier-spotlight-card.theme-gemini .spotlight-brand-badge-ring {
   background: linear-gradient(135deg, rgba(96, 165, 250, 0.25), rgba(192, 132, 252, 0.25));
-  border-color: rgba(192, 132, 252, 0.55);
-  box-shadow: 0 0 24px rgba(168, 85, 247, 0.35);
+  border-color: rgba(192, 132, 252, 0.6);
+  box-shadow: 0 0 24px rgba(168, 85, 247, 0.45);
 }
 
 .verifier-spotlight-card.theme-capcut .spotlight-brand-badge-ring {
   background: linear-gradient(135deg, rgba(6, 182, 212, 0.25), rgba(59, 130, 246, 0.25));
-  border-color: rgba(6, 182, 212, 0.55);
-  box-shadow: 0 0 24px rgba(6, 182, 212, 0.35);
-}
-
-.verifier-spotlight-card.theme-grok .spotlight-brand-badge-ring {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(148, 163, 184, 0.2));
-  border-color: rgba(255, 255, 255, 0.45);
-  box-shadow: 0 0 24px rgba(255, 255, 255, 0.25);
+  border-color: rgba(6, 182, 212, 0.6);
+  box-shadow: 0 0 24px rgba(6, 182, 212, 0.45);
 }
 
 .verifier-spotlight-card:hover .spotlight-brand-badge-ring {
-  transform: scale(1.08) rotate(5deg);
+  transform: scale(1.06);
+}
+
+.verifier-spotlight-card:hover .spotlight-brand-img {
+  transform: scale(1.05);
 }
 
 .spotlight-brand-text-col {

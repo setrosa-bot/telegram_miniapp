@@ -908,7 +908,7 @@ function selectSegmentTab(seg, btn) {
 window.selectSegmentTab = selectSegmentTab;
 
 /* ═══════════════════════════════════════════════════════════════════
-   🌟 DYNAMIC HERO SPOTLIGHT SLIDER (Gemini Pro, CapCut Pro, SuperGrok)
+   🌟 DYNAMIC HERO SPOTLIGHT SLIDER (Gemini Pro & CapCut Pro)
    ═══════════════════════════════════════════════════════════════════ */
 const spotlightSlides = [
   {
@@ -921,16 +921,7 @@ const spotlightSlides = [
     title: "Gemini Pro (18 Month)",
     defaultPrice: "$3.50",
     themeClass: "theme-gemini",
-    iconHtml: `<svg class="spotlight-gemini-icon" viewBox="0 0 24 24" width="34" height="34" fill="none">
-      <path d="M12 2C12 7.5 7.5 12 2 12C7.5 12 12 16.5 12 22C12 16.5 16.5 12 22 12C16.5 12 12 7.5 12 2Z" fill="url(#geminiHeroGrad)"/>
-      <defs>
-        <linearGradient id="geminiHeroGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
-          <stop stop-color="#60a5fa"/>
-          <stop offset="0.5" stop-color="#c084fc"/>
-          <stop offset="1" stop-color="#f43f5e"/>
-        </linearGradient>
-      </defs>
-    </svg>`
+    iconHtml: `<img src="/images/gemini_official.png" alt="Gemini Pro" class="spotlight-brand-img">`
   },
   {
     id: "capcut",
@@ -942,27 +933,7 @@ const spotlightSlides = [
     title: "CapCut Pro (All Features Unlocked)",
     defaultPrice: "$0.99",
     themeClass: "theme-capcut",
-    iconHtml: `<svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#38bdf8" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-      <polygon points="23 7 16 12 23 17 23 7" fill="rgba(56, 189, 248, 0.3)"/>
-      <rect x="1" y="5" width="15" height="14" rx="3" ry="3" fill="rgba(56, 189, 248, 0.15)"/>
-      <line x1="6" y1="10" x2="11" y2="10"/>
-      <line x1="6" y1="14" x2="9" y2="14"/>
-    </svg>`
-  },
-  {
-    id: "supergrok",
-    matcher: /grok|chatgpt|claude/i,
-    brandName: "SuperGrok AI",
-    brandSub: "🧠 X.AI UNLIMITED REASONING",
-    tagPick: "EXCLUSIVE",
-    duration: "HEAVY • 1 MONTH",
-    title: "SuperGrok Heavy CDK (VIP Manual)",
-    defaultPrice: "$3.50",
-    themeClass: "theme-grok",
-    iconHtml: `<svg class="spotlight-grok-icon" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#ffffff" stroke-width="2.3">
-      <circle cx="12" cy="12" r="9"/>
-      <line x1="4" y1="20" x2="20" y2="4"/>
-    </svg>`
+    iconHtml: `<img src="/images/capcut_official.png" alt="CapCut Pro" class="spotlight-brand-img">`
   }
 ];
 
