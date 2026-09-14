@@ -352,6 +352,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     aba = PAYMENT_INFO.get("ABA", {})
     acleda = PAYMENT_INFO.get("ACLEDA", {})
     usdt = PAYMENT_INFO.get("USDT", {})
+    binance = PAYMENT_INFO.get("BINANCE", {})
 
     help_text = (
         "📞 **សេវាបម្រើអតិថិជន & ជំនួយ (SUPPORT)**\n"
@@ -362,6 +363,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "💳 **គណនីទូទាត់ប្រាក់ផ្លូវការ៖**\n"
         f"• 🔵 ABA: `{aba.get('number', '000 123 456')}` ({aba.get('name', 'DIGITAL STORE')})\n"
         f"• 🟢 ACLEDA: `{acleda.get('number', '012345678')}`\n"
+        f"• 🟡 Binance ID: `{binance.get('binance_id', '1172352068')}` (Binance Pay)\n"
         f"• 🟣 USDT (TRC20): `{usdt.get('address', 'TRC20_ADDRESS')}`\n\n"
         "🛡️ **គោលការណ៍ធានា (Warranty):**\n"
         "ធានាជូនពេញរយៈពេលកំណត់ បើមានបញ្ហាអាចស្នើសុំដូរថ្មីតាមប្រព័ន្ធស្វ័យប្រវត្តិក្នុង Mini App!"
@@ -844,6 +846,7 @@ async def handle_callback_query(update: Update, context: ContextTypes.DEFAULT_TY
         aba = PAYMENT_INFO.get("ABA", {})
         acleda = PAYMENT_INFO.get("ACLEDA", {})
         usdt = PAYMENT_INFO.get("USDT", {})
+        binance = PAYMENT_INFO.get("BINANCE", {})
         help_text = (
             "📞 **សេវាបម្រើអតិថិជន & ជំនួយ (SUPPORT)**\n"
             "━━━━━━━━━━━━━━━━━━━━━\n"
@@ -853,6 +856,7 @@ async def handle_callback_query(update: Update, context: ContextTypes.DEFAULT_TY
             "💳 **គណនីទូទាត់ប្រាក់ផ្លូវការ៖**\n"
             f"• 🔵 ABA: `{aba.get('number', '000 123 456')}` ({aba.get('name', 'DIGITAL STORE')})\n"
             f"• 🟢 ACLEDA: `{acleda.get('number', '012345678')}`\n"
+            f"• 🟡 Binance ID: `{binance.get('binance_id', '1172352068')}` (Binance Pay)\n"
             f"• 🟣 USDT (TRC20): `{usdt.get('address', 'TRC20_ADDRESS')}`\n\n"
             "🛡️ **គោលការណ៍ធានា (Warranty):**\n"
             "ធានាជូនពេញរយៈពេលកំណត់ បើមានបញ្ហាអាចស្នើសុំដូរថ្មីតាមប្រព័ន្ធស្វ័យប្រវត្តិក្នុង Mini App!"

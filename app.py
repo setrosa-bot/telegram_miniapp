@@ -1204,12 +1204,14 @@ async def ai_store_assistant_chat(data: AIChatRequest):
         )
         quick = ["🛒 ទិញ ChatGPT Plus", "🛒 ទិញ Gemini Pro", "💳 របៀបបង់ប្រាក់"]
 
-    elif "បង់លុយ" in q or "pay" in q or "aba" in q or "bakong" in q or "qr" in q or "wallet" in q:
+    elif "បង់លុយ" in q or "pay" in q or "aba" in q or "binance" in q or "bakong" in q or "qr" in q or "wallet" in q:
+        binance = PAYMENT_INFO.get("BINANCE", {})
+        bin_id = binance.get("binance_id", "1172352068")
         reply = (
             "💳 <b>របៀបទូទាត់ប្រាក់ (Payment Guide)៖</b>\n"
             "1. ជ្រើសរើសទំនិញរួចចុចប៊ូតុង 'ទិញ'\n"
-            "2. ស្កេន ABA KHQR ឬផ្ទេរប្រាក់តាមគណនីផ្លូវការ\n"
-            "3. Upload រូបភាព Slip បង់ប្រាក់រួចចុចផ្ញើ\n"
+            f"2. ស្កេន <b>ABA KHQR</b> ឬផ្ទេរតាម <b>Binance ID: <code>{bin_id}</code></b>\n"
+            "3. Upload រូបភាព Slip / Transaction Screenshot រួចចុចផ្ញើ\n"
             "💡 ឬបញ្ចូលប្រាក់ក្នុង 'កាបូបលុយ (Wallet)' ដើម្បីទិញស្វ័យប្រវត្តភ្លាមៗ ២៤/៧!"
         )
         quick = ["➕ បញ្ចូលប្រាក់ Wallet", "🛒 ទៅកាន់ហាងទំនិញ", "📞 ទាក់ទង Admin"]
@@ -1382,7 +1384,8 @@ async def subscribe_product_stock_alert(product_id: int, data: StockNotifyReques
 async def wallet_deposit_endpoint(
     user_id: int = Form(...),
     amount: float = Form(...),
-    proof_file: UploadFile = File(...)
+    proof_file: UploadFile = File(...),
+    payment_method: str = Form("ABA KHQR")
 ):
     if amount < 0.50:
         raise HTTPException(status_code=400, detail="ទឹកប្រាក់បញ្ចូលអប្បបរមាគឺ $0.50 USD")
@@ -1411,12 +1414,14 @@ async def wallet_deposit_endpoint(
     # Send instant Telegram Alert to Admins with Photo & Approve/Reject buttons
     if tg_app and tg_app.bot:
         from telegram import InlineKeyboardMarkup, InlineKeyboardButton
+        safe_pm = html.escape(str(payment_method))
         caption = (
             f"💵 <b>សំណើបញ្ចូលប្រាក់ថ្មី (New Top-Up Request)</b>\n"
             f"━━━━━━━━━━━━━━━━━━━━━\n"
             f"🆔 Top-Up ID: <code>#{topup_id}</code>\n"
             f"👤 អតិថិជន: <b>{html.escape(user_name)}</b> (ID: <code>{user_id}</code>)\n"
             f"💰 ទឹកប្រាក់: <b>${amount:.2f} USD</b>\n"
+            f"💳 វិធីបង់ប្រាក់: <code>{safe_pm}</code>\n"
             f"📅 ម៉ោង: <code>{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</code>\n\n"
             f"👇 <i>សូមពិនិត្យ Slip ហើយចុច Approve ឬ Reject ខាងក្រោម៖</i>"
         )

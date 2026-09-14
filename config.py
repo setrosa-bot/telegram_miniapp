@@ -89,5 +89,10 @@ PAYMENT_INFO = {
         "name": "USDT (TRC20)",
         "address": os.getenv("USDT_ADDRESS", "TYourUsdtAddressHere"),
         "icon": "🟣",
+    },
+    "BINANCE": {
+        "name": "Binance Pay / Binance ID",
+        "binance_id": os.getenv("BINANCE_ID", "1172352068"),
+        "icon": "🟡",
     }
 }

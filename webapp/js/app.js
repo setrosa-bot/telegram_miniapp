@@ -1007,6 +1007,7 @@ async function openCheckoutModal(productId) {
     };
   }
 
+  setCheckoutPaymentMethod("ABA KHQR");
   openModal("checkoutModal");
 }
 
@@ -1033,6 +1034,99 @@ function setCheckoutQty(qty) {
   updateCheckoutCalculations();
 }
 
+// Payment Method Selection for Checkout
+let activeCheckoutPaymentMethod = "ABA KHQR";
+function setCheckoutPaymentMethod(method) {
+  activeCheckoutPaymentMethod = method;
+  const isBinance = method.includes("Binance");
+
+  const tabKhqr = document.getElementById("tabCheckoutKhqr");
+  const tabBinance = document.getElementById("tabCheckoutBinance");
+  const cardKhqr = document.getElementById("checkoutKhqrCard");
+  const cardBinance = document.getElementById("checkoutBinanceCard");
+  const pmInput = document.getElementById("checkoutPaymentMethodInput");
+
+  if (tabKhqr) tabKhqr.classList.toggle("active", !isBinance);
+  if (tabBinance) tabBinance.classList.toggle("active", isBinance);
+  if (cardKhqr) cardKhqr.style.display = isBinance ? "none" : "block";
+  if (cardBinance) cardBinance.style.display = isBinance ? "block" : "none";
+  if (pmInput) pmInput.value = method;
+
+  if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred("light");
+  playSound("click");
+}
+window.setCheckoutPaymentMethod = setCheckoutPaymentMethod;
+
+// Payment Method Selection for Top-Up Modal
+let activeTopupPaymentMethod = "ABA KHQR";
+function setTopupPaymentMethod(method) {
+  activeTopupPaymentMethod = method;
+  const isBinance = method.includes("Binance");
+
+  const tabKhqr = document.getElementById("tabTopupKhqr");
+  const tabBinance = document.getElementById("tabTopupBinance");
+  const cardKhqr = document.getElementById("topupKhqrCard");
+  const cardBinance = document.getElementById("topupBinanceCard");
+  const pmInput = document.getElementById("topupPaymentMethodInput");
+
+  if (tabKhqr) tabKhqr.classList.toggle("active", !isBinance);
+  if (tabBinance) tabBinance.classList.toggle("active", isBinance);
+  if (cardKhqr) cardKhqr.style.display = isBinance ? "none" : "block";
+  if (cardBinance) cardBinance.style.display = isBinance ? "block" : "none";
+  if (pmInput) pmInput.value = method;
+
+  if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred("light");
+  playSound("click");
+}
+window.setTopupPaymentMethod = setTopupPaymentMethod;
+
+// Copy Binance ID with Instant 1-Tap Feedback
+function copyBinanceId(id = "1172352068") {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(id).then(() => {
+      onBinanceIdCopied(id);
+    }).catch(() => {
+      fallbackCopyText(id);
+    });
+  } else {
+    fallbackCopyText(id);
+  }
+}
+window.copyBinanceId = copyBinanceId;
+
+function fallbackCopyText(text) {
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.style.position = "fixed";
+  ta.style.opacity = "0";
+  document.body.appendChild(ta);
+  ta.select();
+  try {
+    document.execCommand("copy");
+    onBinanceIdCopied(text);
+  } catch (e) {
+    showToast(`Binance ID: ${text}`, "info");
+  }
+  document.body.removeChild(ta);
+}
+
+function onBinanceIdCopied(id) {
+  if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred("success");
+  playSound("success");
+  showToast(`✅ បានចម្លង Binance ID: ${id} ជោគជ័យ!`, "success", 3000);
+
+  const btns = document.querySelectorAll(".btn-copy-binance");
+  btns.forEach(btn => {
+    btn.classList.add("copied");
+    const textSpan = btn.querySelector(".copy-btn-text");
+    if (textSpan) textSpan.textContent = "Copied! ✓";
+    setTimeout(() => {
+      btn.classList.remove("copied");
+      if (textSpan) textSpan.textContent = "Copy";
+    }, 2500);
+  });
+}
+
 function updateCheckoutCalculations() {
   if (!currentCheckoutProduct) return;
   const prod = currentCheckoutProduct;
@@ -1045,6 +1139,7 @@ function updateCheckoutCalculations() {
   const origPriceEl = document.getElementById("modalOrigPrice");
   const priceEl = document.getElementById("modalProdPrice");
   const amountBadge = document.getElementById("qrAmountBadge");
+  const binanceAmountBadge = document.getElementById("binanceAmountBadge");
 
   if (isReseller && prod.reseller_price && Number(prod.reseller_price) > 0) {
     unitPrice = Number(prod.reseller_price);
@@ -1091,6 +1186,7 @@ function updateCheckoutCalculations() {
 
   if (priceEl) priceEl.textContent = `$${totalPrice.toFixed(2)}`;
   if (amountBadge) amountBadge.textContent = `💰 $${totalPrice.toFixed(2)} USD`;
+  if (binanceAmountBadge) binanceAmountBadge.textContent = `💰 $${totalPrice.toFixed(2)} USDT / USD`;
 
   // Update Instant Wallet Purchase Box
   const walletBox = document.getElementById("checkoutWalletBox");
@@ -5432,6 +5528,7 @@ function openTopupModal() {
   if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred("light");
   playSound("click");
   setTopupAmount(1.00);
+  setTopupPaymentMethod("ABA KHQR");
   openModal("topupWalletModal");
 }
 
@@ -5439,6 +5536,7 @@ function quickOpenTopup(amt) {
   if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred("medium");
   playSound("click");
   setTopupAmount(amt);
+  setTopupPaymentMethod("ABA KHQR");
   openModal("topupWalletModal");
 }
 
@@ -5453,6 +5551,8 @@ function updateTopupQrAmount(val) {
   const num = parseFloat(val) || 0;
   const badge = document.getElementById("topupAmountBadge");
   if (badge) badge.textContent = `💰 $${num.toFixed(2)} USD`;
+  const binBadge = document.getElementById("topupBinanceAmountBadge");
+  if (binBadge) binBadge.textContent = `💰 $${num.toFixed(2)} USDT / USD`;
 }
 
 function handleTopupSlipPreview(input) {
@@ -5494,6 +5594,7 @@ async function submitWalletTopup(e) {
   formData.append("user_id", currentUser.user_id);
   formData.append("amount", amt);
   formData.append("proof_file", slipInput.files[0]);
+  formData.append("payment_method", activeTopupPaymentMethod || "ABA KHQR");
 
   try {
     const res = await fetch("/api/wallet/deposit", {

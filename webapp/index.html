@@ -1615,8 +1615,29 @@
         </div>
       </div>
 
+      <!-- Payment Method Selector Tabs -->
+      <div class="payment-method-selector-card">
+        <label class="pm-selector-label">💳 ជ្រើសរើសវិធីទូទាត់ប្រាក់ (Payment Method):</label>
+        <div class="payment-method-tabs">
+          <button type="button" class="pm-tab-btn active" id="tabCheckoutKhqr" onclick="setCheckoutPaymentMethod('ABA KHQR')">
+            <span class="pm-tab-badge">🔵</span>
+            <div class="pm-tab-text">
+              <span class="pm-tab-main">ABA KHQR</span>
+              <span class="pm-tab-sub">Scan & Pay</span>
+            </div>
+          </button>
+          <button type="button" class="pm-tab-btn" id="tabCheckoutBinance" onclick="setCheckoutPaymentMethod('Binance ID (1172352068)')">
+            <span class="pm-tab-badge">🟡</span>
+            <div class="pm-tab-text">
+              <span class="pm-tab-main">Binance Pay</span>
+              <span class="pm-tab-sub">ID: 1172352068</span>
+            </div>
+          </button>
+        </div>
+      </div>
+
       <!-- KHQR ABA Pay Card -->
-      <div class="khqr-card-container">
+      <div class="khqr-card-container" id="checkoutKhqrCard">
         <!-- ABA Header -->
         <div class="khqr-aba-header">
           <div class="aba-logo-text">ABA<span>PAY</span></div>
@@ -1646,6 +1667,68 @@
         </div>
       </div>
 
+      <!-- Binance Pay Card -->
+      <div class="binance-card-container" id="checkoutBinanceCard" style="display:none;">
+        <!-- Binance Header -->
+        <div class="binance-header">
+          <div class="binance-brand-logo">
+            <svg class="binance-svg-logo" viewBox="0 0 126 126" width="24" height="24">
+              <path fill="#F0B90B" d="M38.4 52.5l24.6-24.6 24.6 24.6 14.2-14.2L63 0 24.2 38.3l14.2 14.2zM0 63l14.2-14.2 14.2 14.2-14.2 14.2L0 63zm38.4 10.5l24.6 24.6 24.6-24.6 14.2 14.2L63 126 24.2 87.7l14.2-14.2zm49.2-10.5l14.2-14.2 14.2 14.2-14.2 14.2-14.2-14.2zm-24.6-14.7l14.7 14.7-14.7 14.7-14.7-14.7 14.7-14.7z"/>
+            </svg>
+            <div class="binance-title-box">
+              <span class="binance-name">BINANCE <span>PAY</span></span>
+              <span class="binance-tagline">Fast • Zero Fee • Instant</span>
+            </div>
+          </div>
+          <span class="binance-badge-verified">⚡ 0% Fee</span>
+        </div>
+
+        <!-- Binance Card Body -->
+        <div class="binance-body">
+          <!-- QR Code Frame -->
+          <div class="binance-qr-frame">
+            <img id="binanceMainImg" src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=1172352068&color=181a20&bgcolor=f0b90b" alt="Binance Pay QR">
+            <div class="binance-qr-badge">🟡 Scan in Binance App</div>
+          </div>
+
+          <!-- Binance ID Display Box with 1-Tap Copy -->
+          <div class="binance-id-box" onclick="copyBinanceId('1172352068')">
+            <div class="binance-id-header">
+              <span class="binance-id-label">🟡 BINANCE ID (UID / Pay ID):</span>
+              <span class="binance-tap-hint">ចុចដើម្បីចម្លង</span>
+            </div>
+            <div class="binance-id-value-row">
+              <span class="binance-id-number" id="binanceIdNum">1172352068</span>
+              <button type="button" class="btn-copy-binance" id="btnCopyBinanceCheckout" onclick="copyBinanceId('1172352068'); event.stopPropagation();">
+                <span class="copy-btn-icon">📋</span> <span class="copy-btn-text">Copy</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Dynamic Amount Badge -->
+          <div class="binance-amount-pill" id="binanceAmountBadge">
+            💰 $0.00 USDT / USD
+          </div>
+
+          <!-- Step-by-Step Payment Guide -->
+          <div class="binance-guide-card">
+            <div class="binance-guide-title">📖 របៀបផ្ទេរប្រាក់តាម Binance ID ៖</div>
+            <div class="binance-guide-item">
+              <span class="bg-step">1</span>
+              <span>បើកកម្មវិធី <b>Binance App</b> ចូលទៅកាន់ Menu <b>Pay</b></span>
+            </div>
+            <div class="binance-guide-item">
+              <span class="bg-step">2</span>
+              <span>ចុច <b>Send</b> រួចជ្រើសរើស <b>Binance ID</b>: <code class="bin-code-hl">1172352068</code></span>
+            </div>
+            <div class="binance-guide-item">
+              <span class="bg-step">3</span>
+              <span>ផ្ទេរទឹកប្រាក់តាមចំនួនខាងលើ និងថត Screenshot Slip រួច Upload ខាងក្រោម</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Promo Code Box -->
       <div class="checkout-promo-card">
         <div class="promo-header-row">
@@ -1665,7 +1748,7 @@
       <!-- Upload Slip Form -->
       <form id="formCheckout" enctype="multipart/form-data">
         <input type="hidden" id="checkoutProdId" name="product_id">
-        <input type="hidden" name="payment_method" value="ABA KHQR">
+        <input type="hidden" id="checkoutPaymentMethodInput" name="payment_method" value="ABA KHQR">
 
         <div class="slip-upload-dropzone">
           <input type="file" name="proof_file" accept="image/*" id="slipFileInput" required class="slip-file-hidden">
@@ -2577,16 +2660,73 @@
       </div>
 
       <form id="formTopupWallet" onsubmit="submitWalletTopup(event)" enctype="multipart/form-data">
+        <input type="hidden" id="topupPaymentMethodInput" name="payment_method" value="ABA KHQR">
+
         <div style="margin-bottom:12px;">
           <label style="font-size:11.5px; font-weight:700; color:var(--text-sub);">ឬបញ្ចូលទឹកប្រាក់ផ្ទាល់ខ្លួន ($ USD):</label>
           <input type="number" step="0.01" min="0.50" id="topupAmountInput" class="form-input" placeholder="ឧ. 5.00" value="1.00" required style="margin-top:4px;" oninput="updateTopupQrAmount(this.value)">
         </div>
 
+        <!-- Payment Method Selector Tabs for Topup -->
+        <div class="payment-method-selector-card" style="margin-bottom:12px;">
+          <div class="payment-method-tabs">
+            <button type="button" class="pm-tab-btn active" id="tabTopupKhqr" onclick="setTopupPaymentMethod('ABA KHQR')">
+              <span class="pm-tab-badge">🔵</span>
+              <div class="pm-tab-text">
+                <span class="pm-tab-main">ABA KHQR</span>
+                <span class="pm-tab-sub">Scan & Pay</span>
+              </div>
+            </button>
+            <button type="button" class="pm-tab-btn" id="tabTopupBinance" onclick="setTopupPaymentMethod('Binance ID (1172352068)')">
+              <span class="pm-tab-badge">🟡</span>
+              <div class="pm-tab-text">
+                <span class="pm-tab-main">Binance Pay</span>
+                <span class="pm-tab-sub">ID: 1172352068</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
         <!-- Top-up KHQR Display Card -->
-        <div style="background:#ffffff; border-radius:16px; overflow:hidden; margin-bottom:14px; text-align:center; padding:12px; box-shadow:0 4px 16px rgba(0,0,0,0.3);">
+        <div id="topupKhqrCard" style="background:#ffffff; border-radius:16px; overflow:hidden; margin-bottom:14px; text-align:center; padding:12px; box-shadow:0 4px 16px rgba(0,0,0,0.3);">
           <div style="color:#003366; font-weight:800; font-size:14px; margin-bottom:4px;">ABA KHQR Payment</div>
           <img id="topupKhqrImg" src="/images/aba_khqr.png" alt="KHQR" style="width:160px; height:160px; object-fit:contain; border-radius:8px; border:2px solid #003366; padding:4px;" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=KHQR_TOPUP&color=003366&bgcolor=FFFFFF'">
           <div style="font-size:13px; font-weight:800; color:#003366; margin-top:6px;" id="topupAmountBadge">💰 $1.00 USD</div>
+        </div>
+
+        <!-- Top-up Binance Pay Card -->
+        <div id="topupBinanceCard" class="binance-card-container" style="display:none; margin-bottom:14px;">
+          <div class="binance-header" style="padding:10px 14px;">
+            <div class="binance-brand-logo">
+              <svg class="binance-svg-logo" viewBox="0 0 126 126" width="20" height="20">
+                <path fill="#F0B90B" d="M38.4 52.5l24.6-24.6 24.6 24.6 14.2-14.2L63 0 24.2 38.3l14.2 14.2zM0 63l14.2-14.2 14.2 14.2-14.2 14.2L0 63zm38.4 10.5l24.6 24.6 24.6-24.6 14.2 14.2L63 126 24.2 87.7l14.2-14.2zm49.2-10.5l14.2-14.2 14.2 14.2-14.2 14.2-14.2-14.2zm-24.6-14.7l14.7 14.7-14.7 14.7-14.7-14.7 14.7-14.7z"/>
+              </svg>
+              <div class="binance-title-box">
+                <span class="binance-name" style="font-size:13px;">BINANCE <span>PAY</span></span>
+              </div>
+            </div>
+            <span class="binance-badge-verified">⚡ 0% Fee</span>
+          </div>
+          <div class="binance-body" style="padding:12px;">
+            <div class="binance-qr-frame" style="padding:4px; margin-bottom:8px;">
+              <img id="topupBinanceImg" src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=1172352068&color=181a20&bgcolor=f0b90b" alt="Binance Pay QR" style="width:140px; height:140px;">
+            </div>
+            <div class="binance-id-box" onclick="copyBinanceId('1172352068')" style="margin-bottom:8px; padding:8px 10px;">
+              <div class="binance-id-header">
+                <span class="binance-id-label" style="font-size:10px;">🟡 BINANCE ID:</span>
+                <span class="binance-tap-hint">ចុចចម្លង</span>
+              </div>
+              <div class="binance-id-value-row">
+                <span class="binance-id-number" style="font-size:14px;">1172352068</span>
+                <button type="button" class="btn-copy-binance" onclick="copyBinanceId('1172352068'); event.stopPropagation();">
+                  <span class="copy-btn-icon">📋</span> <span class="copy-btn-text">Copy</span>
+                </button>
+              </div>
+            </div>
+            <div class="binance-amount-pill" id="topupBinanceAmountBadge" style="margin-top:4px; font-size:13px;">
+              💰 $1.00 USDT / USD
+            </div>
+          </div>
         </div>
 
         <!-- Upload Slip Image -->
