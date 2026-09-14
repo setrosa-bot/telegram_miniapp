@@ -6,11 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#080b14">
   <title>Digital Premium Shop - Telegram Mini App</title>
-  <!-- Google Fonts: Premium Khmer & English Typography Suite -->
+  <!-- Google Fonts: Premium Khmer, Serif & English Typography Suite -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Koh+Santepheap:wght@400;500;600;700;800;900&family=Moul&family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Siemreap&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Kantumruy+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap"
     rel="stylesheet">
   <!-- Telegram WebApp SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -54,48 +54,63 @@
   <div class="bg-glow-2"></div>
   <div class="bg-glow-3"></div>
 
-  <!-- Top App Header -->
-  <header class="app-header">
-    <div class="user-profile" onclick="openVipModal()" style="cursor:pointer;" title="Click to view VIP & Role Profile">
-      <div class="avatar-wrapper">
-        <div class="avatar" id="userAvatar">U</div>
-        <span class="avatar-role-dot" id="avatarRoleDot"></span>
+  <!-- Verifier Cyber-Minimalist Header -->
+  <header class="verifier-header">
+    <div class="verifier-brand" onclick="switchTab('tabShop', document.getElementById('navShop'))">
+      <div class="verifier-avatar-glow">
+        <img src="/images/logo.png" alt="Logo" class="verifier-brand-logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/4712/4712139.png'">
       </div>
-      <div class="user-info-col">
-        <div class="user-name-row">
-          <div class="user-name" id="userName">Customer</div>
-          <span class="role-badge-pill" id="headerRoleBadge" style="display:none;">👑 Admin</span>
-        </div>
-        <div class="user-meta-row">
-          <span class="vip-badge-pill" id="headerVipBadge">🥉 Bronze</span>
-          <span class="user-id" id="userId" onclick="event.stopPropagation(); copyText(currentUser.user_id, this)" title="Click to copy ID">ID: 00000000 📋</span>
-        </div>
+      <div class="verifier-brand-text">
+        <h1 class="verifier-title">Verifier Store</h1>
+        <span class="verifier-subtag">STORE</span>
       </div>
     </div>
 
-    <!-- Header Controls & Admin Badge -->
-    <div class="header-actions">
-      <button id="currencyToggleBtn" class="header-tool-btn" onclick="toggleCurrency()" title="Switch Currency USD ($) / KHR (៛)">
-        <span id="currencySymbol">💵</span>
-        <span id="currencyLabel" class="tool-btn-label">USD</span>
+    <div class="verifier-header-right">
+      <!-- Language Pill Capsule -->
+      <div class="verifier-lang-capsule">
+        <button type="button" class="v-lang-btn active" id="btnLangEn" onclick="setAppLanguage('en')">EN</button>
+        <button type="button" class="v-lang-btn" id="btnLangKh" onclick="setAppLanguage('kh')">KH</button>
+        <button type="button" class="v-lang-btn" id="btnLangRu" onclick="setAppLanguage('ru')">RU</button>
+        <button type="button" class="v-lang-btn" id="btnLangCn" onclick="setAppLanguage('cn')">中</button>
+      </div>
+
+      <!-- Piggy / Wallet Balance Capsule -->
+      <div class="verifier-balance-capsule" onclick="switchTab('tabWallet', document.getElementById('navWallet'))" title="Wallet Balance">
+        <span class="v-balance-icon">👛</span>
+        <span class="v-balance-val" id="verifierBalanceText">$0</span>
+      </div>
+
+      <!-- Notification Bell Icon -->
+      <button type="button" class="verifier-bell-btn" onclick="openNotificationCenter()" title="Notifications">
+        <span class="bell-icon">🔔</span>
+        <span class="bell-unread-dot" id="headerNotifBadge" style="display:none;"></span>
       </button>
-      <button id="langToggleBtn" class="header-tool-btn" onclick="toggleLanguage()" title="Switch Language ខ្មែរ / English">
-        <span id="langFlag">🇰🇭</span>
-        <span id="langLabel" class="tool-btn-label">KM</span>
-      </button>
-      <button id="btnNotifInbox" class="header-tool-btn icon-only notif-inbox-btn" onclick="openNotificationCenter()" title="Notifications">
-        <span class="notif-icon">🔔</span>
-        <span class="notif-unread-dot" id="headerNotifBadge" style="display:none;"></span>
-      </button>
-      <button id="themeToggleBtn" class="header-tool-btn icon-only theme-toggle-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
-        <span class="theme-icon" id="themeIcon">🌙</span>
-      </button>
-      <div id="adminBadge" class="admin-chip-compact" style="display:none;"
-        onclick="switchTab('tabAdmin', document.getElementById('navAdmin'))" title="Click to open Admin Dashboard">
+
+      <!-- Admin Tag -->
+      <div id="adminBadge" class="admin-chip-compact" style="display:none;" onclick="switchTab('tabAdmin', document.getElementById('navAdmin'))">
         👑 ADMIN
       </div>
     </div>
   </header>
+
+  <!-- Top Segmented Category Capsule Bar -->
+  <div class="verifier-segmented-bar-container">
+    <div class="verifier-segmented-bar">
+      <button type="button" class="v-segment-btn active" id="segProducts" onclick="selectSegmentTab('products', this)">
+        Products
+      </button>
+      <button type="button" class="v-segment-btn" id="segVerify" onclick="selectSegmentTab('verify', this)">
+        Verify <span class="v-badge-new">NEW</span>
+      </button>
+      <button type="button" class="v-segment-btn" id="segMethods" onclick="selectSegmentTab('methods', this)">
+        Methods
+      </button>
+      <button type="button" class="v-segment-btn" id="segAds" onclick="selectSegmentTab('ads', this)">
+        Ads
+      </button>
+    </div>
+  </div>
 
   <!-- Main Content Container -->
   <main id="mainContainer">
@@ -103,120 +118,64 @@
     <!-- TAB 1: SHOP CATALOG -->
     <section id="tabShop" class="tab-page active">
 
-      <!-- Ultra-Luxury Store Hero Card -->
-      <div class="store-hero-banner">
-        <div class="hero-glow-orb-1"></div>
-        <div class="hero-glow-orb-2"></div>
-        <div class="hero-banner-inner">
-          <div class="hero-text-col">
-            <div class="hero-pill-badge">
-              <span class="hero-live-dot"></span>
-              <span>24/7 AUTO DELIVERY</span>
-            </div>
-            <h2 class="hero-main-title">Digital Premium Store</h2>
-            <p class="hero-description">ផ្គត់ផ្គង់ Account Premium គុណភាពខ្ពស់ ធានា ១០០%</p>
-            <div class="hero-perks-list">
-              <span class="hero-perk-item">⚡ ភ្លាមៗ ២៤/៧</span>
-              <span class="hero-perk-item">🛡️ ធានាពេញរង្វង់</span>
-              <span class="hero-perk-item">💳 QR &amp; Wallet</span>
-            </div>
-          </div>
-          <div class="hero-visual-col">
-            <div class="hero-3d-badge">
-              <img src="/images/logo.png" alt="Digital Premium Store" class="hero-3d-img">
-              <span class="hero-icon-sparkle">✨</span>
-            </div>
+      <!-- Spotlight Hero Banner (SuperGrok style) -->
+      <div class="verifier-spotlight-card" id="spotlightHeroCard" onclick="openSpotlightCheckout()">
+        <div class="spotlight-header-meta">
+          <div class="spotlight-pagination-dots">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="bar active"></span>
           </div>
         </div>
-      </div>
 
-      <!-- Quick Actions Row: Daily Reward & Lucky Angpao -->
-      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:14px;">
-        <div class="daily-reward-banner" id="dailyRewardBanner" onclick="openDailyCheckinModal()" style="margin-bottom:0; padding:10px 12px;">
-          <div class="daily-reward-left" style="gap:8px;">
-            <div class="daily-gift-icon" style="font-size:22px;">🎁</div>
-            <div>
-              <div class="daily-title" style="font-size:12px;">Daily Check-in</div>
-              <div class="daily-sub" id="dailyRewardSubText" style="font-size:10px;">Free $0.02 - $0.10</div>
-            </div>
+        <div class="spotlight-visual-area">
+          <div class="spotlight-hero-art">
+            <svg class="spotlight-grok-icon" viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2.2">
+              <circle cx="12" cy="12" r="9"/>
+              <line x1="4" y1="20" x2="20" y2="4"/>
+            </svg>
+            <span class="spotlight-brand-big">SuperGrok</span>
           </div>
         </div>
-        <div class="daily-reward-banner angpao-banner-theme" id="angpaoBanner" onclick="openCreateAngpaoModal()" style="margin-bottom:0; padding:10px 12px;">
-          <div class="daily-reward-left" style="gap:8px;">
-            <div class="daily-gift-icon" style="font-size:22px;">🧧</div>
-            <div>
-              <div class="daily-title" style="font-size:12px; color:#fb7185;">Lucky Angpao</div>
-              <div class="daily-sub" style="font-size:10px;">ចែកអាំងប៉ាវក្នុងគ្រុប</div>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <!-- 🎁 EXCLUSIVE VIP GIVEAWAY HERO BANNER (Full Width Glassmorphic Luxury) -->
-      <div id="giveawayStoreBanner" class="giveaway-banner-card" onclick="openGiveawayModal()" style="display: none;">
-        <div class="giveaway-banner-shimmer"></div>
-        <div class="giveaway-banner-left">
-          <div class="giveaway-banner-visual">
-            <div class="giveaway-icon-box">🎁</div>
-            <span class="giveaway-sparkle-tag">✨</span>
-          </div>
-          <div class="giveaway-banner-info">
-            <div class="giveaway-pill-row">
-              <span class="giveaway-live-badge"><span class="pulse-dot"></span> LIVE GIVEAWAY</span>
-              <span id="giveawayStockBadge" class="giveaway-stock-badge">⚡ នៅសល់ 5 អាខោន</span>
+        <div class="spotlight-footer-row">
+          <div class="spotlight-meta-col">
+            <div class="spotlight-tag-row">
+              <span class="spotlight-tag-pick">TODAY'S PICK</span>
+              <span class="spotlight-tag-dur" id="spotlightDuration">HEAVY • 1 MONTH</span>
             </div>
-            <div id="giveawayBannerTitle" class="giveaway-card-title">CapCut Pro (7 ថ្ងៃ Free)</div>
-            <div class="giveaway-card-sub" id="giveawayBannerSub">
-              👉 Join Group & Channel Telegram ដើម្បីទទួលបាន Free 100%!
-            </div>
+            <h3 class="spotlight-title" id="spotlightTitle">SuperGrok Heavy CDK — 1 Month (Manual Delivery)</h3>
           </div>
-        </div>
-        <div class="giveaway-banner-right">
-          <button type="button" class="giveaway-open-btn" aria-label="Open Giveaway">
-            <span>ចូលរួម</span>
-            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+          <button type="button" class="btn-spotlight-buy" id="btnSpotlightBuy" onclick="openSpotlightCheckout(); event.stopPropagation();">
+            Buy now • <span id="spotlightPrice">$70</span>
           </button>
         </div>
       </div>
 
-      <!-- ⚡ FLASH SALE COUNTDOWN HERO BANNER -->
-      <div id="flashSaleBanner" style="display:none; background:linear-gradient(135deg, rgba(239,68,68,0.25), rgba(245,158,11,0.25)); border:1px solid rgba(239,68,68,0.5); border-radius:16px; padding:14px; margin-bottom:14px; position:relative; overflow:hidden; box-shadow:0 8px 24px rgba(239,68,68,0.2);">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <div style="display:flex; align-items:center; gap:6px;">
-            <span style="background:linear-gradient(135deg,#ef4444,#f59e0b); color:#fff; font-size:11px; font-weight:800; padding:3px 8px; border-radius:6px; animation:pulseRed 1.5s infinite;">⚡ FLASH SALE</span>
-            <span id="flashSaleTitleText" style="font-size:13px; font-weight:700; color:#fff;">បញ្ចុះតម្លៃពិសេស</span>
-          </div>
-          <span id="flashSaleDiscountBadge" style="font-size:13px; font-weight:800; color:#f87171; background:rgba(239,68,68,0.2); padding:2px 8px; border-radius:8px; border:1px solid #ef4444;">-20% OFF</span>
-        </div>
-        <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(0,0,0,0.3); padding:8px 12px; border-radius:10px;">
-          <span style="font-size:11.5px; color:var(--text-sub);">⏳ បញ្ចប់ក្នុងរយៈពេល៖</span>
-          <div id="flashSaleClockBox" style="display:flex; align-items:center; gap:4px; font-family:monospace; font-weight:800; font-size:14px; color:#fff;">
-            <span id="fsHours" style="background:rgba(0,0,0,0.6); padding:3px 7px; border-radius:6px; border:1px solid rgba(255,255,255,0.15);">00</span>:
-            <span id="fsMins" style="background:rgba(0,0,0,0.6); padding:3px 7px; border-radius:6px; border:1px solid rgba(255,255,255,0.15);">00</span>:
-            <span id="fsSecs" style="background:rgba(0,0,0,0.6); padding:3px 7px; border-radius:6px; border:1px solid rgba(255,255,255,0.15); color:#f87171;">00</span>
-          </div>
-        </div>
+      <!-- Italic Serif Section Title -->
+      <div class="verifier-section-header">
+        <h2 class="serif-section-title">All products</h2>
       </div>
 
-      <!-- Modern Search Input Box -->
-      <div class="search-box">
-        <svg class="search-icon" viewBox="0 0 24 24">
-          <path
-            d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+      <!-- Modern Search Input Box (Collapsible / Compact) -->
+      <div class="verifier-search-bar" id="verifierSearchBar">
+        <svg class="v-search-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
-        <input type="text" id="searchInput" class="search-input"
-          placeholder="ស្វែងរកទំនិញ ( CapCut, ChatGPT, Netflix )..." oninput="handleSearch(this.value)">
+        <input type="text" id="searchInput" class="v-search-input"
+          placeholder="Search products (ChatGPT, SuperGrok, Canva)..." oninput="handleSearch(this.value)">
       </div>
 
       <!-- Category Filter Scroll Pills -->
-      <div class="category-scroll" id="categoryList">
-        <button class="cat-btn active" onclick="filterCategory(null, this)">✨ ទាំងអស់ (All)</button>
+      <div class="category-scroll" id="categoryList" style="margin-bottom: 14px;">
+        <button class="cat-btn active" onclick="filterCategory(null, this)">✨ All products</button>
       </div>
 
-      <!-- Product Cards Responsive Grid -->
-      <div class="products-grid" id="productsGrid">
+      <!-- 2-Column Product Cards Responsive Grid -->
+      <div class="verifier-products-grid" id="productsGrid">
         <div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 50px;">
-          ⏳ កំពុងផ្ទុកទំនិញ... (Loading Products)
+          ⏳ Loading products...
         </div>
       </div>
 
@@ -2260,49 +2219,35 @@
     </div>
   </div>
 
-  <!-- Floating Bottom Navigation Dock -->
-  <nav class="bottom-nav" aria-label="Primary navigation">
-    <button class="nav-tab active" id="navShop" onclick="switchTab('tabShop', this)">
-      <div class="nav-icon-wrapper">
-        <svg viewBox="0 0 24 24" class="nav-svg">
-          <path d="M3.5 9.5L12 3l8.5 6.5V20a2 2 0 0 1-2 2h-4.5a1 1 0 0 1-1-1v-4.5a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1V21a1 1 0 0 1-1 1H5.5a2 2 0 0 1-2-2V9.5z"/>
-        </svg>
-      </div>
-      <span>ហាងទំនិញ</span>
+  <!-- Floating Bottom Capsule Dock (Verifier Style) -->
+  <nav class="verifier-bottom-dock" aria-label="Primary navigation">
+    <button class="v-dock-btn active nav-tab" id="navShop" onclick="switchTab('tabShop', this)">
+      <span class="v-dock-icon">🏬</span>
+      <span>Store</span>
     </button>
-    <button class="nav-tab" id="navOrders" onclick="switchTab('tabOrders', this)">
-      <div class="nav-icon-wrapper">
-        <svg viewBox="0 0 24 24" class="nav-svg">
-          <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-2 14H7a1 1 0 0 1 0-2h10a1 1 0 0 1 0 2zm0-4H7a1 1 0 0 1 0-2h10a1 1 0 0 1 0 2zm0-4H7a1 1 0 0 1 0-2h10a1 1 0 0 1 0 2z"/>
-        </svg>
-      </div>
-      <span>ប្រវត្តិទិញ</span>
+    <button class="v-dock-btn nav-tab" id="navOrders" onclick="switchTab('tabOrders', this)">
+      <span class="v-dock-icon">🛒</span>
+      <span>Orders</span>
+      <span class="v-dock-order-badge" id="dockOrdersBadge" style="display:none;">0</span>
     </button>
-    <button class="nav-tab" id="navReplace" onclick="switchTab('tabReplace', this)">
-      <div class="nav-icon-wrapper">
-        <svg viewBox="0 0 24 24" class="nav-svg">
-          <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.93V18a1 1 0 0 1-2 0v-1.07A6 6 0 0 1 7.07 13H6a1 1 0 0 1 0-2h1.07A6 6 0 0 1 11 7.07V6a1 1 0 0 1 2 0v1.07A6 6 0 0 1 16.93 11H18a1 1 0 0 1 0 2h-1.07A6 6 0 0 1 13 16.93zM12 9a3 3 0 1 0 3 3 3 3 0 0 0-3-3z"/>
-        </svg>
-      </div>
-      <span>ស្នើដូរអាខោន</span>
+    <button class="v-dock-btn nav-tab" id="navWallet" onclick="switchTab('tabWallet', this)">
+      <span class="v-dock-icon">👛</span>
+      <span>Balance</span>
     </button>
-    <button class="nav-tab" id="navWallet" onclick="switchTab('tabWallet', this)">
-      <div class="nav-icon-wrapper">
-        <svg viewBox="0 0 24 24" class="nav-svg">
-          <path d="M21 7H3a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zm-1 9a1.5 1.5 0 1 1 1.5-1.5A1.5 1.5 0 0 1 20 16zM5 3h14a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2z"/>
-        </svg>
-      </div>
-      <span>កាបូបលុយ</span>
+    <button class="v-dock-btn nav-tab" id="navReplace" onclick="switchTab('tabReplace', this)">
+      <span class="v-dock-icon">👤</span>
+      <span>Profile</span>
     </button>
-    <button class="nav-tab" id="navAdmin" style="display:none;" onclick="switchTab('tabAdmin', this)">
-      <div class="nav-icon-wrapper">
-        <svg viewBox="0 0 24 24" class="nav-svg">
-          <path d="M2 5l4 12h12l4-12-6 6-4-7-4 7-6-6zm3 14h14a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2z"/>
-        </svg>
-      </div>
+    <button class="v-dock-btn nav-tab" id="navAdmin" style="display:none;" onclick="switchTab('tabAdmin', this)">
+      <span class="v-dock-icon">👑</span>
       <span>Admin</span>
     </button>
   </nav>
+
+  <!-- Verifier Footer Brand Signature -->
+  <div class="verifier-footer-brand">
+    <span class="v-footer-sig">@digitalappstore_bot</span>
+  </div>
 
   <!-- Modal: Daily Check-in & Reward -->
   <div class="modal-backdrop" id="dailyCheckinModal">

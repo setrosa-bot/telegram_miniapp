@@ -522,6 +522,8 @@ async function syncUserWithBackend() {
       currentUser.role = data.user.role || (data.user.is_admin ? "admin" : "user");
       const balEl = document.getElementById("userWalletBalance");
       if (balEl) balEl.textContent = `$${currentUser.balance.toFixed(2)}`;
+      const headerBal = document.getElementById("verifierBalanceText");
+      if (headerBal) headerBal.textContent = `$${currentUser.balance.toFixed(0)}`;
       
       const balKhr = document.getElementById("userWalletBalanceKhr");
       if (balKhr) {
@@ -719,12 +721,12 @@ function renderProductsGrid(products) {
     filtered = filtered.filter(p => favoriteProductIds.includes(Number(p.id)));
     if (filtered.length === 0) {
       grid.innerHTML = `
-        <div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px 16px; background: var(--card-glass); border-radius: 16px; border: 1px dashed rgba(244,63,94,0.3);">
-          <div style="font-size:40px; margin-bottom:10px; animation:heartPop 1.2s ease infinite alternate;">❤️</div>
+        <div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px 16px; background: rgba(255,255,255,0.03); border-radius: 16px; border: 1px dashed rgba(244,63,94,0.3);">
+          <div style="font-size:40px; margin-bottom:10px;">❤️</div>
           <div style="font-size:15px; font-weight:800; color:#fff; margin-bottom:6px;">មិនទាន់មានទំនិញចំណាំទុកនៅឡើយទេ</div>
-          <div style="font-size:12px; color:var(--text-sub); margin-bottom:16px; line-height:1.4;">ចុចលើប៊ូតុងបេះដូង ❤️ លើទំនិញដែលអ្នកពេញចិត្ត ដើម្បីងាយស្រួលរកទិញនៅពេលក្រោយ</div>
-          <button class="btn-primary-action" onclick="filterCategory(null, document.querySelector('.cat-btn'))" style="display:inline-block; width:auto; padding:8px 20px; font-size:12.5px; font-weight:800;">
-            ✨ មើលទំនិញទាំងអស់ (Explore Products)
+          <div style="font-size:12px; color:var(--text-sub); margin-bottom:16px;">ចុចលើបេះដូង ❤️ ដើម្បីរក្សាទុកទំនិញដែលអ្នកពេញចិត្ត</div>
+          <button class="v-capsule-btn" onclick="filterCategory(null, document.querySelector('.cat-btn'))" style="background:#2563eb; color:#fff; border:none;">
+            ✨ មើលទំនិញទាំងអស់
           </button>
         </div>`;
       return;
@@ -743,107 +745,63 @@ function renderProductsGrid(products) {
     return;
   }
 
+  // Populate spotlight hero banner with featured / first product
+  const spotlightProd = filtered.find(p => /grok|chatgpt|claude|gemini/i.test(p.name)) || filtered[0];
+  if (spotlightProd) {
+    const spTitle = document.getElementById("spotlightTitle");
+    const spPrice = document.getElementById("spotlightPrice");
+    const spDur = document.getElementById("spotlightDuration");
+    if (spTitle) spTitle.textContent = spotlightProd.name;
+    if (spPrice) spPrice.textContent = `$${spotlightProd.price % 1 === 0 ? spotlightProd.price.toFixed(0) : spotlightProd.price.toFixed(2)}`;
+    if (spDur) spDur.textContent = spotlightProd.duration_days ? `HEAVY • ${spotlightProd.duration_days} DAYS` : `PREMIUM • 1 MONTH`;
+  }
+
   let html = "";
   filtered.forEach((p, index) => {
     const isAvailable = p.stock_count > 0;
-    const isLow = p.stock_count > 0 && p.stock_count <= 5;
     const fav = isFavorite(p.id);
-
-    // Stock text
-    let stockText = "";
-    if (!isAvailable) {
-      stockText = `<div style="font-size:11px; color:#f87171; font-weight:800;">🚫 អស់ស្តុក (Out of Stock)</div>`;
-    } else if (isLow) {
-      stockText = `<div style="font-size:11px; color:#fbbf24; font-weight:700;">⚠️ ស្តុកនៅសល់: ${p.stock_count} (Low Stock!)</div>`;
-    } else {
-      stockText = `<div style="font-size:11px; color:#34d399; font-weight:700;">✅ ស្តុកនៅសល់: ${p.stock_count}</div>`;
-    }
-
-    const maxStock = Math.max(p.stock_count, 10);
-    const stockPercent = Math.min(Math.round((p.stock_count / maxStock) * 100), 100);
-    const barClass = isLow ? "stock-bar-fill low" : "stock-bar-fill";
-
-    // Dynamic High-converting badges (Custom Badges, Urgency & FOMO)
-    let tagHtml = "";
-    if (p.badge) {
-      let bClass = "badge-generic";
-      const bUpper = p.badge.toUpperCase();
-      if (bUpper.includes("HOT") || bUpper.includes("🔥")) bClass = "badge-hot";
-      else if (bUpper.includes("POPULAR") || bUpper.includes("⚡")) bClass = "badge-popular";
-      else if (bUpper.includes("VIP") || bUpper.includes("💎")) bClass = "badge-vip";
-      else if (bUpper.includes("PROMO") || bUpper.includes("🎁")) bClass = "badge-promo";
-      else if (bUpper.includes("BEST") || bUpper.includes("🏆")) bClass = "badge-bestseller";
-      else if (bUpper.includes("NEW") || bUpper.includes("🚀")) bClass = "badge-new";
-      tagHtml = `<div class="product-badge-ribbon ${bClass}">${p.badge}</div>`;
-    } else if (p.stock_count > 0 && p.stock_count <= 3) {
-      tagHtml = `<div class="product-badge-ribbon badge-hot">⚡ សល់តែ ${p.stock_count}!</div>`;
-    } else if (activeFlashSale && activeFlashSale.discount_pct > 0) {
-      tagHtml = `<div class="product-badge-ribbon badge-hot">🔥 FLASH -${activeFlashSale.discount_pct}%</div>`;
-    } else if (index === 0) {
-      tagHtml = `<div class="product-badge-ribbon badge-bestseller">🏆 BEST SELLER</div>`;
-    } else if (index === 1) {
-      tagHtml = `<div class="product-badge-ribbon badge-new">🚀 NEW</div>`;
-    } else if (index === 2) {
-      tagHtml = `<div class="product-badge-ribbon badge-popular">⚡ POPULAR</div>`;
-    } else if (index % 3 === 0) {
-      tagHtml = `<div class="product-badge-ribbon badge-vip">💎 VIP</div>`;
-    }
-
-    // Dynamic Sold Count for Social Proof & Verified Stars
-    const soldCount = 85 + (Number(p.id) * 23) % 115;
-
-    // Star rating & sold count (Clickable to view verified reviews modal)
-    const ratingHtml = `
-      <div onclick="openProductReviewsModal(${p.id}, '${encodeURIComponent(p.name)}')" style="display:flex; align-items:center; justify-content:space-between; margin:4px 0 3px; cursor:pointer;" title="មើល Verified Reviews">
-        <div class="card-rating-preview">
-          <span>⭐ 4.9</span>
-          <span style="color:var(--text-sub); font-size:10px; font-weight:700;">(${soldCount}+ លក់ដាច់)</span>
-        </div>
-        <span style="font-size:9.5px; color:#38bdf8; font-weight:700; text-decoration:underline;">Reviews</span>
-      </div>
-    `;
-
-    // Duration pill
-    const durText = p.duration_days ? `⏳ ${p.duration_days} ថ្ងៃ (Days)` : "";
 
     // Price display with Flash Sale discount
     let displayPrice = p.price;
-    let oldPriceHtml = "";
     if (activeFlashSale && activeFlashSale.discount_pct > 0) {
       displayPrice = p.price * (1.0 - (activeFlashSale.discount_pct / 100.0));
-      oldPriceHtml = `<span style="text-decoration:line-through; color:var(--text-muted); font-size:10px; margin-right:4px;">$${p.price.toFixed(2)}</span>`;
     }
 
-    html += `
-      <div class="product-card${!isAvailable ? ' out-of-stock' : ''}">
-        ${tagHtml}
-        <div class="btn-card-favorite ${fav ? 'is-favorite' : ''}" onclick="toggleFavorite(${p.id}, event)" title="${fav ? 'ដកចេញពីចំណាំទុក' : 'ចំណាំទុកទំនិញ'}">
-          ${fav ? '❤️' : '🤍'}
-        </div>
-        <div class="product-img-box">
-          <img class="product-img" src="${p.image_url}" alt="${p.name}" loading="lazy" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3594/3594363.png'">
-        </div>
-        <h4 class="product-title">${p.name}</h4>
-        ${ratingHtml}
-        <div class="product-desc" style="font-size:11px; color:var(--text-secondary); margin-bottom:4px;">${(p.description || '').slice(0, 60)}${p.description && p.description.length > 60 ? '...' : ''}</div>
-        <div class="product-duration">${durText}</div>
-        
-        <div class="stock-bar-box">
-          ${stockText}
-          <div class="stock-bar-track">
-            <div class="${barClass}" style="width: ${stockPercent}%;"></div>
-          </div>
-        </div>
+    // Category name resolution
+    const cat = categoriesData.find(c => Number(c.id) === Number(p.category_id));
+    const catName = cat ? cat.name.replace(/[^a-zA-Z0-9\s]/g, '').trim().toUpperCase() : "AI TOOLS";
+    const durLabel = p.duration_days ? `${p.duration_days} DAYS` : "1 MONTH";
+    const subLabel = `${catName} • ${durLabel}`;
 
-        <div class="card-bottom">
-          <div class="price-chip">
-            ${oldPriceHtml}
-            <span class="price-tag" style="${activeFlashSale ? 'color:#f87171;' : ''}">$${displayPrice.toFixed(2)}</span>
+    // Badges (+ NEW, ✓ OFFICIAL)
+    let badgeHtml = "";
+    if (index === 0 || p.badge?.toLowerCase().includes("new") || p.id % 2 === 0) {
+      badgeHtml += `<span class="v-badge-new-pill">+ NEW</span>`;
+    }
+    badgeHtml += `<span class="v-badge-official-pill">✓ OFFICIAL</span>`;
+
+    html += `
+      <div class="v-prod-card${!isAvailable ? ' out-of-stock' : ''}" onclick="openCheckoutModal(${p.id})">
+        <div class="v-prod-img-box">
+          <div class="v-card-badges-top">
+            ${badgeHtml}
           </div>
-          ${isAvailable
-            ? `<button class="btn-buy-card" onclick="openCheckoutModal(${p.id})">🛒 ទិញ</button>`
-            : `<button class="btn-buy-card btn-notify-stock" onclick="event.stopPropagation(); handleSubscribeStock(${p.id}, '${encodeURIComponent(p.name)}')">🔔 ផ្ដល់ដំណឹង</button>`
-          }
+          <div class="v-card-fav-btn" onclick="toggleFavorite(${p.id}, event)" title="Favorite">
+            ${fav ? '❤️' : '🤍'}
+          </div>
+          <img class="v-prod-img" src="${p.image_url}" alt="${p.name}" loading="lazy" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3594/3594363.png'">
+        </div>
+        
+        <div class="v-prod-meta">
+          <div class="v-prod-sublabel">${subLabel}</div>
+          <h4 class="v-prod-title">${p.name}</h4>
+          
+          <div class="v-prod-footer">
+            <div class="v-prod-price">$${displayPrice % 1 === 0 ? displayPrice.toFixed(0) : displayPrice.toFixed(2)}</div>
+            <div class="v-stock-pill ${isAvailable ? '' : 'out'}">
+              • ${isAvailable ? p.stock_count + ' left' : '0 left'}
+            </div>
+          </div>
         </div>
       </div>
     `;
@@ -852,13 +810,44 @@ function renderProductsGrid(products) {
   grid.innerHTML = html;
 }
 
+function selectSegmentTab(seg, btn) {
+  try {
+    if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred("light");
+  } catch (e) {}
+  document.querySelectorAll(".v-segment-btn").forEach(b => b.classList.remove("active"));
+  if (btn) btn.classList.add("active");
+  
+  if (seg === 'products') {
+    switchTab('tabShop', document.getElementById('navShop'));
+    const gridEl = document.getElementById("productsGrid");
+    if (gridEl) gridEl.scrollIntoView({ behavior: 'smooth' });
+  } else if (seg === 'verify') {
+    switchTab('tabReplace', document.getElementById('navReplace'));
+  } else if (seg === 'methods') {
+    openTopupModal();
+  } else if (seg === 'ads') {
+    openAngpaoClaimModal();
+  }
+}
+window.selectSegmentTab = selectSegmentTab;
 
+function openSpotlightCheckout() {
+  try {
+    if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred("medium");
+  } catch (e) {}
+  const spotlightProd = productsData.find(p => /grok|chatgpt|claude|gemini/i.test(p.name)) || productsData[0];
+  if (spotlightProd) {
+    openCheckoutModal(spotlightProd.id);
+  }
+}
+window.openSpotlightCheckout = openSpotlightCheckout;
 
 async function fetchUserWalletData() {
   try {
     const res = await fetch(`/api/user/${currentUser.user_id}/wallet`);
     const json = await res.json();
     if (json.status === "success") {
+      currentUser.balance = json.balance;
       const balEl = document.getElementById("userWalletBalance");
       if (balEl) {
         balEl.textContent = `$${json.balance.toFixed(2)}`;
@@ -866,11 +855,15 @@ async function fetchUserWalletData() {
         void balEl.offsetWidth; // reflow to restart animation
         balEl.classList.add("wallet-balance-anim");
       }
+      const headerBal = document.getElementById("verifierBalanceText");
+      if (headerBal) {
+        headerBal.textContent = `$${json.balance.toFixed(0)}`;
+      }
       const linkEl = document.getElementById("textRefLink");
       const countEl = document.getElementById("refCount");
       const earnedEl = document.getElementById("refTotalEarned");
       if (linkEl) linkEl.textContent = json.referral_link;
-      if (countEl) countEl.textContent = `${json.referrals_count} នាក`;
+      if (countEl) countEl.textContent = `${json.referrals_count} នាក់`;
       if (earnedEl) earnedEl.textContent = `$${json.total_earned.toFixed(2)}`;
     }
   } catch (err) {
@@ -1763,6 +1756,11 @@ async function loadUserOrders() {
 
     if (json.status === "success" && json.data.length > 0) {
       userOrdersCache = json.data;
+      const dockOrdersBadge = document.getElementById("dockOrdersBadge");
+      if (dockOrdersBadge) {
+        dockOrdersBadge.textContent = `• ${json.data.length} Orders`;
+        dockOrdersBadge.style.display = "inline-block";
+      }
       let html = "";
       json.data.forEach(o => {
         const statusColors = {
