@@ -178,7 +178,7 @@ function switchTab(tabId, btn) {
   });
 
   // Deactivate all nav buttons
-  document.querySelectorAll(".nav-tab").forEach(b => {
+  document.querySelectorAll(".nav-tab, .v-dock-btn").forEach(b => {
     b.classList.remove("active");
   });
 
@@ -6974,7 +6974,7 @@ let currentAppLang = localStorage.getItem("app_lang") || "km";
 const i18nDict = {
   km: {
     nav_shop: "ហាង",
-    nav_orders: "បញ្ជាទិញ",
+    nav_orders: "កុម្ម៉ង់",
     nav_replace: "គណនី",
     nav_wallet: "កាបូប",
     nav_admin: "Admin",
@@ -6985,7 +6985,7 @@ const i18nDict = {
   },
   kh: {
     nav_shop: "ហាង",
-    nav_orders: "បញ្ជាទិញ",
+    nav_orders: "កុម្ម៉ង់",
     nav_replace: "គណនី",
     nav_wallet: "កាបូប",
     nav_admin: "Admin",
