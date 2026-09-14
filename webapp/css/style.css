@@ -15272,6 +15272,53 @@ textarea.form-input-lux {
   box-shadow: 0 -10px 50px rgba(0, 0, 0, 0.8), 0 0 1px rgba(255, 255, 255, 0.2) !important;
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   🔒 STRICT CUSTOMER / NON-ADMIN ISOLATION SYSTEM
+   Ensure regular users / customers NEVER see or access Admin UI
+   ═══════════════════════════════════════════════════════════════ */
+#adminBadge:not(.is-admin-verified),
+#navAdmin:not(.is-admin-verified),
+#tabAdmin:not(.is-admin-verified) {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+}
+
+#adminBadge.is-admin-verified {
+  display: inline-flex !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+#navAdmin.is-admin-verified {
+  display: flex !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+#tabAdmin.is-admin-verified.active {
+  display: block !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+
 
 
 

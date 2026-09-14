@@ -148,7 +148,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Hash-based tab switching
   if (window.location.hash === "#admin") {
-    switchTab('tabAdmin', document.getElementById('navAdmin'));
+    if (currentUser && currentUser.is_admin) {
+      switchTab('tabAdmin', document.getElementById('navAdmin'));
+    } else {
+      switchTab('tabShop', document.getElementById('navShop'));
+    }
   } else if (window.location.hash === "#orders") {
     switchTab('tabOrders', document.getElementById('navOrders'));
   } else if (window.location.hash === "#replace") {
@@ -172,6 +176,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 // ─── Core Navigation & Modal Helpers ─────────────────────────────────────────
 function switchTab(tabId, btn) {
+  // 🔒 Security Check: Block normal users / customers from accessing tabAdmin
+  if (tabId === 'tabAdmin' && (!currentUser || !currentUser.is_admin)) {
+    console.warn("🔒 Unauthorized access blocked: tabAdmin is restricted to admins only.");
+    tabId = 'tabShop';
+    btn = document.getElementById('navShop');
+  }
+
   try {
     if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred("light");
   } catch (e) {}
@@ -592,13 +603,22 @@ async function syncUserWithBackend() {
     const data = await res.json();
     const adminBadge = document.getElementById("adminBadge");
     const navAdmin = document.getElementById("navAdmin");
+    const tabAdmin = document.getElementById("tabAdmin");
     const headerRoleBadge = document.getElementById("headerRoleBadge");
     const avatarRoleDot = document.getElementById("avatarRoleDot");
 
+    // 🔒 Strict Admin Verification: Check user object and explicit admin role
+    const isAdminUser = Boolean(
+      data.user &&
+      (data.user.is_admin === 1 || data.user.is_admin === true || data.user.is_admin === "1") &&
+      (data.role_info?.role === "admin" || data.role_info?.role === "super_admin" || data.user.role === "admin" || data.user.role === "super_admin")
+    );
+
+    currentUser.is_admin = isAdminUser;
+    currentUser.role = isAdminUser ? (data.user.role || "admin") : "user";
+
     if (data.user) {
       currentUser.balance = parseFloat(data.user.balance) || 0.0;
-      currentUser.is_admin = !!data.user.is_admin;
-      currentUser.role = data.user.role || (data.user.is_admin ? "admin" : "user");
       const balEl = document.getElementById("userWalletBalance");
       if (balEl) balEl.textContent = `$${currentUser.balance.toFixed(2)}`;
       const profileBal = document.getElementById("profileUserBalance");
@@ -638,15 +658,35 @@ async function syncUserWithBackend() {
       }
     }
 
-    if (data.user && data.user.is_admin) {
-      if (adminBadge) adminBadge.style.display = "inline-block";
-      if (navAdmin) navAdmin.style.display = "flex";
+    if (isAdminUser) {
+      if (adminBadge) {
+        adminBadge.classList.add("is-admin-verified");
+        adminBadge.style.setProperty("display", "inline-flex", "important");
+      }
+      if (navAdmin) {
+        navAdmin.classList.add("is-admin-verified");
+        navAdmin.style.setProperty("display", "flex", "important");
+      }
+      if (tabAdmin) {
+        tabAdmin.classList.add("is-admin-verified");
+      }
       loadAdminStats();
       startAdminLiveMonitor();
       updateAdminSoundUI();
     } else {
-      if (adminBadge) adminBadge.style.display = "none";
-      if (navAdmin) navAdmin.style.display = "none";
+      // 🔒 Strictly ensure all Customers / Regular Users NEVER see Admin Icon or Panel
+      if (adminBadge) {
+        adminBadge.classList.remove("is-admin-verified");
+        adminBadge.style.setProperty("display", "none", "important");
+      }
+      if (navAdmin) {
+        navAdmin.classList.remove("is-admin-verified");
+        navAdmin.style.setProperty("display", "none", "important");
+      }
+      if (tabAdmin) {
+        tabAdmin.classList.remove("is-admin-verified");
+        tabAdmin.style.setProperty("display", "none", "important");
+      }
       stopAdminLiveMonitor();
     }
   } catch (err) {
