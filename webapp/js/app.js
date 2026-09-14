@@ -479,19 +479,21 @@ function initLiveSocialProof() {
 
 
 function renderUserHeader() {
-  document.getElementById("userName").textContent = currentUser.full_name;
-  document.getElementById("userId").textContent = `ID: ${currentUser.user_id}`;
+  const nameEl = document.getElementById("userName");
+  if (nameEl) nameEl.textContent = currentUser.full_name;
+  const idEl = document.getElementById("userId");
+  if (idEl) idEl.textContent = `ID: ${currentUser.user_id}`;
 
   const avatarEl = document.getElementById("userAvatar");
-  if (currentUser.photo_url) {
-    // Show real Telegram profile photo
-    avatarEl.innerHTML = `<img src="${currentUser.photo_url}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;">`;
-    avatarEl.style.padding = '0';
-    avatarEl.style.overflow = 'hidden';
-  } else {
-    // Fallback: letter initial
-    const initial = currentUser.full_name.charAt(0).toUpperCase();
-    avatarEl.textContent = initial;
+  if (avatarEl) {
+    if (currentUser.photo_url) {
+      avatarEl.innerHTML = `<img src="${currentUser.photo_url}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;">`;
+      avatarEl.style.padding = '0';
+      avatarEl.style.overflow = 'hidden';
+    } else {
+      const initial = currentUser.full_name.charAt(0).toUpperCase();
+      avatarEl.textContent = initial;
+    }
   }
 
   const replaceBuyerInput = document.getElementById("replaceBuyerName");

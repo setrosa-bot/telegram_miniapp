@@ -17,34 +17,12 @@
   <!-- Canvas Confetti for Celebration Effects -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   <!-- Custom Redesigned Styles -->
-  <link rel="stylesheet" href="/css/style.css?v=20260908_giveaway_v14">
+  <link rel="stylesheet" href="/css/style.css?v=20260914_verifier_v3">
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="/images/logo.png">
 </head>
 
 <body>
-
-  <!-- 🌟 Fullscreen Welcome Splash Screen with Logo -->
-  <div id="appSplashScreen">
-    <div class="splash-content">
-      <div class="splash-logo-container">
-        <div class="splash-logo-glow-ring"></div>
-        <div class="splash-logo-glow-behind"></div>
-        <img src="/images/logo.png" alt="Digital Premium Store" class="splash-logo-img">
-      </div>
-      <div class="splash-welcome-subtitle">✨ សូមស្វាគមន៍មកកាន់ ✨</div>
-      <h1 class="splash-brand-title">Digital Premium Store</h1>
-      <div class="splash-tagline">Premium Tools • Trusted Access • Auto Delivery</div>
-      
-      <div class="splash-progress-track">
-        <div class="splash-progress-bar" id="splashProgressBar"></div>
-      </div>
-      <div class="splash-status-text">
-        <span class="splash-spinner-dot"></span>
-        <span id="splashStatusText">កំពុងរៀបចំហាង...</span>
-      </div>
-    </div>
-  </div>
 
   <!-- Floating Live Order / Topup Alert Banner Container -->
   <div id="liveAlertBannerContainer"></div>
@@ -2208,7 +2186,7 @@
 
 
   <!-- 🎧 Floating 24/7 Support Quick Action Hub Button -->
-  <div class="floating-support-btn" id="floatingSupportBtn" onclick="openSupportTicketModal()" title="ជំនួយ Support 24/7">
+  <div class="floating-support-btn" id="floatingSupportBtn" style="display:none;" onclick="openSupportTicketModal()" title="ជំនួយ Support 24/7">
     <div class="floating-support-icon-wrap">
       <span>🎧</span>
       <span class="floating-support-dot"></span>

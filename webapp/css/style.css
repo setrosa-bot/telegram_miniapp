@@ -13701,6 +13701,11 @@ textarea.form-input-lux {
    🛡️ CYBER-MINIMALIST "VERIFIER BOT" ULTRA LUXURY UI SUITE
    ═══════════════════════════════════════════════════════════════ */
 
+/* ── Splash Screen (Completely Disabled / Hidden) ── */
+#appSplashScreen {
+  display: none !important;
+}
+
 /* ── 1. Top Verifier Header Bar ── */
 .verifier-header {
   position: sticky;
@@ -13710,149 +13715,163 @@ textarea.form-input-lux {
   align-items: center;
   justify-content: space-between;
   padding: calc(10px + env(safe-area-inset-top, 0px)) 16px 10px;
-  background: rgba(10, 11, 15, 0.88);
+  background: #090a0f;
+  background: rgba(9, 10, 15, 0.95);
   backdrop-filter: blur(28px) saturate(190%);
   -webkit-backdrop-filter: blur(28px) saturate(190%);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  transition: background 0.3s;
+  gap: 8px;
 }
 
-.verifier-brand-left {
+.verifier-brand {
   display: flex;
   align-items: center;
   gap: 10px;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
-.verifier-avatar-box {
+.verifier-avatar-glow {
   position: relative;
-  width: 38px;
-  height: 38px;
-}
-
-.verifier-avatar-img, .verifier-avatar-fallback {
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  object-fit: cover;
-  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
-  font-weight: 900;
-  font-size: 15px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  box-shadow: 0 0 12px rgba(37, 99, 235, 0.35);
 }
 
-.verifier-online-dot {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 9px;
-  height: 9px;
+.verifier-brand-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   border-radius: 50%;
-  background: #10b981;
-  border: 2px solid #0a0b0f;
-  box-shadow: 0 0 6px #10b981;
 }
 
-.verifier-title-col {
+.verifier-brand-text {
   display: flex;
   flex-direction: column;
 }
 
-.verifier-store-name {
+.verifier-title {
   font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
   font-size: 15px;
   font-weight: 800;
   color: #ffffff;
   letter-spacing: -0.2px;
   line-height: 1.2;
+  margin: 0;
 }
 
-.verifier-tag-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 1px;
-}
-
-.verifier-sub-tag {
+.verifier-subtag {
   font-size: 9px;
   font-weight: 800;
   color: #94a3b8;
-  letter-spacing: 0.6px;
+  letter-spacing: 0.8px;
   text-transform: uppercase;
 }
 
-.verifier-user-id-chip {
-  font-size: 9px;
-  color: #64748b;
-  font-family: 'Fira Code', Consolas, monospace;
-}
-
 /* ── Header Right Action Capsules ── */
-.verifier-actions-right {
+.verifier-header-right {
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-.v-capsule-btn {
-  height: 32px;
-  padding: 0 10px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #e2e8f0;
-  font-size: 11.5px;
-  font-weight: 800;
+.verifier-lang-capsule {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 4px;
+  background: #15161e;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  padding: 2px;
+  gap: 1px;
+}
+
+.v-lang-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 10.5px;
+  font-weight: 800;
+  padding: 3px 6px;
+  border-radius: 999px;
   cursor: pointer;
   outline: none;
   transition: all 0.2s ease;
-  user-select: none;
-}
-.v-capsule-btn:active {
-  transform: scale(0.94);
-  background: rgba(255, 255, 255, 0.12);
 }
 
-.v-balance-capsule {
+.v-lang-btn.active {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.verifier-balance-capsule {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   background: rgba(251, 191, 36, 0.1);
-  border-color: rgba(251, 191, 36, 0.35);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  padding: 4px 10px;
+  border-radius: 999px;
   color: #fbbf24;
+  font-size: 11.5px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.verifier-balance-capsule:active {
+  transform: scale(0.95);
+}
+
+.v-balance-icon {
+  font-size: 12px;
+}
+
+.v-balance-val {
   font-family: var(--font-num);
 }
-.v-balance-capsule:active {
-  background: rgba(251, 191, 36, 0.2);
-}
 
-.v-bell-btn {
+.verifier-bell-btn {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.06);
+  background: #15161e;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #e2e8f0;
+  color: #ffffff;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s ease;
   position: relative;
+  outline: none;
+  transition: transform 0.2s ease;
 }
-.v-bell-btn:active {
+.verifier-bell-btn:active {
   transform: scale(0.92);
+}
+
+.bell-icon {
+  font-size: 14px;
+}
+
+.bell-unread-dot {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: 0 0 6px #ef4444;
 }
 
 /* ── 2. Top Segmented Category Capsule Bar ── */
 .verifier-segmented-bar-container {
-  padding: 12px 14px 4px;
+  padding: 12px 14px 6px;
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -13863,11 +13882,11 @@ textarea.form-input-lux {
 .verifier-segmented-bar {
   display: inline-flex;
   align-items: center;
-  background: #101117;
+  background: #111218;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 999px;
-  padding: 3px;
-  gap: 2px;
+  padding: 4px;
+  gap: 4px;
   min-width: 100%;
 }
 
@@ -13879,7 +13898,7 @@ textarea.form-input-lux {
   border: none;
   background: transparent;
   color: #94a3b8;
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 700;
   display: inline-flex;
   align-items: center;
@@ -13887,16 +13906,15 @@ textarea.form-input-lux {
   gap: 4px;
   cursor: pointer;
   white-space: nowrap;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  user-select: none;
+  transition: all 0.2s ease;
   outline: none;
 }
 
 .v-segment-btn.active {
-  background: #232631;
+  background: #232632;
   color: #ffffff;
   font-weight: 800;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 .v-segment-btn:active {
@@ -13911,19 +13929,18 @@ textarea.form-input-lux {
   padding: 1px 5px;
   border-radius: 6px;
   letter-spacing: 0.4px;
-  line-height: 1.2;
 }
 
 /* ── 3. Spotlight Hero Banner Card (SuperGrok Style) ── */
 .verifier-spotlight-card {
   margin: 10px 14px 16px;
-  background: linear-gradient(145deg, #1b1c24 0%, #13141a 50%, #0d0e13 100%);
+  background: linear-gradient(145deg, #181922 0%, #121319 50%, #0d0e13 100%);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 20px;
-  padding: 16px 18px 16px;
+  padding: 16px 18px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.12);
   cursor: pointer;
   transition: transform 0.25s ease, border-color 0.25s ease;
 }
@@ -13939,7 +13956,7 @@ textarea.form-input-lux {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .spotlight-pagination-dots {
@@ -13971,7 +13988,7 @@ textarea.form-input-lux {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 18px 0 20px;
+  padding: 14px 0 18px;
 }
 
 .spotlight-hero-art {
@@ -14036,7 +14053,7 @@ textarea.form-input-lux {
 }
 
 .spotlight-title {
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 800;
   color: #ffffff;
   line-height: 1.3;
@@ -14048,14 +14065,15 @@ textarea.form-input-lux {
   color: #ffffff;
   border: none;
   border-radius: 999px;
-  padding: 10px 18px;
-  font-size: 13px;
+  padding: 9px 16px;
+  font-size: 12.5px;
   font-weight: 800;
   white-space: nowrap;
   box-shadow: 0 6px 18px rgba(37, 99, 235, 0.45);
   cursor: pointer;
   transition: all 0.2s ease;
   flex-shrink: 0;
+  outline: none;
 }
 .btn-spotlight-buy:hover {
   filter: brightness(1.1);
@@ -14084,7 +14102,7 @@ textarea.form-input-lux {
 /* ── 5. Verifier Search Bar (Compact Pill) ── */
 .verifier-search-bar {
   margin: 0 14px 12px;
-  background: #111217;
+  background: #111218;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 14px;
   padding: 8px 14px;
@@ -14200,17 +14218,6 @@ textarea.form-input-lux {
   box-shadow: 0 2px 6px rgba(5, 150, 105, 0.5);
 }
 
-.v-badge-hot-pill {
-  background: #ea580c;
-  color: #ffffff;
-  font-size: 9px;
-  font-weight: 900;
-  padding: 2px 7px;
-  border-radius: 6px;
-  letter-spacing: 0.3px;
-  width: fit-content;
-}
-
 .v-card-fav-btn {
   position: absolute;
   top: 8px;
@@ -14301,7 +14308,7 @@ textarea.form-input-lux {
   left: 50%;
   transform: translateX(-50%);
   z-index: 999;
-  background: rgba(18, 19, 25, 0.88);
+  background: rgba(18, 19, 25, 0.92);
   backdrop-filter: blur(28px) saturate(180%);
   -webkit-backdrop-filter: blur(28px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -14374,6 +14381,47 @@ textarea.form-input-lux {
   color: rgba(255, 255, 255, 0.35);
   letter-spacing: 0.3px;
 }
+
+/* ── 9. Clean Category Scroll Pills ── */
+.category-scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 0 14px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.category-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.cat-btn {
+  background: #14151d;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  padding: 6px 14px;
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+  user-select: none;
+}
+
+.cat-btn.active {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+  box-shadow: 0 2px 10px rgba(37, 99, 235, 0.35);
+}
+
+.cat-btn:active {
+  transform: scale(0.95);
+}
+
+
 
 
 
