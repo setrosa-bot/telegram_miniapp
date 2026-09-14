@@ -207,10 +207,10 @@ function switchTab(tabId, btn) {
     }
   }
 
-  // Hide floating support button inside Admin dashboard to prevent covering admin controls
+  // Hide floating support button permanently to keep clean Cyber-Minimalist view
   const supportBtn = document.querySelector(".floating-support-btn");
   if (supportBtn) {
-    supportBtn.style.display = (tabId === "tabAdmin") ? "none" : "flex";
+    supportBtn.style.display = "none";
   }
 
   // Trigger tab-specific loaders
@@ -6973,10 +6973,21 @@ let currentAppLang = localStorage.getItem("app_lang") || "km";
 
 const i18nDict = {
   km: {
-    nav_shop: "ហាងទំនិញ",
-    nav_orders: "ប្រវត្តិទិញ",
-    nav_replace: "ស្នើសុំដូរអាខោន",
-    nav_wallet: "កាបូបលុយ",
+    nav_shop: "ហាង",
+    nav_orders: "បញ្ជាទិញ",
+    nav_replace: "គណនី",
+    nav_wallet: "កាបូប",
+    nav_admin: "Admin",
+    search_placeholder: "ស្វែងរកទំនិញ ( CapCut, ChatGPT, Netflix )...",
+    all_categories: "✨ ទាំងអស់ (All)",
+    buy_now: "🛒 ទិញឥឡូវនេះ",
+    out_of_stock: "❌ អស់ស្តុក"
+  },
+  kh: {
+    nav_shop: "ហាង",
+    nav_orders: "បញ្ជាទិញ",
+    nav_replace: "គណនី",
+    nav_wallet: "កាបូប",
     nav_admin: "Admin",
     search_placeholder: "ស្វែងរកទំនិញ ( CapCut, ChatGPT, Netflix )...",
     all_categories: "✨ ទាំងអស់ (All)",
@@ -6985,14 +6996,36 @@ const i18nDict = {
   },
   en: {
     nav_shop: "Store",
-    nav_orders: "My Orders",
-    nav_replace: "Warranty",
-    nav_wallet: "Wallet",
+    nav_orders: "Orders",
+    nav_replace: "Profile",
+    nav_wallet: "Balance",
     nav_admin: "Admin",
     search_placeholder: "Search products (CapCut, ChatGPT, Netflix)...",
     all_categories: "✨ All Products",
     buy_now: "🛒 Buy Now",
     out_of_stock: "❌ Out of Stock"
+  },
+  ru: {
+    nav_shop: "Магазин",
+    nav_orders: "Заказы",
+    nav_replace: "Профиль",
+    nav_wallet: "Баланс",
+    nav_admin: "Админ",
+    search_placeholder: "Поиск товаров (CapCut, ChatGPT)...",
+    all_categories: "✨ Все товары",
+    buy_now: "🛒 Купить",
+    out_of_stock: "❌ Нет в наличии"
+  },
+  cn: {
+    nav_shop: "商店",
+    nav_orders: "订单",
+    nav_replace: "我的",
+    nav_wallet: "钱包",
+    nav_admin: "管理",
+    search_placeholder: "搜索产品 (CapCut, ChatGPT)...",
+    all_categories: "✨ 全部产品",
+    buy_now: "🛒 立即购买",
+    out_of_stock: "❌ 缺货"
   }
 };
 
@@ -7006,18 +7039,45 @@ function toggleLanguage() {
 }
 window.toggleLanguage = toggleLanguage;
 
+function setAppLanguage(lang) {
+  try {
+    if (window.Telegram?.WebApp?.HapticFeedback) {
+      window.Telegram.WebApp.HapticFeedback.impactOccurred("light");
+    }
+  } catch (e) {}
+  
+  const targetKey = (lang === "kh" ? "km" : lang);
+  currentAppLang = targetKey;
+  localStorage.setItem("app_lang", targetKey);
+
+  // Update header language buttons active state
+  document.querySelectorAll(".v-lang-btn").forEach(b => b.classList.remove("active"));
+  const btnMap = { en: "btnLangEn", km: "btnLangKh", kh: "btnLangKh", ru: "btnLangRu", cn: "btnLangCn" };
+  const targetBtn = document.getElementById(btnMap[lang]);
+  if (targetBtn) targetBtn.classList.add("active");
+
+  applyAppLanguage(targetKey);
+  
+  const langNames = { en: "English", km: "ភាសាខ្មែរ", kh: "ភាសាខ្មែរ", ru: "Русский", cn: "中文" };
+  showToast(`🌐 Language: ${langNames[lang] || lang.toUpperCase()}`, "success");
+}
+window.setAppLanguage = setAppLanguage;
+
 function applyAppLanguage(lang) {
+  const normalized = (lang === "kh" ? "km" : lang);
   const flagEl = document.getElementById("langFlag");
   const labelEl = document.getElementById("langLabel");
   const searchInput = document.getElementById("searchInput");
 
   if (flagEl && labelEl) {
-    flagEl.textContent = lang === "km" ? "🇰🇭" : "🇺🇸";
-    labelEl.textContent = lang === "km" ? "KM" : "EN";
+    const flags = { km: "🇰🇭", en: "🇺🇸", ru: "🇷🇺", cn: "🇨🇳" };
+    flagEl.textContent = flags[normalized] || "🌐";
+    labelEl.textContent = normalized.toUpperCase();
   }
 
-  if (searchInput && i18nDict[lang]) {
-    searchInput.placeholder = i18nDict[lang].search_placeholder;
+  const dict = i18nDict[normalized] || i18nDict.en;
+  if (searchInput && dict) {
+    searchInput.placeholder = dict.search_placeholder;
   }
 
   // Update Nav Labels if elements exist
@@ -7026,16 +7086,17 @@ function applyAppLanguage(lang) {
   const navReplaceLabel = document.querySelector("#navReplace span:last-child");
   const navWalletLabel = document.querySelector("#navWallet span:last-child");
 
-  if (navShopLabel && i18nDict[lang]) navShopLabel.textContent = i18nDict[lang].nav_shop;
-  if (navOrdersLabel && i18nDict[lang]) navOrdersLabel.textContent = i18nDict[lang].nav_orders;
-  if (navReplaceLabel && i18nDict[lang]) navReplaceLabel.textContent = i18nDict[lang].nav_replace;
-  if (navWalletLabel && i18nDict[lang]) navWalletLabel.textContent = i18nDict[lang].nav_wallet;
+  if (navShopLabel && dict) navShopLabel.textContent = dict.nav_shop;
+  if (navOrdersLabel && dict) navOrdersLabel.textContent = dict.nav_orders;
+  if (navReplaceLabel && dict) navReplaceLabel.textContent = dict.nav_replace;
+  if (navWalletLabel && dict) navWalletLabel.textContent = dict.nav_wallet;
 }
 window.applyAppLanguage = applyAppLanguage;
 
 // Apply saved language on start
 document.addEventListener("DOMContentLoaded", () => {
-  applyAppLanguage(currentAppLang);
+  const saved = localStorage.getItem("app_lang") || "en";
+  setAppLanguage(saved);
 });
 
 /* ═══════════════════════════════════════════════════════════════════
