@@ -501,9 +501,69 @@ function renderUserHeader() {
     }
   }
 
+  // 1. Update Bottom Navbar Profile Avatar
+  const dockImg = document.getElementById("dockUserAvatarImg");
+  const dockFallback = document.getElementById("dockUserAvatarFallback");
+  if (dockImg && dockFallback) {
+    if (currentUser.photo_url) {
+      dockImg.src = currentUser.photo_url;
+      dockImg.style.display = "block";
+      dockFallback.style.display = "none";
+    } else {
+      dockImg.style.display = "none";
+      dockFallback.style.display = "flex";
+      dockFallback.textContent = currentUser.full_name ? currentUser.full_name.charAt(0).toUpperCase() : "👤";
+    }
+  }
+
+  // 2. Update Telegram User Profile Hero Card
+  const profileAvatar = document.getElementById("profileTelegramAvatar");
+  const profileFallbackLetter = document.getElementById("profileAvatarFallbackLetter");
+  const profileFullName = document.getElementById("profileUserFullName");
+  const profileUsername = document.getElementById("profileUserUsername");
+  const profileId = document.getElementById("profileUserIdText");
+  const profileBal = document.getElementById("profileUserBalance");
+
+  if (profileAvatar && profileFallbackLetter) {
+    if (currentUser.photo_url) {
+      profileAvatar.src = currentUser.photo_url;
+      profileAvatar.style.display = "block";
+      profileFallbackLetter.style.display = "none";
+    } else {
+      profileAvatar.style.display = "none";
+      profileFallbackLetter.style.display = "flex";
+      profileFallbackLetter.textContent = currentUser.full_name ? currentUser.full_name.charAt(0).toUpperCase() : "U";
+    }
+  }
+
+  if (profileFullName) profileFullName.textContent = currentUser.full_name;
+  if (profileUsername) {
+    const rawUser = (currentUser.username || "").replace(/^@/, "");
+    profileUsername.textContent = rawUser ? `@${rawUser}` : `@user${currentUser.user_id}`;
+  }
+  if (profileId) profileId.textContent = currentUser.user_id;
+  if (profileBal) profileBal.textContent = `$${(currentUser.balance || 0).toFixed(2)}`;
+
   const replaceBuyerInput = document.getElementById("replaceBuyerName");
   if (replaceBuyerInput) replaceBuyerInput.value = currentUser.full_name;
 }
+
+function copyTelegramUserId() {
+  triggerHaptic("selection");
+  navigator.clipboard?.writeText(String(currentUser.user_id))
+    .then(() => showToast(`📋 Copied Telegram ID: ${currentUser.user_id}`, "success"))
+    .catch(() => showToast(`ID: ${currentUser.user_id}`, "info"));
+}
+window.copyTelegramUserId = copyTelegramUserId;
+
+function scrollOrToggleWarrantyForm() {
+  triggerHaptic("light");
+  const form = document.getElementById("formReplacementRequest");
+  if (form) {
+    form.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
+window.scrollOrToggleWarrantyForm = scrollOrToggleWarrantyForm;
 
 async function syncUserWithBackend() {
   try {
@@ -529,6 +589,8 @@ async function syncUserWithBackend() {
       currentUser.role = data.user.role || (data.user.is_admin ? "admin" : "user");
       const balEl = document.getElementById("userWalletBalance");
       if (balEl) balEl.textContent = `$${currentUser.balance.toFixed(2)}`;
+      const profileBal = document.getElementById("profileUserBalance");
+      if (profileBal) profileBal.textContent = `$${currentUser.balance.toFixed(2)}`;
       const headerBal = document.getElementById("verifierBalanceText");
       if (headerBal) headerBal.textContent = `$${currentUser.balance.toFixed(0)}`;
       
@@ -1983,6 +2045,8 @@ async function loadUserOrders() {
         dockOrdersBadge.textContent = `• ${json.data.length} Orders`;
         dockOrdersBadge.style.display = "inline-block";
       }
+      const profileOrders = document.getElementById("profileUserOrdersCount");
+      if (profileOrders) profileOrders.textContent = `${json.data.length} Orders`;
       let html = "";
       json.data.forEach(o => {
         const statusColors = {

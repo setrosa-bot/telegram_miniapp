@@ -17,7 +17,7 @@
   <!-- Canvas Confetti for Celebration Effects -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   <!-- Custom Redesigned Styles -->
-  <link rel="stylesheet" href="/css/style.css?v=20260914_spotlight_v10">
+  <link rel="stylesheet" href="/css/style.css?v=20260914_profile_v11">
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="/images/logo.png">
 </head>
@@ -194,15 +194,80 @@
       </div>
     </section>
 
-    <!-- TAB 3: WARRANTY / ACCOUNT REPLACEMENT REQUEST -->
-    <section id="tabReplace" class="tab-page" style="display:none; padding: 16px;">
+    <!-- TAB 3: TELEGRAM USER PROFILE & SERVICES HUB -->
+    <section id="tabReplace" class="tab-page" style="display:none; padding: 14px 16px 125px;">
       
+      <!-- Top Telegram User Profile Card -->
+      <div class="telegram-profile-hero-card">
+        <div class="profile-hero-top">
+          <!-- Avatar with Glowing Neon Ring & Online Dot -->
+          <div class="profile-avatar-outer-ring">
+            <img id="profileTelegramAvatar" class="profile-avatar-large" src="" alt="User Avatar" style="display:none;" onerror="this.style.display='none'; document.getElementById('profileAvatarFallbackLetter').style.display='flex';">
+            <div id="profileAvatarFallbackLetter" class="profile-avatar-letter-fallback">U</div>
+            <span class="profile-verified-badge" title="Verified Telegram User">✓</span>
+          </div>
+
+          <!-- User Name, Handle, ID -->
+          <div class="profile-hero-meta">
+            <div class="profile-name-row">
+              <h2 id="profileUserFullName" class="profile-user-fullname">Set Rosa</h2>
+              <span class="profile-vip-pill">👑 VIP LEVEL 1</span>
+            </div>
+            <div id="profileUserUsername" class="profile-user-handle">@setrosa</div>
+            <div class="profile-id-chip" onclick="copyTelegramUserId()" title="Copy User ID">
+              <span class="id-label">ID:</span>
+              <span id="profileUserIdText" class="id-val">12345678</span>
+              <span class="id-copy-icon">📋</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Balance & Stats Bar -->
+        <div class="profile-stats-grid">
+          <div class="profile-stat-box" onclick="switchTab('tabWallet', document.getElementById('navWallet'))">
+            <div class="stat-icon">👛</div>
+            <div class="stat-content">
+              <div class="stat-label">សមតុល្យ (Balance)</div>
+              <div class="stat-val" id="profileUserBalance">$0.00</div>
+            </div>
+          </div>
+          <div class="profile-stat-box" onclick="switchTab('tabOrders', document.getElementById('navOrders'))">
+            <div class="stat-icon">🛒</div>
+            <div class="stat-content">
+              <div class="stat-label">ការកុម្ម៉ង់ (Orders)</div>
+              <div class="stat-val" id="profileUserOrdersCount">0 Orders</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile Quick Actions Grid -->
+      <div class="profile-actions-grid">
+        <div class="profile-action-tile active-action" onclick="scrollOrToggleWarrantyForm()">
+          <span class="action-tile-icon">🛡️</span>
+          <div class="action-tile-text">
+            <span class="action-tile-title">ស្នើដូរអាខោនថ្មី</span>
+            <span class="action-tile-sub">100% Replacement Warranty</span>
+          </div>
+          <span class="action-tile-arrow">▼</span>
+        </div>
+
+        <a href="https://t.me/digitalappstore_admin" target="_blank" class="profile-action-tile" style="text-decoration:none;">
+          <span class="action-tile-icon">🎧</span>
+          <div class="action-tile-text">
+            <span class="action-tile-title">ជំនួយ Support 24/7</span>
+            <span class="action-tile-sub">សរសេរសួរផ្ទាល់ទៅ Admin</span>
+          </div>
+          <span class="action-tile-arrow">➔</span>
+        </a>
+      </div>
+
       <!-- Top Title & Warranty Guarantee Badge -->
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin: 18px 0 10px;">
         <div>
           <div style="font-size: 11px; font-weight: 800; color: #c084fc; text-transform: uppercase; letter-spacing: 0.5px;">Premium Warranty Service</div>
-          <h3 style="margin: 2px 0 0 0; font-size: 18px; font-weight: 900; color: #fff; display: flex; align-items: center; gap: 8px;">
-            <span>🛡️</span> <span>ស្នើដូរអាខោនថ្មី</span>
+          <h3 style="margin: 2px 0 0 0; font-size: 17px; font-weight: 900; color: #fff; display: flex; align-items: center; gap: 8px;">
+            <span>🛡️</span> <span>ពាក្យស្នើសុំដូរអាខោន (Warranty Form)</span>
           </h3>
         </div>
         <div style="display: inline-flex; align-items: center; gap: 4px; background: rgba(168,85,247,0.15); border: 1px solid rgba(168,85,247,0.4); padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 800; color: #c084fc;">
@@ -210,7 +275,7 @@
         </div>
       </div>
 
-      <p style="font-size: 12px; color: var(--text-sub); margin-bottom: 18px; line-height: 1.45;">
+      <p style="font-size: 12px; color: var(--text-sub); margin-bottom: 14px; line-height: 1.45;">
         ប្រសិនបើអាខោនដែលបានទិញមានបញ្ហាមិនអាចចូលប្រើប្រាស់បាន សូមបំពេញ Form ខាងក្រោម ក្រុមការងារនឹងត្រួតពិនិត្យ និងប្តូរជូនភ្លាមៗ៖
       </p>
 
@@ -2227,8 +2292,11 @@
       <span class="v-dock-icon">👛</span>
       <span>Balance</span>
     </button>
-    <button type="button" class="v-dock-btn" id="navReplace" onclick="switchTab('tabReplace', this)">
-      <span class="v-dock-icon">👤</span>
+    <button type="button" class="v-dock-btn" id="navReplace" onclick="switchTab('tabReplace', this)" title="Profile">
+      <div class="v-dock-avatar-wrapper">
+        <img id="dockUserAvatarImg" class="v-dock-avatar-img" src="" alt="Profile" style="display:none;" onerror="this.style.display='none'; document.getElementById('dockUserAvatarFallback').style.display='flex';">
+        <span id="dockUserAvatarFallback" class="v-dock-avatar-fallback">👤</span>
+      </div>
       <span>Profile</span>
     </button>
     <button type="button" class="v-dock-btn" id="navAdmin" style="display:none;" onclick="switchTab('tabAdmin', this)">
@@ -3598,7 +3666,7 @@
     </div>
   </div>
 
-  <script src="/js/app.js?v=20260914_spotlight_v10"></script>
-  <script src="/js/ux.js?v=20260914_spotlight_v10"></script>
+  <script src="/js/app.js?v=20260914_profile_v11"></script>
+  <script src="/js/ux.js?v=20260914_profile_v11"></script>
 </body>
 </html>
