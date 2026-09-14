@@ -17,7 +17,7 @@
   <!-- Canvas Confetti for Celebration Effects -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   <!-- Custom Redesigned Styles -->
-  <link rel="stylesheet" href="/css/style.css?v=20260914_clean_v14">
+  <link rel="stylesheet" href="/css/style.css?v=20260914_icononly_v15">
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="/images/logo.png">
 </head>
@@ -2231,15 +2231,12 @@
       <span class="v-dock-indicator"></span>
     </button>
     <button type="button" class="v-dock-btn" id="navReplace" onclick="switchTab('tabReplace', this)" title="Profile">
-      <div class="v-dock-avatar-wrapper">
-        <img id="dockUserAvatarImg" class="v-dock-avatar-img" src="" alt="Profile" style="display:none;" onerror="this.style.display='none'; document.getElementById('dockUserAvatarFallback').style.display='flex';">
-        <div id="dockUserAvatarFallback" class="v-dock-avatar-fallback">
-          <svg class="v-dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
-          </svg>
-        </div>
-      </div>
+      <span class="v-dock-icon">
+        <svg class="v-dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </span>
       <span class="v-dock-label" id="navReplaceLabel">Profile</span>
       <span class="v-dock-indicator"></span>
     </button>

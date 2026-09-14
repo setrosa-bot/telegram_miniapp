@@ -501,20 +501,6 @@ function renderUserHeader() {
     }
   }
 
-  // 1. Update Bottom Navbar Profile Avatar
-  const dockImg = document.getElementById("dockUserAvatarImg");
-  const dockFallback = document.getElementById("dockUserAvatarFallback");
-  if (dockImg && dockFallback) {
-    if (currentUser.photo_url) {
-      dockImg.src = currentUser.photo_url;
-      dockImg.style.display = "block";
-      dockFallback.style.display = "none";
-    } else {
-      dockImg.style.display = "none";
-      dockFallback.style.display = "flex";
-      dockFallback.textContent = currentUser.full_name ? currentUser.full_name.charAt(0).toUpperCase() : "👤";
-    }
-  }
 
   // 2. Update Telegram User Profile Hero Card
   const profileAvatar = document.getElementById("profileTelegramAvatar");
