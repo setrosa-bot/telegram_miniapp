@@ -7336,6 +7336,40 @@ body, .app-header, .bottom-nav, .product-card, .modal-box,
   z-index: 1;
 }
 
+.binance-qr-frame {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  background: #ffffff;
+  padding: 8px;
+  border-radius: 18px;
+  border: 2.5px solid #f0b90b;
+  box-shadow: 0 6px 24px rgba(240, 185, 11, 0.22);
+  margin-bottom: 12px;
+  max-width: 240px;
+}
+
+.binance-qr-frame img {
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+  max-height: 280px;
+  object-fit: contain;
+  border-radius: 12px;
+  display: block;
+}
+
+.binance-qr-badge {
+  margin-top: 6px;
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #181a20;
+  background: #f0b90b;
+  padding: 3px 12px;
+  border-radius: 10px;
+  letter-spacing: 0.3px;
+}
+
 .binance-id-box {
   background: linear-gradient(135deg, rgba(240, 185, 11, 0.12) 0%, rgba(240, 185, 11, 0.04) 100%);
   border: 1.5px dashed rgba(240, 185, 11, 0.55);
