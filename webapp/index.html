@@ -17,7 +17,7 @@
   <!-- Canvas Confetti for Celebration Effects -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   <!-- Custom Redesigned Styles -->
-  <link rel="stylesheet" href="/css/style.css?v=20260914_dock_v13">
+  <link rel="stylesheet" href="/css/style.css?v=20260914_clean_v14">
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="/images/logo.png">
 </head>
@@ -84,23 +84,6 @@
     </div>
   </header>
 
-  <!-- Top Segmented Category Capsule Bar -->
-  <div class="verifier-segmented-bar-container">
-    <div class="verifier-segmented-bar">
-      <button type="button" class="v-segment-btn active" id="segProducts" onclick="selectSegmentTab('products', this)">
-        Products
-      </button>
-      <button type="button" class="v-segment-btn" id="segVerify" onclick="selectSegmentTab('verify', this)">
-        Verify <span class="v-badge-new">NEW</span>
-      </button>
-      <button type="button" class="v-segment-btn" id="segMethods" onclick="selectSegmentTab('methods', this)">
-        Methods
-      </button>
-      <button type="button" class="v-segment-btn" id="segAds" onclick="selectSegmentTab('ads', this)">
-        Ads
-      </button>
-    </div>
-  </div>
 
   <!-- Main Content Container -->
   <main id="mainContainer">
@@ -251,16 +234,7 @@
       </div>
 
       <!-- Profile Quick Actions Grid -->
-      <div class="profile-actions-grid">
-        <div class="profile-action-tile active-action" onclick="scrollOrToggleWarrantyForm()">
-          <span class="action-tile-icon">🛡️</span>
-          <div class="action-tile-text">
-            <span class="action-tile-title">ស្នើដូរអាខោនថ្មី</span>
-            <span class="action-tile-sub">100% Replacement Warranty</span>
-          </div>
-          <span class="action-tile-arrow">▼</span>
-        </div>
-
+      <div class="profile-actions-grid" style="margin-bottom: 24px;">
         <a href="https://t.me/digitalappstore_admin" target="_blank" class="profile-action-tile" style="text-decoration:none;">
           <span class="action-tile-icon">🎧</span>
           <div class="action-tile-text">
@@ -269,105 +243,38 @@
           </div>
           <span class="action-tile-arrow">➔</span>
         </a>
-      </div>
 
-      <!-- Top Title & Warranty Guarantee Badge -->
-      <div style="display: flex; justify-content: space-between; align-items: center; margin: 18px 0 10px;">
-        <div>
-          <div style="font-size: 11px; font-weight: 800; color: #c084fc; text-transform: uppercase; letter-spacing: 0.5px;">Premium Warranty Service</div>
-          <h3 style="margin: 2px 0 0 0; font-size: 17px; font-weight: 900; color: #fff; display: flex; align-items: center; gap: 8px;">
-            <span>🛡️</span> <span>ពាក្យស្នើសុំដូរអាខោន (Warranty Form)</span>
-          </h3>
-        </div>
-        <div style="display: inline-flex; align-items: center; gap: 4px; background: rgba(168,85,247,0.15); border: 1px solid rgba(168,85,247,0.4); padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 800; color: #c084fc;">
-          <span>✅</span> <span>100% Guarantee</span>
-        </div>
-      </div>
-
-      <p style="font-size: 12px; color: var(--text-sub); margin-bottom: 14px; line-height: 1.45;">
-        ប្រសិនបើអាខោនដែលបានទិញមានបញ្ហាមិនអាចចូលប្រើប្រាស់បាន សូមបំពេញ Form ខាងក្រោម ក្រុមការងារនឹងត្រួតពិនិត្យ និងប្តូរជូនភ្លាមៗ៖
-      </p>
-
-      <!-- Luxury Form Container -->
-      <form id="formReplacementRequest" class="warranty-form-card">
-        
-        <div class="form-group-lux">
-          <label class="form-label-lux">
-            <span>👤</span> <span>1. ឈ្មោះអ្នកទិញ (Buyer Name)</span>
-          </label>
-          <input type="text" name="buyer_name" id="replaceBuyerName" class="form-input-lux" placeholder="ឈ្មោះរបស់អ្នក" required>
-        </div>
-
-        <div class="form-group-lux">
-          <label class="form-label-lux">
-            <span>📦</span> <span>2. ទិញលើកម្មវិធី (Select App / Product)</span>
-          </label>
-          <select name="product_name" id="replaceProductSelect" class="form-input-lux" required style="cursor:pointer;">
-            <option value="CapCut Pro">🎬 CapCut Pro</option>
-            <option value="ChatGPT Plus">🤖 ChatGPT Plus</option>
-            <option value="Gemini Advanced / Pro">✨ Gemini Pro (18 Months)</option>
-            <option value="Claude Pro">🧠 Claude Pro</option>
-            <option value="Canva Pro">🎨 Canva Pro</option>
-            <option value="Netflix Premium 4K">🍿 Netflix Premium 4K</option>
-            <option value="Spotify Premium">🎵 Spotify Premium</option>
-            <option value="YouTube Premium">▶️ YouTube Premium</option>
-            <option value="Other / ផ្សេងៗ">📦 Other / ផ្សេងៗ</option>
-          </select>
-        </div>
-
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px;" class="form-group-lux">
-          <div>
-            <label class="form-label-lux">
-              <span>📅</span> <span>3. ថ្ងៃខែទិញ</span>
-            </label>
-            <input type="date" name="purchase_date" id="replacePurchaseDate" class="form-input-lux" required>
+        <div class="profile-action-tile" onclick="switchTab('tabOrders', document.getElementById('navOrders'))" style="cursor:pointer;">
+          <span class="action-tile-icon">📦</span>
+          <div class="action-tile-text">
+            <span class="action-tile-title">ប្រវត្តិបញ្ជាទិញ</span>
+            <span class="action-tile-sub">My Orders History</span>
           </div>
-          <div>
-            <label class="form-label-lux">
-              <span>⏳</span> <span>4. ថ្ងៃផុតកំណត់</span>
-            </label>
-            <input type="date" name="expiry_date" id="replaceExpiryDate" class="form-input-lux" required>
+          <span class="action-tile-arrow">➔</span>
+        </div>
+
+        <div class="profile-action-tile" onclick="openTopupModal()" style="cursor:pointer;">
+          <span class="action-tile-icon">👛</span>
+          <div class="action-tile-text">
+            <span class="action-tile-title">បញ្ចូលប្រាក់ Wallet</span>
+            <span class="action-tile-sub">Top Up Balance</span>
           </div>
+          <span class="action-tile-arrow">➔</span>
         </div>
 
-        <div class="form-group-lux">
-          <label class="form-label-lux">
-            <span>🔐</span> <span>5. Email & Password ដែលមានបញ្ហា (Current Email & Pass)</span>
-          </label>
-          <input type="text" name="problem_credentials" class="form-input-lux" placeholder="myemail@gmail.com | password123" required>
-        </div>
-
-        <div class="form-group-lux">
-          <label class="form-label-lux">
-            <span>📝</span> <span>6. ពណ៌នាអំពីបញ្ហា (Problem Description)</span>
-          </label>
-          <textarea name="issue_description" id="replaceIssueDesc" class="form-input-lux" rows="2" placeholder="ឧ. ចូលមិនបាន / សុពលភាពត្រូវបានលុប..."></textarea>
-          
-          <!-- Quick Problem Issue Chips -->
-          <div class="quick-issue-chips">
-            <span class="issue-chip" onclick="fillIssueDescription('❌ ចូលមិនបាន Password ខុស (Wrong Password)')">❌ Password ខុស</span>
-            <span class="issue-chip" onclick="fillIssueDescription('⚠️ អស់សុពលភាពមុនកាលកំណត់ (Expired Early)')">⚠️ អស់សុពលភាពមុនកំណត់</span>
-            <span class="issue-chip" onclick="fillIssueDescription('🔄 សុំ Reset Link ថ្មី (Request Reset Link)')">🔄 សុំ Link ថ្មី</span>
-            <span class="issue-chip" onclick="fillIssueDescription('🚫 គណនីត្រូវជាប់ Lock / Suspended')">🚫 ជាប់ Lock</span>
+        <a href="https://t.me/digitalappstore_bot" target="_blank" class="profile-action-tile" style="text-decoration:none;">
+          <span class="action-tile-icon">📢</span>
+          <div class="action-tile-text">
+            <span class="action-tile-title">ឆានែល Telegram</span>
+            <span class="action-tile-sub">Updates & Promos</span>
           </div>
-        </div>
-
-        <button type="submit" class="btn-submit-warranty" id="btnSubmitReplacement">
-          <span>⚡</span> <span>ផ្ញើសំណើស្នើសុំដូរអាខោនថ្មី</span>
-        </button>
-      </form>
-
-      <!-- History Header & Refresh -->
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-        <h4 style="margin: 0; font-size: 14px; font-weight: 800; color: var(--gold-primary); display: flex; align-items: center; gap: 6px;">
-          <span>📋</span> <span>ប្រវត្តិស្នើសុំដូរអាខោន (Replacement History)</span>
-        </h4>
-        <button type="button" class="btn-mini-copy" style="font-size:10.5px; padding:3px 8px; background:rgba(255,255,255,0.06); color:var(--text-sub); border:1px solid rgba(255,255,255,0.1);" onclick="loadReplacementHistory()">🔄 Refresh</button>
+          <span class="action-tile-arrow">➔</span>
+        </a>
       </div>
 
-      <div id="replacementHistoryList">
-        <div style="text-align: center; color: var(--text-muted); padding: 30px;">⏳ កំពុងផ្ទុក...</div>
-      </div>
+      <!-- Hidden placeholder for legacy scripts -->
+      <div id="replacementHistoryList" style="display:none;"></div>
+      <form id="formReplacementRequest" style="display:none;"></form>
     </section>
 
     <!-- TAB 4: WALLET & REFERRAL SYSTEM -->
