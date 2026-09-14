@@ -17,7 +17,7 @@
   <!-- Canvas Confetti for Celebration Effects -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   <!-- Custom Redesigned Styles -->
-  <link rel="stylesheet" href="/css/style.css?v=20260914_tgheader_v12">
+  <link rel="stylesheet" href="/css/style.css?v=20260914_dock_v13">
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="/images/logo.png">
 </head>
@@ -212,7 +212,7 @@
           <!-- Avatar with Glowing Neon Ring & Online Dot -->
           <div class="profile-avatar-outer-ring">
             <img id="profileTelegramAvatar" class="profile-avatar-large" src="" alt="User Avatar" style="display:none;" onerror="this.style.display='none'; document.getElementById('profileAvatarFallbackLetter').style.display='flex';">
-            <div id="profileAvatarFallbackLetter" class="profile-avatar-letter-fallback">U</div>
+            <div id="profileAvatarFallbackLetter" class="profile-avatar-letter-fallback" style="display:none;">U</div>
             <span class="profile-verified-badge" title="Verified Telegram User">✓</span>
           </div>
 
@@ -2288,29 +2288,63 @@
 
   <!-- Floating Bottom Capsule Dock (Verifier Style) -->
   <nav class="verifier-bottom-dock" aria-label="Primary navigation">
-    <button type="button" class="v-dock-btn active" id="navShop" onclick="switchTab('tabShop', this)">
-      <span class="v-dock-icon">🏬</span>
-      <span>Store</span>
+    <button type="button" class="v-dock-btn active" id="navShop" onclick="switchTab('tabShop', this)" title="Store">
+      <span class="v-dock-icon">
+        <svg class="v-dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l1-5h16l1 5"/>
+          <path d="M3 9a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0"/>
+          <path d="M4 14v6a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/>
+          <path d="M9 21v-5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v5"/>
+        </svg>
+      </span>
+      <span class="v-dock-label" id="navShopLabel">Store</span>
+      <span class="v-dock-indicator"></span>
     </button>
-    <button type="button" class="v-dock-btn" id="navOrders" onclick="switchTab('tabOrders', this)">
-      <span class="v-dock-icon">🛒</span>
-      <span>Orders</span>
+    <button type="button" class="v-dock-btn" id="navOrders" onclick="switchTab('tabOrders', this)" title="Orders">
+      <span class="v-dock-icon">
+        <svg class="v-dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+      </span>
+      <span class="v-dock-label" id="navOrdersLabel">Orders</span>
       <span class="v-dock-order-badge" id="dockOrdersBadge" style="display:none;">0</span>
+      <span class="v-dock-indicator"></span>
     </button>
-    <button type="button" class="v-dock-btn" id="navWallet" onclick="switchTab('tabWallet', this)">
-      <span class="v-dock-icon">👛</span>
-      <span>Balance</span>
+    <button type="button" class="v-dock-btn" id="navWallet" onclick="switchTab('tabWallet', this)" title="Wallet">
+      <span class="v-dock-icon">
+        <svg class="v-dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="5" width="20" height="14" rx="3" stroke-width="2"/>
+          <path d="M2 9h20" stroke-width="1.8"/>
+          <circle cx="17" cy="14" r="1.5" fill="currentColor"/>
+        </svg>
+      </span>
+      <span class="v-dock-label" id="navWalletLabel">Balance</span>
+      <span class="v-dock-indicator"></span>
     </button>
     <button type="button" class="v-dock-btn" id="navReplace" onclick="switchTab('tabReplace', this)" title="Profile">
       <div class="v-dock-avatar-wrapper">
         <img id="dockUserAvatarImg" class="v-dock-avatar-img" src="" alt="Profile" style="display:none;" onerror="this.style.display='none'; document.getElementById('dockUserAvatarFallback').style.display='flex';">
-        <span id="dockUserAvatarFallback" class="v-dock-avatar-fallback">👤</span>
+        <div id="dockUserAvatarFallback" class="v-dock-avatar-fallback">
+          <svg class="v-dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
       </div>
-      <span>Profile</span>
+      <span class="v-dock-label" id="navReplaceLabel">Profile</span>
+      <span class="v-dock-indicator"></span>
     </button>
-    <button type="button" class="v-dock-btn" id="navAdmin" style="display:none;" onclick="switchTab('tabAdmin', this)">
-      <span class="v-dock-icon">👑</span>
-      <span>Admin</span>
+    <button type="button" class="v-dock-btn" id="navAdmin" style="display:none;" onclick="switchTab('tabAdmin', this)" title="Admin">
+      <span class="v-dock-icon">
+        <svg class="v-dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 4l3 12h14l3-12-5 4-5-6-5 6-5-4z"/>
+          <circle cx="12" cy="19" r="1.5" fill="currentColor"/>
+        </svg>
+      </span>
+      <span class="v-dock-label" id="navAdminLabel">Admin</span>
+      <span class="v-dock-indicator"></span>
     </button>
   </nav>
 

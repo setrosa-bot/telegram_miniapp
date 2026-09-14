@@ -14526,17 +14526,17 @@ textarea.form-input-lux {
   left: 50% !important;
   transform: translateX(-50%) !important;
   z-index: 9999 !important;
-  background: rgba(14, 16, 23, 0.90) !important;
-  backdrop-filter: blur(28px) saturate(200%) !important;
-  -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  background: rgba(10, 12, 18, 0.92) !important;
+  backdrop-filter: blur(30px) saturate(210%) !important;
+  -webkit-backdrop-filter: blur(30px) saturate(210%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.13) !important;
   border-radius: 999px !important;
-  padding: 5px 6px !important;
+  padding: 4px 6px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   gap: 4px !important;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 0 1px rgba(255, 255, 255, 0.25) !important;
   max-width: calc(100% - 24px) !important;
   width: auto !important;
 }
@@ -14544,12 +14544,12 @@ textarea.form-input-lux {
 .v-dock-btn {
   all: unset !important;
   box-sizing: border-box !important;
-  min-width: 64px !important;
-  padding: 6px 12px !important;
+  min-width: 58px !important;
+  padding: 5px 9px 4px !important;
   border-radius: 999px !important;
   border: 1px solid transparent !important;
   background: transparent !important;
-  color: #8b92a2 !important;
+  color: #94a3b8 !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
@@ -14571,46 +14571,93 @@ textarea.form-input-lux {
 }
 
 .v-dock-btn .v-dock-icon {
-  font-size: 19px !important;
-  line-height: 1 !important;
-  margin-bottom: 3px !important;
+  width: 22px !important;
+  height: 22px !important;
+  margin-bottom: 2px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  color: #94a3b8 !important;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-.v-dock-btn span:last-child {
-  font-size: 10.5px !important;
+.v-dock-svg {
+  width: 20px !important;
+  height: 20px !important;
+  display: block !important;
+  stroke: currentColor !important;
+  transition: all 0.22s ease !important;
+}
+
+.v-dock-label {
+  font-size: 10px !important;
   font-weight: 700 !important;
-  line-height: 1 !important;
+  line-height: 1.1 !important;
   letter-spacing: 0.2px !important;
   white-space: nowrap !important;
-  overflow: visible !important;
-  text-overflow: clip !important;
-  color: inherit !important;
-  background: none !important;
-  -webkit-background-clip: unset !important;
-  -webkit-text-fill-color: initial !important;
+  color: #94a3b8 !important;
+  font-family: 'Kantumruy Pro', 'Plus Jakarta Sans', sans-serif !important;
+  transition: all 0.22s ease !important;
 }
 
-/* Active State: Frosted Silver Glass Pill (Verifier Iconic Glow) */
+.v-dock-indicator {
+  width: 3px !important;
+  height: 3px !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  margin-top: 2px !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Active State: Frosted Cyan Glow Capsule (Verifier Authentic Style) */
 .v-dock-btn.active {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.07) 100%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  background: linear-gradient(180deg, rgba(56, 189, 248, 0.18) 0%, rgba(37, 99, 235, 0.08) 100%) !important;
+  border: 1px solid rgba(56, 189, 248, 0.45) !important;
   color: #ffffff !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6), inset 0 1px 1.5px rgba(255, 255, 255, 0.45) !important;
-  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 18px rgba(37, 99, 235, 0.32), inset 0 1px 1.5px rgba(255, 255, 255, 0.35) !important;
+  transform: translateY(-1.5px) !important;
 }
 
-.v-dock-btn.active .v-dock-icon {
+.v-dock-btn.active .v-dock-icon,
+.v-dock-btn.active .v-dock-svg {
+  color: #38bdf8 !important;
   transform: scale(1.1) !important;
-  filter: drop-shadow(0 2px 6px rgba(255, 255, 255, 0.4)) !important;
+  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.8)) !important;
 }
 
-.v-dock-btn.active span:last-child {
+.v-dock-btn.active .v-dock-label {
   color: #ffffff !important;
   font-weight: 800 !important;
+}
+
+.v-dock-btn.active .v-dock-indicator {
+  width: 14px !important;
+  height: 2.5px !important;
+  border-radius: 999px !important;
+  background: #38bdf8 !important;
+  box-shadow: 0 0 8px #38bdf8 !important;
+}
+
+/* Admin Button Specific Styling */
+#navAdmin:not(.active) .v-dock-svg {
+  color: #fbbf24 !important;
+  opacity: 0.85 !important;
+}
+
+#navAdmin.active {
+  background: linear-gradient(180deg, rgba(251, 191, 36, 0.22) 0%, rgba(217, 119, 6, 0.1) 100%) !important;
+  border-color: rgba(251, 191, 36, 0.55) !important;
+  box-shadow: 0 4px 18px rgba(251, 191, 36, 0.35) !important;
+}
+
+#navAdmin.active .v-dock-svg {
+  color: #fbbf24 !important;
+  filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.85)) !important;
+}
+
+#navAdmin.active .v-dock-indicator {
+  background: #fbbf24 !important;
+  box-shadow: 0 0 8px #fbbf24 !important;
 }
 
 .v-dock-btn:active {
@@ -14619,15 +14666,15 @@ textarea.form-input-lux {
 
 .v-dock-order-badge {
   position: absolute !important;
-  top: 2px !important;
-  right: 8px !important;
+  top: 1px !important;
+  right: 6px !important;
   background: #10b981 !important;
   color: #ffffff !important;
   font-size: 8.5px !important;
   font-weight: 900 !important;
   padding: 1px 5px !important;
   border-radius: 999px !important;
-  box-shadow: 0 0 8px rgba(16, 185, 129, 0.6) !important;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.7) !important;
   line-height: 1 !important;
 }
 
@@ -14655,16 +14702,23 @@ textarea.form-input-lux {
 
 .v-dock-btn.active .v-dock-avatar-img {
   border-color: #38bdf8 !important;
-  box-shadow: 0 0 12px rgba(56, 189, 248, 0.65) !important;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.75) !important;
   transform: scale(1.12) !important;
 }
 
 .v-dock-avatar-fallback {
-  font-size: 17px !important;
-  line-height: 1 !important;
+  width: 22px !important;
+  height: 22px !important;
+  border-radius: 50% !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+  color: #94a3b8 !important;
+}
+
+.v-dock-btn.active .v-dock-avatar-fallback {
+  color: #38bdf8 !important;
+  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.8)) !important;
 }
 
 /* ── 8. Cursive / Stylish Footer Signature ── */
@@ -14846,9 +14900,9 @@ textarea.form-input-lux {
   color: #ffffff !important;
   font-size: 26px !important;
   font-weight: 900 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+  display: none;
+  align-items: center;
+  justify-content: center;
 }
 
 .profile-verified-badge {

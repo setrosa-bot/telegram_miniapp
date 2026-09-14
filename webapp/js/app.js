@@ -7392,15 +7392,17 @@ function applyAppLanguage(lang) {
   }
 
   // Update Nav Labels if elements exist
-  const navShopLabel = document.querySelector("#navShop span:last-child");
-  const navOrdersLabel = document.querySelector("#navOrders span:last-child");
-  const navReplaceLabel = document.querySelector("#navReplace span:last-child");
-  const navWalletLabel = document.querySelector("#navWallet span:last-child");
+  const navShopLabel = document.getElementById("navShopLabel") || document.querySelector("#navShop .v-dock-label");
+  const navOrdersLabel = document.getElementById("navOrdersLabel") || document.querySelector("#navOrders .v-dock-label");
+  const navReplaceLabel = document.getElementById("navReplaceLabel") || document.querySelector("#navReplace .v-dock-label");
+  const navWalletLabel = document.getElementById("navWalletLabel") || document.querySelector("#navWallet .v-dock-label");
+  const navAdminLabel = document.getElementById("navAdminLabel") || document.querySelector("#navAdmin .v-dock-label");
 
   if (navShopLabel && dict) navShopLabel.textContent = dict.nav_shop;
   if (navOrdersLabel && dict) navOrdersLabel.textContent = dict.nav_orders;
   if (navReplaceLabel && dict) navReplaceLabel.textContent = dict.nav_replace;
   if (navWalletLabel && dict) navWalletLabel.textContent = dict.nav_wallet;
+  if (navAdminLabel && dict && dict.nav_admin) navAdminLabel.textContent = dict.nav_admin;
 }
 window.applyAppLanguage = applyAppLanguage;
 
