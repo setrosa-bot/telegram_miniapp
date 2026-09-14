@@ -17,7 +17,7 @@
   <!-- Canvas Confetti for Celebration Effects -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   <!-- Custom Redesigned Styles -->
-  <link rel="stylesheet" href="/css/style.css?v=20260914_icononly_v15">
+  <link rel="stylesheet" href="/css/style.css?v=20260914_lang_v16">
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="/images/logo.png">
 </head>
@@ -57,17 +57,21 @@
     </div>
 
     <div class="verifier-header-right">
-      <!-- Language Pill Capsule -->
-      <div class="verifier-lang-capsule">
+      <!-- Language Switch Capsule (English & Khmer Only) -->
+      <div class="verifier-lang-capsule" title="Switch Language (EN / KH)">
         <button type="button" class="v-lang-btn active" id="btnLangEn" onclick="setAppLanguage('en')">EN</button>
         <button type="button" class="v-lang-btn" id="btnLangKh" onclick="setAppLanguage('kh')">KH</button>
-        <button type="button" class="v-lang-btn" id="btnLangRu" onclick="setAppLanguage('ru')">RU</button>
-        <button type="button" class="v-lang-btn" id="btnLangCn" onclick="setAppLanguage('cn')">中</button>
       </div>
 
-      <!-- Piggy / Wallet Balance Capsule -->
+      <!-- Cyber Wallet Balance Capsule -->
       <div class="verifier-balance-capsule" onclick="switchTab('tabWallet', document.getElementById('navWallet'))" title="Wallet Balance">
-        <span class="v-balance-icon">👛</span>
+        <span class="v-balance-icon">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="5" width="20" height="14" rx="3"/>
+            <path d="M2 9h20"/>
+            <circle cx="17" cy="14" r="1.5" fill="currentColor"/>
+          </svg>
+        </span>
         <span class="v-balance-val" id="verifierBalanceText">$0</span>
       </div>
 

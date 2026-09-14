@@ -13893,55 +13893,81 @@ textarea.form-input-lux {
 .verifier-lang-capsule {
   display: inline-flex;
   align-items: center;
-  background: #15161e;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(17, 20, 30, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 999px;
-  padding: 2px;
-  gap: 1px;
+  padding: 2.5px 3px;
+  gap: 2px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .v-lang-btn {
   background: transparent;
   border: none;
   color: #94a3b8;
-  font-size: 10.5px;
+  font-size: 11px;
   font-weight: 800;
-  padding: 3px 6px;
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  padding: 3px 8px;
   border-radius: 999px;
   cursor: pointer;
   outline: none;
-  transition: all 0.2s ease;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  letter-spacing: 0.3px;
+  line-height: 1.2;
+}
+
+.v-lang-btn:hover {
+  color: #ffffff;
 }
 
 .v-lang-btn.active {
-  background: #2563eb;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
   color: #ffffff;
+  font-weight: 800;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  transform: scale(1.02);
 }
 
 .verifier-balance-capsule {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
   background: rgba(251, 191, 36, 0.1);
   border: 1px solid rgba(251, 191, 36, 0.35);
-  padding: 4px 10px;
+  padding: 4px 9px 4px 8px;
   border-radius: 999px;
   color: #fbbf24;
   font-size: 11.5px;
   font-weight: 800;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: inset 0 1px 1px rgba(251, 191, 36, 0.15);
 }
+
+.verifier-balance-capsule:hover {
+  background: rgba(251, 191, 36, 0.16);
+  border-color: rgba(251, 191, 36, 0.55);
+  box-shadow: 0 0 12px rgba(251, 191, 36, 0.25);
+}
+
 .verifier-balance-capsule:active {
   transform: scale(0.95);
 }
 
 .v-balance-icon {
-  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fbbf24;
 }
 
 .v-balance-val {
-  font-family: var(--font-num);
+  font-family: var(--font-num, 'Outfit', sans-serif);
+  font-weight: 800;
+  letter-spacing: 0.2px;
 }
 
 .verifier-bell-btn {
