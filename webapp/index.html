@@ -17,12 +17,81 @@
   <!-- Canvas Confetti for Celebration Effects -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   <!-- Custom Redesigned Styles -->
-  <link rel="stylesheet" href="/css/style.css?v=20260914_adminsec_v18">
+  <link rel="stylesheet" href="/css/style.css?v=20260914_welcome_v19">
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="/images/logo.png">
 </head>
 
 <body>
+
+  <!-- 🌟 ULTRA-LUXURY BOT WELCOME SCREEN / SPLASH OVERLAY -->
+  <div id="appSplashScreen">
+    <div class="welcome-splash-ambient-1"></div>
+    <div class="welcome-splash-ambient-2"></div>
+
+    <div class="welcome-splash-card">
+      <!-- Animated Brand Logo with Zoom in/out and Pulsing Glow -->
+      <div class="welcome-logo-container">
+        <div class="welcome-logo-orbit-ring"></div>
+        <div class="welcome-logo-glow"></div>
+        <img src="/images/welcome_brand_logo.png" alt="Digital Premium Store" class="welcome-logo-img">
+      </div>
+
+      <!-- Welcome Pill Tag -->
+      <div class="welcome-pill-badge">
+        <span class="welcome-sparkle-icon">✨</span>
+        <span>WELCOME TO MINI APP</span>
+        <span class="welcome-sparkle-icon">✨</span>
+      </div>
+
+      <!-- Main Welcome Title -->
+      <h1 class="welcome-heading">
+        សូមស្វាគមន៍មកកាន់បត<br>
+        <span class="welcome-brand-gradient">Digital Premium Store</span>
+      </h1>
+
+      <!-- Subtitle Description -->
+      <p class="welcome-description">
+        មជ្ឈមណ្ឌលផ្គត់ផ្គង់ Digital Tools & AI Premium ឈានមុខគេ ផ្ដល់ទំនុកចិត្ត សុវត្ថិភាពខ្ពស់ និងការធានាជូនពេញទំហឹង ១០០%
+      </p>
+
+      <!-- Highlights / Value Chips -->
+      <div class="welcome-features-list">
+        <div class="welcome-feature-item">
+          <span class="welcome-feat-icon">⚡</span>
+          <span>ផ្ញើជូនរហ័សទាន់ចិត្ត</span>
+        </div>
+        <div class="welcome-feature-item">
+          <span class="welcome-feat-icon">🛡️</span>
+          <span>ធានាជូន ១០០%</span>
+        </div>
+        <div class="welcome-feature-item">
+          <span class="welcome-feat-icon">💎</span>
+          <span>តម្លៃសមរម្យបំផុត</span>
+        </div>
+      </div>
+
+      <!-- Progress Track & Live Status -->
+      <div class="welcome-progress-section">
+        <div class="welcome-progress-track">
+          <div class="welcome-progress-fill" id="splashProgressBar"></div>
+        </div>
+        <div class="welcome-status-row">
+          <span class="welcome-pulse-dot"></span>
+          <span id="splashStatusText" class="welcome-status-text">កំពុងតភ្ជាប់ប្រព័ន្ធទិន្នន័យ...</span>
+        </div>
+      </div>
+
+      <!-- Instant Enter Button -->
+      <button type="button" class="welcome-action-enter-btn" onclick="hideSplashScreen()">
+        <span>ចូលទៅកាន់ហាង (Enter Store)</span>
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </button>
+    </div>
+  </div>
 
   <!-- Floating Live Order / Topup Alert Banner Container -->
   <div id="liveAlertBannerContainer"></div>
@@ -3606,7 +3675,7 @@
     </div>
   </div>
 
-  <script src="/js/app.js?v=20260914_adminsec_v18"></script>
-  <script src="/js/ux.js?v=20260914_adminsec_v18"></script>
+  <script src="/js/app.js?v=20260914_welcome_v19"></script>
+  <script src="/js/ux.js?v=20260914_welcome_v19"></script>
 </body>
 </html>

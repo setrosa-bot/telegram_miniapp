@@ -4819,7 +4819,7 @@ body, .app-header, .bottom-nav, .product-card, .modal-box,
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   🌟 LUXURY SPLASH SCREEN / STORE WELCOME LOADING (2s ANIMATION)
+   🌟 ULTRA-LUXURY BOT WELCOME SCREEN / SPLASH EXPERIENCE
    ═══════════════════════════════════════════════════════════════ */
 #appSplashScreen {
   position: fixed;
@@ -4828,172 +4828,302 @@ body, .app-header, .bottom-nav, .product-card, .modal-box,
   width: 100vw;
   height: 100vh;
   height: 100dvh;
-  background: radial-gradient(ellipse 100% 90% at 50% 30%, #150e35 0%, #09071e 50%, #030208 100%);
-  z-index: 9999999;
+  background: radial-gradient(circle at 50% 25%, #0f172a 0%, #080d1a 50%, #03050a 100%);
+  z-index: 99999999;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: 24px 20px;
   text-align: center;
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.5s ease;
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.55s ease;
   user-select: none;
-  backdrop-filter: blur(16px);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  overflow: hidden;
 }
 
 #appSplashScreen.splash-hidden {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transform: scale(1.04);
+  transform: scale(1.05);
 }
 
-.splash-content {
+.welcome-splash-ambient-1 {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.18) 0%, rgba(99, 102, 241, 0.12) 50%, transparent 70%);
+  filter: blur(40px);
+  pointer-events: none;
+  animation: ambientFloat 6s ease-in-out infinite alternate;
+}
+
+.welcome-splash-ambient-2 {
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.12) 0%, rgba(244, 63, 94, 0.08) 50%, transparent 70%);
+  filter: blur(45px);
+  pointer-events: none;
+}
+
+@keyframes ambientFloat {
+  0% { transform: translate(-50%, 0) scale(1); }
+  100% { transform: translate(-50%, -15px) scale(1.08); }
+}
+
+.welcome-splash-card {
+  position: relative;
+  z-index: 10;
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 320px;
+  max-width: 360px;
   width: 100%;
 }
 
-.splash-logo-container {
+/* ── Animated Brand Logo (Zoom in, Zoom out, Fade in, Fade out) ── */
+.welcome-logo-container {
   position: relative;
-  width: 120px;
-  height: 120px;
-  margin-bottom: 20px;
+  width: 146px;
+  height: 146px;
+  margin-bottom: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.splash-logo-glow-ring {
-  position: absolute;
-  top: -6px;
-  left: -6px;
-  width: 132px;
-  height: 132px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #a78bfa, #38bdf8, #fbbf24, #10b981, #a78bfa);
-  background-size: 300% 300%;
-  animation: splashRingRotate 4s linear infinite, splashRingPulse 2s infinite ease-in-out;
-  filter: blur(2px);
-  opacity: 0.85;
+@keyframes welcomeLogoPulseZoomFade {
+  0% {
+    transform: scale(0.90);
+    opacity: 0.70;
+    filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.45));
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 1;
+    filter: drop-shadow(0 0 32px rgba(56, 189, 248, 0.9)) drop-shadow(0 0 55px rgba(139, 92, 246, 0.65));
+  }
+  100% {
+    transform: scale(0.90);
+    opacity: 0.70;
+    filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.45));
+  }
 }
 
-.splash-logo-glow-behind {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  background: rgba(139, 92, 246, 0.6);
-  filter: blur(24px);
-  animation: splashGlowPulse 2s infinite alternate ease-in-out;
-}
-
-.splash-logo-img {
+.welcome-logo-img {
   position: relative;
-  width: 120px;
-  height: 120px;
+  width: 136px;
+  height: 136px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid rgba(255, 255, 255, 0.85);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7), inset 0 0 10px rgba(255, 255, 255, 0.2);
-  z-index: 2;
-  animation: splashLogoFloat 3s ease-in-out infinite alternate;
+  border: 3px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(56, 189, 248, 0.4);
+  z-index: 3;
+  animation: welcomeLogoPulseZoomFade 2.6s ease-in-out infinite;
 }
 
-@keyframes splashRingRotate {
+@keyframes welcomeOrbitSpin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 
-@keyframes splashRingPulse {
-  0%, 100% { transform: scale(1); opacity: 0.75; }
-  50% { transform: scale(1.06); opacity: 1; filter: blur(3px) brightness(1.2); }
+.welcome-logo-orbit-ring {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  bottom: -6px;
+  border-radius: 50%;
+  border: 2px dashed rgba(56, 189, 248, 0.5);
+  animation: welcomeOrbitSpin 12s linear infinite;
+  z-index: 2;
 }
 
-@keyframes splashGlowPulse {
-  0% { transform: scale(0.9); opacity: 0.4; }
-  100% { transform: scale(1.3); opacity: 0.8; }
+.welcome-logo-glow {
+  position: absolute;
+  width: 125px;
+  height: 125px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.6) 0%, rgba(139, 92, 246, 0.4) 60%, transparent 80%);
+  filter: blur(26px);
+  animation: welcomeLogoPulseZoomFade 2.6s ease-in-out infinite;
+  z-index: 1;
 }
 
-@keyframes splashLogoFloat {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-6px); }
+/* ── Typography & Welcome Content ── */
+.welcome-pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 14px;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 100px;
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #38bdf8;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.2);
 }
 
-.splash-welcome-subtitle {
-  font-size: 13px;
-  font-weight: 700;
-  color: #fbbf24;
-  letter-spacing: 0.5px;
-  margin-bottom: 6px;
-  text-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
+.welcome-sparkle-icon {
+  font-size: 11px;
 }
 
-.splash-brand-title {
+.welcome-heading {
   font-size: 20px;
-  font-weight: 900;
-  background: linear-gradient(135deg, #ffffff 0%, #ddd6fe 50%, #a78bfa 100%);
+  line-height: 1.45;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 10px 0;
+  font-family: 'Kantumruy Pro', 'Outfit', sans-serif;
+  letter-spacing: 0.2px;
+}
+
+.welcome-brand-gradient {
+  display: inline-block;
+  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin: 0 0 6px 0;
-  letter-spacing: 0.3px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 900;
+  font-size: 22px;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
 }
 
-.splash-tagline {
+.welcome-description {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #94a3b8;
+  margin: 0 0 18px 0;
+  max-width: 320px;
+  font-family: 'Kantumruy Pro', sans-serif;
+}
+
+/* ── Value Proposition Chips ── */
+.welcome-features-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+
+.welcome-feature-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 5px 12px;
+  border-radius: 20px;
   font-size: 11px;
-  color: var(--text-sub);
-  margin-bottom: 24px;
-  letter-spacing: 0.4px;
+  font-weight: 600;
+  color: #e2e8f0;
+  backdrop-filter: blur(8px);
 }
 
-/* Progress bar container */
-.splash-progress-track {
+.welcome-feat-icon {
+  font-size: 12px;
+}
+
+/* ── Progress & Status Row ── */
+.welcome-progress-section {
   width: 100%;
-  max-width: 220px;
+  max-width: 250px;
+  margin-bottom: 20px;
+}
+
+.welcome-progress-track {
+  width: 100%;
   height: 5px;
   background: rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
+  border-radius: 100px;
   overflow: hidden;
   position: relative;
-  margin-bottom: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  margin-bottom: 10px;
 }
 
-.splash-progress-bar {
+.welcome-progress-fill {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, #8b5cf6 0%, #38bdf8 50%, #10b981 100%);
-  border-radius: 10px;
+  background: linear-gradient(90deg, #38bdf8 0%, #818cf8 50%, #10b981 100%);
+  border-radius: 100px;
   box-shadow: 0 0 12px rgba(56, 189, 248, 0.8);
   transition: width 0.15s ease-out;
 }
 
-.splash-status-text {
-  font-size: 11px;
-  color: var(--text-muted);
-  font-weight: 600;
+.welcome-status-row {
   display: flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+  gap: 8px;
 }
 
-.splash-spinner-dot {
-  display: inline-block;
-  width: 5px;
-  height: 5px;
+.welcome-pulse-dot {
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: #38bdf8;
-  animation: splashDotPulse 1s infinite alternate;
+  box-shadow: 0 0 8px #38bdf8;
+  animation: welcomeDotBlink 1s infinite alternate;
 }
 
-@keyframes splashDotPulse {
+@keyframes welcomeDotBlink {
   0% { opacity: 0.3; transform: scale(0.8); }
   100% { opacity: 1; transform: scale(1.3); }
+}
+
+.welcome-status-text {
+  font-size: 11.5px;
+  color: #94a3b8;
+  font-weight: 600;
+  font-family: 'Kantumruy Pro', sans-serif;
+}
+
+/* ── Instant Enter Button ── */
+.welcome-action-enter-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 22px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.18) 0%, rgba(99, 102, 241, 0.18) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #ffffff;
+  font-size: 12.5px;
+  font-weight: 700;
+  font-family: 'Kantumruy Pro', 'Outfit', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(56, 189, 248, 0.2);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(12px);
+}
+
+.welcome-action-enter-btn:hover,
+.welcome-action-enter-btn:active {
+  transform: translateY(-2px) scale(1.02);
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.28) 0%, rgba(99, 102, 241, 0.28) 100%);
+  border-color: rgba(56, 189, 248, 0.6);
+  box-shadow: 0 6px 25px rgba(56, 189, 248, 0.35);
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -13707,11 +13837,6 @@ textarea.form-input-lux {
 /* ═══════════════════════════════════════════════════════════════
    🛡️ CYBER-MINIMALIST "VERIFIER BOT" ULTRA LUXURY UI SUITE
    ═══════════════════════════════════════════════════════════════ */
-
-/* ── Splash Screen (Completely Disabled / Hidden) ── */
-#appSplashScreen {
-  display: none !important;
-}
 
 /* ── 1. Top Verifier Header Bar ── */
 .verifier-header {

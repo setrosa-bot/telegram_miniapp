@@ -65,7 +65,7 @@ function initAppSplashScreen() {
   if (!splash) return;
 
   const startTime = Date.now();
-  const duration = 1800; // 1.8 seconds fast smooth transition
+  const duration = 2400; // 2.4s smooth luxury welcome sequence
 
   const interval = setInterval(() => {
     const elapsed = Date.now() - startTime;
@@ -73,12 +73,12 @@ function initAppSplashScreen() {
 
     if (bar) bar.style.width = `${progress}%`;
 
-    if (progress > 30 && progress < 70 && status) {
-      status.textContent = "កំពុងផ្ទុកទំនិញ & ស្តុក...";
-    } else if (progress >= 70 && progress < 95 && status) {
+    if (progress > 25 && progress < 60 && status) {
+      status.textContent = "កំពុងតភ្ជាប់ & ផ្ទុកទំនិញ Premium...";
+    } else if (progress >= 60 && progress < 90 && status) {
       status.textContent = "ស្វាគមន៍មកកាន់ Digital Store...";
-    } else if (progress >= 95 && status) {
-      status.textContent = "រួចរាល់ 100% ✨";
+    } else if (progress >= 90 && status) {
+      status.textContent = "រួចរាល់ ១០០% ✨";
     }
 
     if (elapsed >= duration) {
@@ -87,10 +87,10 @@ function initAppSplashScreen() {
     }
   }, 25);
 
-  // Absolute safety fallback (maximum 2.2s)
+  // Safety fallback
   setTimeout(() => {
     hideSplashScreen();
-  }, 2200);
+  }, 2800);
 }
 
 function hideSplashScreen() {
