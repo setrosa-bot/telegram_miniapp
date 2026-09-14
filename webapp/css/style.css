@@ -13733,9 +13733,27 @@ textarea.form-input-lux {
 .verifier-brand {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   cursor: pointer;
   flex-shrink: 0;
+  min-width: 0;
+  padding: 3px 8px 3px 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+}
+
+.verifier-brand:hover {
+  background: rgba(56, 189, 248, 0.09);
+  border-color: rgba(56, 189, 248, 0.3);
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.18);
+}
+
+.verifier-brand:active {
+  transform: scale(0.96);
+  opacity: 0.9;
 }
 
 .verifier-avatar-glow {
@@ -13743,42 +13761,126 @@ textarea.form-input-lux {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  background: linear-gradient(135deg, #1e293b, #0f172a);
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  box-shadow: 0 0 12px rgba(37, 99, 235, 0.35);
+  border: 1.5px solid rgba(56, 189, 248, 0.65);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+  flex-shrink: 0;
 }
 
-.verifier-brand-logo {
+.header-user-avatar {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
+  display: block;
+}
+
+.header-user-avatar-fallback {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0284c7, #2563eb);
+  color: #ffffff;
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  font-size: 14.5px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+}
+
+.header-user-status-dot {
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #10b981;
+  border: 2px solid #090a0f;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.9);
+  z-index: 2;
+  animation: pulseHeaderStatus 2.2s infinite ease-in-out;
+}
+
+@keyframes pulseHeaderStatus {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.18); opacity: 0.85; box-shadow: 0 0 10px rgba(16, 185, 129, 1); }
 }
 
 .verifier-brand-text {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  padding-right: 2px;
+}
+
+.verifier-name-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
 }
 
 .verifier-title {
   font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
-  font-size: 15px;
+  font-size: 13.5px;
   font-weight: 800;
   color: #ffffff;
   letter-spacing: -0.2px;
   line-height: 1.2;
   margin: 0;
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.verifier-verified-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.verifier-subtag-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 1px;
+  line-height: 1;
 }
 
 .verifier-subtag {
+  font-family: 'Outfit', -apple-system, sans-serif;
   font-size: 9px;
-  font-weight: 800;
-  color: #94a3b8;
-  letter-spacing: 0.8px;
+  font-weight: 700;
+  color: #38bdf8;
+  letter-spacing: 0.2px;
+  max-width: 72px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.verifier-vip-badge {
+  font-family: 'Outfit', sans-serif;
+  font-size: 7.5px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: #0b0f19;
+  padding: 1px 4px;
+  border-radius: 3px;
+  letter-spacing: 0.4px;
+  line-height: 1.1;
   text-transform: uppercase;
+  box-shadow: 0 0 8px rgba(251, 191, 36, 0.35);
+  flex-shrink: 0;
 }
 
 /* ── Header Right Action Capsules ── */

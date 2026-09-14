@@ -17,7 +17,7 @@
   <!-- Canvas Confetti for Celebration Effects -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   <!-- Custom Redesigned Styles -->
-  <link rel="stylesheet" href="/css/style.css?v=20260914_profile_v11">
+  <link rel="stylesheet" href="/css/style.css?v=20260914_tgheader_v12">
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="/images/logo.png">
 </head>
@@ -32,18 +32,27 @@
   <div class="bg-glow-2"></div>
   <div class="bg-glow-3"></div>
 
-  <!-- Verifier Cyber-Minimalist Header -->
+  <!-- Verifier Cyber-Minimalist Header with Telegram User Profile -->
   <header class="verifier-header">
-    <div class="verifier-brand" onclick="switchTab('tabShop', document.getElementById('navShop'))">
-      <div class="verifier-avatar-glow">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#ffffff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          <path d="M9 12l2 2 4-4"/>
-        </svg>
+    <div class="verifier-brand header-user-profile-btn" onclick="switchTab('tabReplace', document.getElementById('navReplace'))" title="Telegram Profile Hub">
+      <div class="verifier-avatar-glow" id="headerUserAvatarWrap">
+        <img id="headerUserAvatarImg" class="header-user-avatar" src="" alt="Profile" style="display:none;" onerror="this.style.display='none';document.getElementById('headerUserAvatarFallback').style.display='flex';">
+        <div id="headerUserAvatarFallback" class="header-user-avatar-fallback">👤</div>
+        <span class="header-user-status-dot" title="Online"></span>
       </div>
       <div class="verifier-brand-text">
-        <h1 class="verifier-title">Verifier Store</h1>
-        <span class="verifier-subtag">STORE</span>
+        <div class="verifier-name-row">
+          <h1 class="verifier-title" id="headerUserFullName">Telegram User</h1>
+          <span class="verifier-verified-icon" title="Telegram Verified">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="#38bdf8">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            </svg>
+          </span>
+        </div>
+        <div class="verifier-subtag-row">
+          <span class="verifier-subtag" id="headerUserSubtag">@user</span>
+          <span class="verifier-vip-badge">VIP</span>
+        </div>
       </div>
     </div>
 

@@ -544,6 +544,32 @@ function renderUserHeader() {
   if (profileId) profileId.textContent = currentUser.user_id;
   if (profileBal) profileBal.textContent = `$${(currentUser.balance || 0).toFixed(2)}`;
 
+  // 3. Update Top Header Bar with Telegram Profile & Name
+  const headerFullName = document.getElementById("headerUserFullName");
+  if (headerFullName) {
+    headerFullName.textContent = currentUser.full_name || "Telegram User";
+  }
+
+  const headerSubtag = document.getElementById("headerUserSubtag");
+  if (headerSubtag) {
+    const rawUser = (currentUser.username || "").replace(/^@/, "");
+    headerSubtag.textContent = rawUser ? `@${rawUser}` : `ID: ${currentUser.user_id}`;
+  }
+
+  const headerAvatarImg = document.getElementById("headerUserAvatarImg");
+  const headerAvatarFallback = document.getElementById("headerUserAvatarFallback");
+  if (headerAvatarImg && headerAvatarFallback) {
+    if (currentUser.photo_url) {
+      headerAvatarImg.src = currentUser.photo_url;
+      headerAvatarImg.style.display = "block";
+      headerAvatarFallback.style.display = "none";
+    } else {
+      headerAvatarImg.style.display = "none";
+      headerAvatarFallback.style.display = "flex";
+      headerAvatarFallback.textContent = currentUser.full_name ? currentUser.full_name.charAt(0).toUpperCase() : "👤";
+    }
+  }
+
   const replaceBuyerInput = document.getElementById("replaceBuyerName");
   if (replaceBuyerInput) replaceBuyerInput.value = currentUser.full_name;
 }
@@ -606,6 +632,7 @@ async function syncUserWithBackend() {
         const idStr = String(currentUser.user_id || "0000");
         cardId.textContent = `•••• •••• •••• ${idStr.slice(-4)}`;
       }
+      renderUserHeader();
     }
 
     if (data.role_info) {
